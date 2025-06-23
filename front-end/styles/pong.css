@@ -1,0 +1,65 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px;
+}
+
+.paddle {
+  width: 80px;
+  height: 400px;
+  background: var(--main-color);
+  border-radius: 40px;
+}
+
+.paddle-left {
+  margin-right: 70px;
+}
+
+.paddle-right {
+  margin-left: 70px;
+}
+
+.middle-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#ball {
+  margin-top: 30px;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: var(--main-color);
+}
+
+#game-name {
+  font-size: 150px;
+  font-family: Arial;
+  color: var(--main-color);
+  margin: 0;
+}
+
+.play-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#play-button {
+  background: var(--main-color);
+  padding: 20px 100px;
+  border: none;
+  border-radius: 45px;
+  color: white;
+  cursor: pointer;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Arial;
+  transition: opacity 0.15s;
+}
+
+#play-button:hover {
+  opacity: 0.7;
+}
