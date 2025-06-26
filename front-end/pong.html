@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./styles/pong.css" />
     <link rel="stylesheet" href="./styles/general.css" />
     <link rel="stylesheet" href="./styles/switch-pages.css" />
+    <link rel="stylesheet" href="./styles/choose-mode.css" />
   </head>
   <body>
     <section id="welcome-page">
@@ -19,7 +20,21 @@
         <div class="paddle paddle-right"></div>
       </div>
       <div class="play-button-container">
-        <button id="play-button">PLAY</button>
+        <button class="play-button js-play-button">PLAY</button>
+      </div>
+    </section>
+
+    <section id="choose-mode-page">
+      <div class="game-options">
+        <div class="game-option-1 js-game-option">
+          <p>Quick Play</p>
+        </div>
+        <div class="game-option-2 js-game-option">
+          <p>Tournament</p>
+        </div>
+      </div>
+      <div class="start-button-container">
+        <button class="start-button">START</button>
       </div>
     </section>
 

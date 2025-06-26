@@ -1,7 +1,9 @@
-#welcome-page:target {
-  display: initial;
+#welcome-page,
+#choose-mode-page {
+  display: none;
 }
 
-/* #welcome-page {
-  display: none;
-} */
+#welcome-page:target,
+#choose-mode-page:target {
+  display: initial;
+}

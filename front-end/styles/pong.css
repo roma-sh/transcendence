@@ -47,7 +47,7 @@
   justify-content: center;
 }
 
-#play-button {
+.play-button {
   background: var(--main-color);
   padding: 20px 100px;
   border: none;
@@ -60,6 +60,6 @@
   transition: opacity 0.15s;
 }
 
-#play-button:hover {
+.play-button:hover {
   opacity: 0.7;
 }
