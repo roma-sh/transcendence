@@ -3,18 +3,10 @@ import { drawPaddle, drawBall, drawDividingLine } from "./draw-game-elems.js";
 import { updatePaddleDirection, updateScore } from "./update-game-elems.js";
 
 export function game() {
-  let isPaused = true;
+  let isPaused = false;
   let leftScore = 0;
   let rightScore = 0;
-
-  function toggleGame() {
-    const buttonEl = document.querySelector('.js-start-button-guick-game');
-    buttonEl?.addEventListener('click', () => {
-      isPaused = !isPaused;
-      buttonEl.textContent = isPaused ? 'START' : 'STOP';
-    });
-  }
-  toggleGame();
+  const maxScore = 10;
 
   const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
 
@@ -92,6 +84,10 @@ export function game() {
     if (ball.x - ball.radius < 0) {
       rightScore++;
       updateScore('.js-right-score', rightScore);
+      if (rightScore === maxScore) {
+        isPaused = true;
+        return;
+      }
       isPaused = true;
       setTimeout(() => {
         resetBall();
@@ -101,6 +97,10 @@ export function game() {
     if (ball.x + ball.radius > canvas.width) {
       leftScore++;
       updateScore('.js-left-score', leftScore);
+      if (leftScore === maxScore) {
+        isPaused = true;
+        return;
+      }
       isPaused = true;
       setTimeout(() => {
         resetBall();
