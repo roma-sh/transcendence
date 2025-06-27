@@ -1,24 +1,27 @@
-import { Paddle, Ball } from "./types.js";
+import { Paddle, Ball, GameConfig } from "./types.js";
 
 export function drawPaddle(
   paddle : Paddle,
   ctx: CanvasRenderingContext2D | null,
-  width: number, height: number) {
+  gameConfig : GameConfig) {
 
   const radius = 8;
   if (ctx) {
     ctx.fillStyle = 'rgb(70, 61, 61)';
     ctx.beginPath();
     ctx.moveTo(paddle.x + radius, paddle.y);
-    ctx.lineTo(paddle.x + width - radius, paddle.y);
-    ctx.quadraticCurveTo(paddle.x + width, paddle.y,
-      paddle.x + width, paddle.y + radius);
-    ctx.lineTo(paddle.x + width, paddle.y + height - radius);
-    ctx.quadraticCurveTo(paddle.x + width, paddle.y + height,
-      paddle.x + width - radius, paddle.y + height);
-    ctx.lineTo(paddle.x + radius, paddle.y + height);
-    ctx.quadraticCurveTo(paddle.x, paddle.y + height, paddle.x,
-      paddle.y + height - radius);
+    ctx.lineTo(paddle.x + gameConfig.paddleWidth - radius, paddle.y);
+    ctx.quadraticCurveTo(paddle.x + gameConfig.paddleWidth, paddle.y,
+      paddle.x + gameConfig.paddleWidth, paddle.y + radius);
+    ctx.lineTo(paddle.x + gameConfig.paddleWidth,
+      paddle.y + gameConfig.paddleHeight - radius);
+    ctx.quadraticCurveTo(paddle.x + gameConfig.paddleWidth,
+      paddle.y + gameConfig.paddleHeight,
+      paddle.x + gameConfig.paddleWidth - radius,
+      paddle.y + gameConfig.paddleHeight);
+    ctx.lineTo(paddle.x + radius, paddle.y + gameConfig.paddleHeight);
+    ctx.quadraticCurveTo(paddle.x, paddle.y + gameConfig.paddleHeight,
+      paddle.x, paddle.y + gameConfig.paddleHeight - radius);
     ctx.lineTo(paddle.x, paddle.y + radius);
     ctx.quadraticCurveTo(paddle.x, paddle.y, paddle.x + radius, paddle.y);
     ctx.closePath();
@@ -93,3 +96,8 @@ export function drawWinText(
       ctx.fillText('WIN', rightCoords.x, rightCoords.y);
     }
 }
+
+export function drawPlayAgainButton(
+  ctx: CanvasRenderingContext2D | null,
+  canvas : HTMLCanvasElement,
+  winner : 'left' | 'right') {}
