@@ -1,9 +1,15 @@
 import { Paddle, KeyMap, Ball } from "./types.js";
-import { drawPaddle, drawBall, drawDividingLine } from "./draw-game-elems.js";
 import { updatePaddleDirection, updateScore } from "./update-game-elems.js";
+import {
+  drawPaddle,
+  drawBall,
+  drawDividingLine,
+  drawWinText
+} from "./draw-game-elems.js";
 
 export function game() {
   let isPaused = false;
+  let isWin = false;
   let leftScore = 0;
   let rightScore = 0;
   const maxScore = 10;
@@ -86,6 +92,7 @@ export function game() {
       updateScore('.js-right-score', rightScore);
       if (rightScore === maxScore) {
         isPaused = true;
+        isWin = true;
         return;
       }
       isPaused = true;
@@ -99,6 +106,7 @@ export function game() {
       updateScore('.js-left-score', leftScore);
       if (leftScore === maxScore) {
         isPaused = true;
+        isWin = true;
         return;
       }
       isPaused = true;
@@ -122,6 +130,11 @@ export function game() {
     drawPaddle(rightPaddle, ctx, paddleWidth, paddleHeight);
     drawBall(ctx, isPaused, ball);
     drawDividingLine(ctx, canvas);
+
+    if (isWin) {
+      const winner = leftScore > rightScore ? 'left' : 'right';
+      drawWinText(ctx, canvas, winner);
+    }
 
     update();
 

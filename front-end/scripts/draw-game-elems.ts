@@ -67,3 +67,29 @@ export function drawDividingLine(
     ctx.setLineDash([]);
   }
 }
+
+export function drawWinText(
+  ctx: CanvasRenderingContext2D | null,
+  canvas : HTMLCanvasElement,
+  winner : 'left' | 'right') {
+    if (!ctx) return;
+
+    const text = 'WIN';
+    ctx.font = "48px Arial";
+    const textWidth = ctx.measureText(text).width;
+
+    const leftCoords = {
+      x: canvas.width / 4 - textWidth / 2,
+      y: canvas.height / 2,
+    };
+    const rightCoords = {
+      x: canvas.width * (3 / 4) - textWidth / 2,
+      y: canvas.height / 2,
+    };
+
+    if (winner === 'left') {
+      ctx.fillText('WIN', leftCoords.x, leftCoords.y);
+    } else {
+      ctx.fillText('WIN', rightCoords.x, rightCoords.y);
+    }
+}
