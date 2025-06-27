@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./styles/general.css" />
     <link rel="stylesheet" href="./styles/switch-pages.css" />
     <link rel="stylesheet" href="./styles/choose-mode.css" />
+    <link rel="stylesheet" href="./styles/game-page.css" />
   </head>
   <body>
     <section id="welcome-page">
@@ -26,15 +27,27 @@
 
     <section id="choose-mode-page">
       <div class="game-options">
-        <div class="game-option-1 js-game-option">
+        <div class="game-option-1 js-game-option" data-option="quick-play">
           <p>Quick Play</p>
         </div>
-        <div class="game-option-2 js-game-option">
+        <div class="game-option-2 js-game-option" data-option="tournament">
           <p>Tournament</p>
         </div>
       </div>
       <div class="start-button-container">
-        <button class="start-button">START</button>
+        <button class="start-button js-start-button">START</button>
+      </div>
+    </section>
+
+    <section id="quick-game-page">
+      <div class="scores">
+        <div class="score js-left-score">0</div>
+        <div class="score js-right-score">0</div>
+      </div>
+      <div class="game-window">
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+        <button class="start-button-guick-game
+          js-start-button-guick-game">START</button>
       </div>
     </section>
 
