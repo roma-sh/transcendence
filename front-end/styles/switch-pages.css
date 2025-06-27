@@ -1,7 +1,11 @@
-#welcome-page:target {
-  display: initial;
+#welcome-page,
+#choose-mode-page,
+#quick-game-page {
+  display: none;
 }
 
-/* #welcome-page {
-  display: none;
-} */
+#welcome-page:target,
+#choose-mode-page:target,
+#quick-game-page:target {
+  display: initial;
+}
