@@ -79,25 +79,70 @@ export function drawWinText(
 
     const text = 'WIN';
     ctx.font = "48px Arial";
-    const textWidth = ctx.measureText(text).width;
+    ctx.textAlign = 'center';
+    // ctx.textBaseline = 'middle';
 
     const leftCoords = {
-      x: canvas.width / 4 - textWidth / 2,
+      x: canvas.width / 4,
       y: canvas.height / 2,
     };
     const rightCoords = {
-      x: canvas.width * (3 / 4) - textWidth / 2,
+      x: canvas.width * (3 / 4),
       y: canvas.height / 2,
     };
 
-    if (winner === 'left') {
-      ctx.fillText('WIN', leftCoords.x, leftCoords.y);
-    } else {
-      ctx.fillText('WIN', rightCoords.x, rightCoords.y);
-    }
+    const pos = winner === 'left' ? leftCoords : rightCoords;
+    ctx.fillText('WIN', pos.x, pos.y);
 }
 
 export function drawPlayAgainButton(
   ctx: CanvasRenderingContext2D | null,
   canvas : HTMLCanvasElement,
-  winner : 'left' | 'right') {}
+  winner : 'left' | 'right') {
+
+    if (!ctx) return;
+
+    const width = 120;
+    const height = 35;
+    const radius = 20;
+
+    let coords : {x: number, y: number};
+    const leftCoords = {
+      x: canvas.width / 4 - width / 2,
+      y: canvas.height / 2 + 30,
+    };
+    const rightCoords = {
+      x: canvas.width * (3 / 4) - width / 2,
+      y: canvas.height / 2 + 30,
+    };
+
+    coords = winner === 'left' ? leftCoords : rightCoords;
+
+    ctx.fillStyle = 'rgb(70, 61, 61)';
+    ctx.strokeStyle = 'rgb(70, 61, 61)';
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(coords.x + radius, coords.y);
+    ctx.lineTo(coords.x + width - radius, coords.y);
+    ctx.quadraticCurveTo(coords.x + width, coords.y,
+      coords.x + width, coords.y + radius);
+    ctx.lineTo(coords.x + width, coords.y + height - radius);
+    ctx.quadraticCurveTo(coords.x + width, coords.y + height,
+      coords.x + width - radius, coords.y + height);
+    ctx.lineTo(coords.x + radius, coords.y + height);
+    ctx.quadraticCurveTo(coords.x, coords.y + height,
+      coords.x, coords.y + height - radius);
+    ctx.lineTo(coords.x, coords.y + radius);
+    ctx.quadraticCurveTo(coords.x, coords.y, coords.x + radius, coords.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = 'white';
+    ctx.font = '15px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('PLAY AGAIN',
+      coords.x + width / 2, coords.y + height / 2);
+  }

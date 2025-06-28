@@ -1,5 +1,6 @@
 import { GameState, Paddle, KeyMap, Ball, GameConfig } from "./types.js";
 import { updatePaddleDirection, update } from "./update-game-elems.js";
+import { setupPlayAgainInteraction } from "./interact-game-elems.js";
 import {
   drawPaddle,
   drawBall,
@@ -19,7 +20,7 @@ export function game() {
     paddleWidth: 30,
     paddleHeight: 100,
     ballRadius: 10,
-    maxScore: 10,
+    maxScore: 1,
     ballInitSpeed: 5
   };
 
@@ -70,6 +71,7 @@ export function game() {
       const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
       drawWinText(ctx, canvas, winner);
       drawPlayAgainButton(ctx, canvas, winner);
+      setupPlayAgainInteraction(ctx, canvas, winner);
     }
 
     update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
