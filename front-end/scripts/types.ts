@@ -30,3 +30,10 @@ export interface Ball {
   dx: number,
   dy: number
 }
+
+export interface ButtonRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}

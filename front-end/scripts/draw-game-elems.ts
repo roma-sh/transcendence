@@ -1,4 +1,4 @@
-import { Paddle, Ball, GameConfig } from "./types.js";
+import { Paddle, Ball, GameConfig, ButtonRect } from "./types.js";
 
 export function drawPaddle(
   paddle : Paddle,
@@ -95,54 +95,48 @@ export function drawWinText(
     ctx.fillText('WIN', pos.x, pos.y);
 }
 
-export function drawPlayAgainButton(
+export function drawPlayAgainBtn (
   ctx: CanvasRenderingContext2D | null,
-  canvas : HTMLCanvasElement,
-  winner : 'left' | 'right') {
+  canvas: HTMLCanvasElement,
+  winner: 'left' | 'right'
+) : ButtonRect | null {
+  if (!ctx) return null;
 
-    if (!ctx) return;
+  const btnText = 'PLAY AGAIN';
+  const btnWidth = 150;
+  const btnHeight = 40;
+  const radius = btnHeight / 2;
 
-    const width = 120;
-    const height = 35;
-    const radius = 20;
+  const centerX =
+    winner === 'left'
+      ? canvas.width  / 4
+      : (canvas.width * 3) / 4;
+  const centerY = canvas.height / 2 + 60;
 
-    let coords : {x: number, y: number};
-    const leftCoords = {
-      x: canvas.width / 4 - width / 2,
-      y: canvas.height / 2 + 30,
-    };
-    const rightCoords = {
-      x: canvas.width * (3 / 4) - width / 2,
-      y: canvas.height / 2 + 30,
-    };
+  const x = centerX - btnWidth / 2;
+  const y = centerY - btnHeight / 2;
 
-    coords = winner === 'left' ? leftCoords : rightCoords;
+  ctx.fillStyle = 'rgb(70, 61, 61)';
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + btnWidth - radius, y);
+  ctx.quadraticCurveTo(x + btnWidth,y, x + btnWidth, y + radius);
+  ctx.lineTo(x + btnWidth, y + btnHeight - radius);
+  ctx.quadraticCurveTo(x + btnWidth, y + btnHeight,
+    x + btnWidth - radius, y + btnHeight);
+  ctx.lineTo(x + radius, y + btnHeight);
+  ctx.quadraticCurveTo(x, y + btnHeight,
+    x, y + btnHeight - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  ctx.fill();
 
-    ctx.fillStyle = 'rgb(70, 61, 61)';
-    ctx.strokeStyle = 'rgb(70, 61, 61)';
-    ctx.lineWidth = 2;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '18px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(btnText, centerX, centerY);
 
-    ctx.beginPath();
-    ctx.moveTo(coords.x + radius, coords.y);
-    ctx.lineTo(coords.x + width - radius, coords.y);
-    ctx.quadraticCurveTo(coords.x + width, coords.y,
-      coords.x + width, coords.y + radius);
-    ctx.lineTo(coords.x + width, coords.y + height - radius);
-    ctx.quadraticCurveTo(coords.x + width, coords.y + height,
-      coords.x + width - radius, coords.y + height);
-    ctx.lineTo(coords.x + radius, coords.y + height);
-    ctx.quadraticCurveTo(coords.x, coords.y + height,
-      coords.x, coords.y + height - radius);
-    ctx.lineTo(coords.x, coords.y + radius);
-    ctx.quadraticCurveTo(coords.x, coords.y, coords.x + radius, coords.y);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.fillStyle = 'white';
-    ctx.font = '15px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('PLAY AGAIN',
-      coords.x + width / 2, coords.y + height / 2);
-  }
+  return { x, y, width: btnWidth, height: btnHeight };
+}

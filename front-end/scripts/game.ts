@@ -1,12 +1,11 @@
-import { GameState, Paddle, KeyMap, Ball, GameConfig } from "./types.js";
-import { updatePaddleDirection, update } from "./update-game-elems.js";
-import { setupPlayAgainInteraction } from "./interact-game-elems.js";
 import {
-  drawPaddle,
-  drawBall,
-  drawDividingLine,
-  drawWinText,
-  drawPlayAgainButton
+  GameState, Paddle, KeyMap,
+  Ball, GameConfig, ButtonRect } from "./types.js";
+import { updatePaddleDirection, update } from "./update-game-elems.js";
+import { setupPlayAgainBtnInteraction } from "./interact-game-elems.js";
+import {
+  drawPaddle, drawBall, drawDividingLine,
+  drawWinText, drawPlayAgainBtn
 } from "./draw-game-elems.js";
 
 export function game() {
@@ -20,7 +19,7 @@ export function game() {
     paddleWidth: 30,
     paddleHeight: 100,
     ballRadius: 10,
-    maxScore: 1,
+    maxScore: 10,
     ballInitSpeed: 5
   };
 
@@ -70,8 +69,10 @@ export function game() {
     if (gameState.isWin) {
       const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
       drawWinText(ctx, canvas, winner);
-      drawPlayAgainButton(ctx, canvas, winner);
-      setupPlayAgainInteraction(ctx, canvas, winner);
+      const btnRect : ButtonRect | null
+        = drawPlayAgainBtn(ctx, canvas, winner);
+      if (btnRect) setupPlayAgainBtnInteraction(canvas, btnRect);
+      return;
     }
 
     update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
