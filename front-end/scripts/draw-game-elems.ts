@@ -95,10 +95,9 @@ export function drawDividingLine(
 }
 
 export function drawWinText(
-  ctx: CanvasRenderingContext2D | null,
+  ctx: CanvasRenderingContext2D,
   canvas : HTMLCanvasElement,
   winner : 'left' | 'right') {
-    if (!ctx) return;
 
     const text = 'WIN';
     ctx.font = "48px Arial";
@@ -118,14 +117,14 @@ export function drawWinText(
     ctx.fillText('WIN', pos.x, pos.y);
 }
 
-export function drawPlayAgainBtn (
-  ctx: CanvasRenderingContext2D | null,
+export function drawButton (
+  ctx: CanvasRenderingContext2D,
   canvas: HTMLCanvasElement,
-  winner: 'left' | 'right'
-) : ButtonRect | null {
-  if (!ctx) return null;
+  winner: 'left' | 'right',
+  btnText: string,
+  yMargin: number,
+) : ButtonRect {
 
-  const btnText = 'PLAY AGAIN';
   const btnWidth = 150;
   const btnHeight = 40;
   const radius = btnHeight / 2;
@@ -134,7 +133,7 @@ export function drawPlayAgainBtn (
     winner === 'left'
       ? canvas.width  / 4
       : (canvas.width * 3) / 4;
-  const centerY = canvas.height / 2 + 80;
+  const centerY = canvas.height / 2 + yMargin;
 
   const x = centerX - btnWidth / 2;
   const y = centerY - btnHeight / 2;

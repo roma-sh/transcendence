@@ -1,11 +1,14 @@
 import {
   GameState, Paddle, KeyMap,
-  Ball, GameConfig, ButtonRect } from "./types.js";
-import { updatePaddleDirection, update, resetBall } from "./update-game-elems.js";
-import { setupPlayAgainBtnInteraction } from "./interact-game-elems.js";
+  Ball, GameConfig, ButtonRect
+} from "./types.js";
+import {
+  updatePaddleDirection, update, resetBall
+} from "./update-game-elems.js";
+import { bindButtonEvent } from "./interact-game-elems.js";
 import {
   drawPaddle, drawBall, drawDividingLine,
-  drawWinText, drawPlayAgainBtn, drawScore
+  drawWinText, drawButton, drawScore
 } from "./draw-game-elems.js";
 
 export function game() {
@@ -19,7 +22,7 @@ export function game() {
     paddleWidth: 30,
     paddleHeight: 100,
     ballRadius: 10,
-    maxScore: 10,
+    maxScore: 5,
     ballInitSpeed: 9
   };
 
@@ -70,12 +73,19 @@ export function game() {
     drawBall(ctx, gameState.isPaused, ball);
     drawDividingLine(ctx, canvas);
 
-    if (gameState.isWin) {
+    if (gameState.isWin && ctx) {
       const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
       drawWinText(ctx, canvas, winner);
-      const btnRect : ButtonRect | null
-        = drawPlayAgainBtn(ctx, canvas, winner);
-      if (btnRect) setupPlayAgainBtnInteraction(canvas, btnRect);
+      const playAgainRect : ButtonRect
+        = drawButton(ctx, canvas, winner, 'PLAY AGAIN', 80);
+      bindButtonEvent(canvas, playAgainRect, () => {
+        game();
+      });
+      const mainMenuRect : ButtonRect
+        = drawButton(ctx, canvas, winner, 'MAIN MENU', 130);
+      bindButtonEvent(canvas, mainMenuRect, () => {
+        location.hash = 'choose-mode-page';
+      });
       return;
     }
 
