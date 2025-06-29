@@ -134,7 +134,7 @@ export function drawPlayAgainBtn (
     winner === 'left'
       ? canvas.width  / 4
       : (canvas.width * 3) / 4;
-  const centerY = canvas.height / 2 + 60;
+  const centerY = canvas.height / 2 + 80;
 
   const x = centerX - btnWidth / 2;
   const y = centerY - btnHeight / 2;

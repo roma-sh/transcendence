@@ -35,7 +35,12 @@ export function update(
     ball.x += ball.dx;
     ball.y += ball.dy;
 
-    if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+    if (ball.y - ball.radius < 0) {
+      ball.y  = ball.radius;
+      ball.dy = -ball.dy;
+    }
+    if (ball.y + ball.radius > canvas.height) {
+      ball.y  = canvas.height - ball.radius;
       ball.dy = -ball.dy;
     }
 
