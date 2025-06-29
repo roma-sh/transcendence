@@ -52,7 +52,7 @@ export function game() {
     radius: gameConfig.ballRadius,
     x: canvas.width / 2,
     y: canvas.height / 2,
-    dx: 5,
+    dx: 7,
     dy: 3
   };
 
