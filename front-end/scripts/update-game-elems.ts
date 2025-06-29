@@ -22,11 +22,6 @@ export function updatePaddleDirection (
   }
 }
 
-export function updateScore(score_side: string, score: number) {
-  const scoreEl = document.querySelector(score_side);
-  if (scoreEl) scoreEl.innerHTML = score.toString();
-}
-
 export function update(
   gameState : GameState,
   ball : Ball,
@@ -64,7 +59,6 @@ export function update(
 
     if (ball.x - ball.radius < 0) {
       gameState.rightScore++;
-      updateScore('.js-right-score', gameState.rightScore);
       if (gameState.rightScore === gameConfig.maxScore) {
         gameState.isPaused = true;
         gameState.isWin = true;
@@ -78,7 +72,6 @@ export function update(
     }
     if (ball.x + ball.radius > canvas.width) {
       gameState.leftScore++;
-      updateScore('.js-left-score', gameState.leftScore);
       if (gameState.leftScore === gameConfig.maxScore) {
         gameState.isPaused = true;
         gameState.isWin = true;

@@ -1,5 +1,28 @@
 import { Paddle, Ball, GameConfig, ButtonRect } from "./types.js";
 
+export function drawScore (
+  ctx: CanvasRenderingContext2D | null,
+  canvas : HTMLCanvasElement,
+  side: 'left' | 'right',
+  score: number
+) {
+  if (!ctx) return;
+
+  const fontSize = 32;
+  const paddingY = 20;
+
+  ctx.fillStyle = 'rgb(70, 61, 61)';
+  ctx.font = `${fontSize}px Arial`;
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'center';
+
+  const x = side === 'left'
+    ? canvas.width  / 4
+    : (canvas.width * 3) / 4;
+
+  ctx.fillText(String(score), x, paddingY);
+}
+
 export function drawPaddle(
   paddle : Paddle,
   ctx: CanvasRenderingContext2D | null,

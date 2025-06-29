@@ -5,7 +5,7 @@ import { updatePaddleDirection, update } from "./update-game-elems.js";
 import { setupPlayAgainBtnInteraction } from "./interact-game-elems.js";
 import {
   drawPaddle, drawBall, drawDividingLine,
-  drawWinText, drawPlayAgainBtn
+  drawWinText, drawPlayAgainBtn, drawScore
 } from "./draw-game-elems.js";
 
 export function game() {
@@ -60,6 +60,9 @@ export function game() {
 
   function gameLoop() {
     if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawScore(ctx, canvas, 'left',  gameState.leftScore);
+    drawScore(ctx, canvas, 'right', gameState.rightScore);
 
     drawPaddle(leftPaddle, ctx, gameConfig);
     drawPaddle(rightPaddle, ctx, gameConfig);

@@ -17,6 +17,5 @@ initGameOptionHighlight();
 useGameOption();
 
 if (window.location.hash === '#game-page') {
-  console.log('it is on the pong ts');
   game();
 }
