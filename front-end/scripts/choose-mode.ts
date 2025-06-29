@@ -25,7 +25,7 @@ export function useGameOption() {
       option = optionEl?.dataset.option;
 
     if (option === 'quick-play') {
-      location.hash = 'quick-game-page';
+      location.hash = 'game-page';
       game();
     }
   });

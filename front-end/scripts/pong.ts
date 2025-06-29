@@ -6,6 +6,7 @@ import {
   initGameOptionHighlight,
   useGameOption
 } from './choose-mode.js';
+import { game } from './game.js';
 
 // for the welcome page:
 setInitialWelcomePage();
@@ -14,3 +15,8 @@ addHashForChooseModePage();
 // for the choose mode page:
 initGameOptionHighlight();
 useGameOption();
+
+if (window.location.hash === '#game-page') {
+  console.log('it is on the pong ts');
+  game();
+}
