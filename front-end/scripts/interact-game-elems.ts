@@ -1,9 +1,9 @@
-import { game } from "./game.js";
 import { ButtonRect } from "./types.js";
 
-export function setupPlayAgainBtnInteraction(
+export function bindButtonEvent(
   canvas: HTMLCanvasElement,
-  btnRect : ButtonRect
+  btnRect : ButtonRect,
+  callback: () => void
 ) {
   const clientRect = canvas.getBoundingClientRect();
 
@@ -18,7 +18,7 @@ export function setupPlayAgainBtnInteraction(
       my <= btnRect.y + btnRect.height
     ) {
       canvas.removeEventListener('click', onClick);
-      game();
+      callback();
     }
   };
 
