@@ -22,7 +22,7 @@ export function game() {
     paddleWidth: 30,
     paddleHeight: 100,
     ballRadius: 10,
-    maxScore: 1,
+    maxScore: 5,
     ballInitSpeed: 9
   };
 
@@ -83,7 +83,9 @@ export function game() {
       });
       const mainMenuRect : ButtonRect
         = drawButton(ctx, canvas, winner, 'MAIN MENU', 130);
-      // setupMainMenuBtnInteraction(canvas, mainMenuRect);
+      bindButtonEvent(canvas, mainMenuRect, () => {
+        location.hash = 'choose-mode-page';
+      });
       return;
     }
 
