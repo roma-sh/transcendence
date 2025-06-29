@@ -1,7 +1,7 @@
 import {
   GameState, Paddle, KeyMap,
   Ball, GameConfig, ButtonRect } from "./types.js";
-import { updatePaddleDirection, update } from "./update-game-elems.js";
+import { updatePaddleDirection, update, resetBall } from "./update-game-elems.js";
 import { setupPlayAgainBtnInteraction } from "./interact-game-elems.js";
 import {
   drawPaddle, drawBall, drawDividingLine,
@@ -20,7 +20,7 @@ export function game() {
     paddleHeight: 100,
     ballRadius: 10,
     maxScore: 10,
-    ballInitSpeed: 5
+    ballInitSpeed: 9
   };
 
   const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -52,9 +52,10 @@ export function game() {
     radius: gameConfig.ballRadius,
     x: canvas.width / 2,
     y: canvas.height / 2,
-    dx: 7,
-    dy: 3
+    dx: 0,
+    dy: 0
   };
+  resetBall(ball, canvas, gameConfig);
 
   const keys : KeyMap = {};
 
