@@ -16,6 +16,6 @@ addHashForChooseModePage();
 initGameOptionHighlight();
 useGameOption();
 
-// launch the game
-console.log('call game function');
-game();
+if (window.location.hash === '#game-page') {
+  game();
+}

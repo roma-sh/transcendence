@@ -1,11 +1,11 @@
 #welcome-page,
 #choose-mode-page,
-#quick-game-page {
+#game-page {
   display: none;
 }
 
 #welcome-page:target,
 #choose-mode-page:target,
-#quick-game-page:target {
+#game-page:target {
   display: initial;
 }

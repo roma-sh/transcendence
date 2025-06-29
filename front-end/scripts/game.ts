@@ -1,20 +1,27 @@
-import { Paddle, KeyMap, Ball } from "./types.js";
-import { drawPaddle, drawBall, drawDividingLine } from "./draw-game-elems.js";
-import { updatePaddleDirection, updateScore } from "./update-game-elems.js";
+import {
+  GameState, Paddle, KeyMap,
+  Ball, GameConfig, ButtonRect } from "./types.js";
+import { updatePaddleDirection, update, resetBall } from "./update-game-elems.js";
+import { setupPlayAgainBtnInteraction } from "./interact-game-elems.js";
+import {
+  drawPaddle, drawBall, drawDividingLine,
+  drawWinText, drawPlayAgainBtn, drawScore
+} from "./draw-game-elems.js";
 
 export function game() {
-  let isPaused = true;
-  let leftScore = 0;
-  let rightScore = 0;
-
-  function toggleGame() {
-    const buttonEl = document.querySelector('.js-start-button-guick-game');
-    buttonEl?.addEventListener('click', () => {
-      isPaused = !isPaused;
-      buttonEl.textContent = isPaused ? 'START' : 'STOP';
-    });
-  }
-  toggleGame();
+  const gameState : GameState = {
+    isPaused: false,
+    isWin: false,
+    leftScore: 0,
+    rightScore: 0
+  };
+  const gameConfig : GameConfig = {
+    paddleWidth: 30,
+    paddleHeight: 100,
+    ballRadius: 10,
+    maxScore: 10,
+    ballInitSpeed: 9
+  };
 
   const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
 
@@ -30,100 +37,49 @@ export function game() {
     return;
   }
 
-  const paddleWidth = 30;
-  const paddleHeight = 100;
-
   const leftPaddle : Paddle = {
     x: 10,
-    y: canvas.height / 2 - paddleHeight / 2,
+    y: canvas.height / 2 - gameConfig.paddleHeight / 2,
     dy: 0
   };
   const rightPaddle : Paddle = {
-    x: canvas.width - paddleWidth - 10,
-    y: canvas.height / 2 - paddleHeight / 2,
+    x: canvas.width - gameConfig.paddleWidth - 10,
+    y: canvas.height / 2 - gameConfig.paddleHeight / 2,
     dy: 0
   };
 
   let ball : Ball = {
-    radius: 10,
+    radius: gameConfig.ballRadius,
     x: canvas.width / 2,
     y: canvas.height / 2,
-    dx: 5,
-    dy: 3
+    dx: 0,
+    dy: 0
   };
+  resetBall(ball, canvas, gameConfig);
 
   const keys : KeyMap = {};
-
-  function resetBall() {
-    ball.x = canvas.width / 2;
-    ball.y = canvas.height / 2;
-    ball.dx = -ball.dx;
-    ball.dy = (Math.random() * 4) - 2;
-  }
-
-  function update() {
-    if (isPaused) return;
-
-    ball.x += ball.dx;
-    ball.y += ball.dy;
-
-    if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
-      ball.dy = -ball.dy;
-    }
-
-    if (
-      ball.x - ball.radius < leftPaddle.x + paddleWidth &&
-      ball.y > leftPaddle.y &&
-      ball.y < leftPaddle.y + paddleHeight
-    ) {
-      ball.dx = -ball.dx;
-      ball.x = leftPaddle.x + paddleWidth + ball.radius;
-    }
-
-    if (
-      ball.x + ball.radius > rightPaddle.x &&
-      ball.y > rightPaddle.y &&
-      ball.y < rightPaddle.y + paddleHeight
-    ) {
-      ball.dx = -ball.dx;
-      ball.x = rightPaddle.x - ball.radius;
-    }
-
-    if (ball.x - ball.radius < 0) {
-      rightScore++;
-      updateScore('.js-right-score', rightScore);
-      isPaused = true;
-      setTimeout(() => {
-        resetBall();
-        isPaused = false;
-      }, 1500);
-    }
-    if (ball.x + ball.radius > canvas.width) {
-      leftScore++;
-      updateScore('.js-left-score', leftScore);
-      isPaused = true;
-      setTimeout(() => {
-        resetBall();
-        isPaused = false;
-      }, 1500);
-    }
-
-    leftPaddle.y += leftPaddle.dy;
-    rightPaddle.y += rightPaddle.dy;
-
-    leftPaddle.y = Math.max(Math.min(leftPaddle.y, canvas.height - paddleHeight), 0);
-    rightPaddle.y = Math.max(Math.min(rightPaddle.y, canvas.height - paddleHeight), 0);
-  }
 
   function gameLoop() {
     if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    drawPaddle(leftPaddle, ctx, paddleWidth, paddleHeight);
-    drawPaddle(rightPaddle, ctx, paddleWidth, paddleHeight);
-    drawBall(ctx, isPaused, ball);
+    drawScore(ctx, canvas, 'left',  gameState.leftScore);
+    drawScore(ctx, canvas, 'right', gameState.rightScore);
+
+    drawPaddle(leftPaddle, ctx, gameConfig);
+    drawPaddle(rightPaddle, ctx, gameConfig);
+    drawBall(ctx, gameState.isPaused, ball);
     drawDividingLine(ctx, canvas);
 
-    update();
+    if (gameState.isWin) {
+      const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
+      drawWinText(ctx, canvas, winner);
+      const btnRect : ButtonRect | null
+        = drawPlayAgainBtn(ctx, canvas, winner);
+      if (btnRect) setupPlayAgainBtnInteraction(canvas, btnRect);
+      return;
+    }
+
+    update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
 
     requestAnimationFrame(gameLoop);
   }

@@ -1,24 +1,50 @@
-import { Paddle, Ball } from "./types.js";
+import { Paddle, Ball, GameConfig, ButtonRect } from "./types.js";
+
+export function drawScore (
+  ctx: CanvasRenderingContext2D | null,
+  canvas : HTMLCanvasElement,
+  side: 'left' | 'right',
+  score: number
+) {
+  if (!ctx) return;
+
+  const fontSize = 32;
+  const paddingY = 20;
+
+  ctx.fillStyle = 'rgb(70, 61, 61)';
+  ctx.font = `${fontSize}px Arial`;
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'center';
+
+  const x = side === 'left'
+    ? canvas.width  / 4
+    : (canvas.width * 3) / 4;
+
+  ctx.fillText(String(score), x, paddingY);
+}
 
 export function drawPaddle(
   paddle : Paddle,
   ctx: CanvasRenderingContext2D | null,
-  width: number, height: number) {
+  gameConfig : GameConfig) {
 
   const radius = 8;
   if (ctx) {
     ctx.fillStyle = 'rgb(70, 61, 61)';
     ctx.beginPath();
     ctx.moveTo(paddle.x + radius, paddle.y);
-    ctx.lineTo(paddle.x + width - radius, paddle.y);
-    ctx.quadraticCurveTo(paddle.x + width, paddle.y,
-      paddle.x + width, paddle.y + radius);
-    ctx.lineTo(paddle.x + width, paddle.y + height - radius);
-    ctx.quadraticCurveTo(paddle.x + width, paddle.y + height,
-      paddle.x + width - radius, paddle.y + height);
-    ctx.lineTo(paddle.x + radius, paddle.y + height);
-    ctx.quadraticCurveTo(paddle.x, paddle.y + height, paddle.x,
-      paddle.y + height - radius);
+    ctx.lineTo(paddle.x + gameConfig.paddleWidth - radius, paddle.y);
+    ctx.quadraticCurveTo(paddle.x + gameConfig.paddleWidth, paddle.y,
+      paddle.x + gameConfig.paddleWidth, paddle.y + radius);
+    ctx.lineTo(paddle.x + gameConfig.paddleWidth,
+      paddle.y + gameConfig.paddleHeight - radius);
+    ctx.quadraticCurveTo(paddle.x + gameConfig.paddleWidth,
+      paddle.y + gameConfig.paddleHeight,
+      paddle.x + gameConfig.paddleWidth - radius,
+      paddle.y + gameConfig.paddleHeight);
+    ctx.lineTo(paddle.x + radius, paddle.y + gameConfig.paddleHeight);
+    ctx.quadraticCurveTo(paddle.x, paddle.y + gameConfig.paddleHeight,
+      paddle.x, paddle.y + gameConfig.paddleHeight - radius);
     ctx.lineTo(paddle.x, paddle.y + radius);
     ctx.quadraticCurveTo(paddle.x, paddle.y, paddle.x + radius, paddle.y);
     ctx.closePath();
@@ -66,4 +92,74 @@ export function drawDividingLine(
     ctx.stroke();
     ctx.setLineDash([]);
   }
+}
+
+export function drawWinText(
+  ctx: CanvasRenderingContext2D | null,
+  canvas : HTMLCanvasElement,
+  winner : 'left' | 'right') {
+    if (!ctx) return;
+
+    const text = 'WIN';
+    ctx.font = "48px Arial";
+    ctx.textAlign = 'center';
+    // ctx.textBaseline = 'middle';
+
+    const leftCoords = {
+      x: canvas.width / 4,
+      y: canvas.height / 2,
+    };
+    const rightCoords = {
+      x: canvas.width * (3 / 4),
+      y: canvas.height / 2,
+    };
+
+    const pos = winner === 'left' ? leftCoords : rightCoords;
+    ctx.fillText('WIN', pos.x, pos.y);
+}
+
+export function drawPlayAgainBtn (
+  ctx: CanvasRenderingContext2D | null,
+  canvas: HTMLCanvasElement,
+  winner: 'left' | 'right'
+) : ButtonRect | null {
+  if (!ctx) return null;
+
+  const btnText = 'PLAY AGAIN';
+  const btnWidth = 150;
+  const btnHeight = 40;
+  const radius = btnHeight / 2;
+
+  const centerX =
+    winner === 'left'
+      ? canvas.width  / 4
+      : (canvas.width * 3) / 4;
+  const centerY = canvas.height / 2 + 80;
+
+  const x = centerX - btnWidth / 2;
+  const y = centerY - btnHeight / 2;
+
+  ctx.fillStyle = 'rgb(70, 61, 61)';
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + btnWidth - radius, y);
+  ctx.quadraticCurveTo(x + btnWidth,y, x + btnWidth, y + radius);
+  ctx.lineTo(x + btnWidth, y + btnHeight - radius);
+  ctx.quadraticCurveTo(x + btnWidth, y + btnHeight,
+    x + btnWidth - radius, y + btnHeight);
+  ctx.lineTo(x + radius, y + btnHeight);
+  ctx.quadraticCurveTo(x, y + btnHeight,
+    x, y + btnHeight - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '18px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(btnText, centerX, centerY);
+
+  return { x, y, width: btnWidth, height: btnHeight };
 }

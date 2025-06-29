@@ -3,40 +3,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100vh;
 }
 
 #gameCanvas {
   border: 2px solid rgb(165, 162, 162);
   border-radius: 20px;
   display: block;
-}
-
-.start-button-guick-game {
-  border: none;
-  margin-top: 20px;
-  padding: 15px 20px;
-  font-size: 20px;
-  background-color: var(--main-color);
-  color: white;
-  border-radius: 30px;
-  cursor: pointer;
-}
-
-.start-button-guick-game:hover {
-  opacity: 0.7;
-}
-
-.scores {
-  display: flex;
-  justify-content: space-between;
-  width: 630px;
-  align-items: center;
-  padding-top: 50px;
-  margin: auto;
-}
-
-.score {
-  font-size: 30px;
-  font-family: Arial;
-  color: var(--main-color);
 }
