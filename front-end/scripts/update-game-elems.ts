@@ -30,6 +30,14 @@ export function update(
   canvas : HTMLCanvasElement,
   gameConfig : GameConfig) {
 
+    leftPaddle.y += leftPaddle.dy;
+    rightPaddle.y += rightPaddle.dy;
+
+    leftPaddle.y = Math.max(Math.min(leftPaddle.y,
+      canvas.height - gameConfig.paddleHeight), 0);
+    rightPaddle.y = Math.max(Math.min(rightPaddle.y,
+      canvas.height - gameConfig.paddleHeight), 0);
+
     if (gameState.isPaused) return;
 
     ball.x += ball.dx;
@@ -102,14 +110,6 @@ export function update(
         gameState.isPaused = false;
       }, 1500);
     }
-
-    leftPaddle.y += leftPaddle.dy;
-    rightPaddle.y += rightPaddle.dy;
-
-    leftPaddle.y = Math.max(Math.min(leftPaddle.y,
-      canvas.height - gameConfig.paddleHeight), 0);
-    rightPaddle.y = Math.max(Math.min(rightPaddle.y,
-      canvas.height - gameConfig.paddleHeight), 0);
 }
 
 export function resetBall(
