@@ -7,6 +7,7 @@ import {
   useGameOption
 } from './choose-mode.js';
 import { game } from './game.js';
+import { tournament } from "./tournament.js";
 
 // for the welcome page:
 setInitialWelcomePage();
@@ -16,6 +17,8 @@ addHashForChooseModePage();
 initGameOptionHighlight();
 useGameOption();
 
-if (window.location.hash === '#game-page') {
+if (location.hash === '#game-page') {
   game();
+} else if (location.hash === '#tournament-page') {
+  tournament();
 }

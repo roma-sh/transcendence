@@ -1,4 +1,5 @@
 import { game } from "./game.js";
+import { tournament } from "./tournament.js";
 
 export function initGameOptionHighlight() {
   const gameOptionEls = document.querySelectorAll('.js-game-option');
@@ -27,6 +28,9 @@ export function useGameOption() {
     if (option === 'quick-play') {
       location.hash = 'game-page';
       game();
+    } else if (option === 'tournament') {
+      location.hash = 'tournament-page';
+      tournament();
     }
   });
 }

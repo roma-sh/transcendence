@@ -1,0 +1,41 @@
+.player-count {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#player-count-input {
+  padding: 15px;
+  width: 350px;
+  margin-top: 20px;
+  border: 2px solid rgb(165, 162, 162);
+  border-radius: 4px;
+  font-size: 20px;
+  font-family: Arial;
+  color: var(--main-color);
+}
+
+.player-count p {
+  font-size: 40px;
+  color: var(--main-color);
+}
+
+.next-btn-after-count {
+  border: none;
+  padding: 10px 50px;
+  margin-top: 20px;
+  border-radius: 20px;
+  font-size: 20px;
+  font-family: Arial;
+  text-align: center;
+  color: white;
+  background-color: var(--main-color);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.next-btn-after-count:hover {
+  opacity: 0.7;
+}
