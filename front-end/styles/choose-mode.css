@@ -10,7 +10,7 @@
 .game-option-2 {
   width: 300px;
   height: 300px;
-  border: 2px solid rgb(165, 162, 162);
+  border: 2px solid var(--border-color);
   border-radius: 20px;
   display: flex;
   align-items: center;

@@ -1,5 +1,6 @@
 import { game } from "./game.js";
 import { tournament } from "./tournament.js";
+import { TournamentSettings } from "./types.js";
 
 export function initGameOptionHighlight() {
   const gameOptionEls = document.querySelectorAll('.js-game-option');
@@ -16,7 +17,7 @@ export function initGameOptionHighlight() {
   });
 }
 
-export function useGameOption() {
+export function useGameOption(tSettings: TournamentSettings) {
   const startButtonEl = document.querySelector('.js-start-button');
 
   startButtonEl?.addEventListener('click', () => {
@@ -30,7 +31,7 @@ export function useGameOption() {
       game();
     } else if (option === 'tournament') {
       location.hash = 'tournament-page';
-      tournament();
+      tournament(tSettings);
     }
   });
 }
