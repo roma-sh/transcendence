@@ -37,3 +37,8 @@ export interface ButtonRect {
   width: number;
   height: number;
 }
+
+export interface TournamentSettings {
+  numberOfPlayers: number,
+  playerAliases: string[]
+}

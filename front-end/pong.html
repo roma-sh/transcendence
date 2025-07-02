@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="./styles/switch-pages.css" />
     <link rel="stylesheet" href="./styles/choose-mode.css" />
     <link rel="stylesheet" href="./styles/game-page.css" />
+    <link rel="stylesheet" href="./styles/tournament-player-count.css" />
+    <link rel="stylesheet" href="./styles/tournament-player-aliases.css" />
   </head>
   <body>
     <section id="welcome-page">
@@ -42,6 +44,27 @@
     <section id="game-page">
       <div class="game-window">
         <canvas id="gameCanvas" width="800" height="500"></canvas>
+      </div>
+    </section>
+
+    <section id="tournament-page">
+      <div class="player-count">
+        <p>Enter number of players</p>
+        <input type="number"
+          id="player-count-input"
+          name="playerCount"
+          value="2" max="100" min="2">
+        <button class="next-btn-after-count
+          js-next-btn-after-count">NEXT</button>
+      </div>
+    </section>
+
+    <section id="tournament-page-player-aliases">
+      <div class="player-aliases js-player-aliases">
+        <p id="enter-aliases-hint">Enter aliases</p>
+        <div class="aliase-inputs"></div>
+        <button class="next-btn-after-aliases
+          js-next-btn-after-aliases">NEXT</button>
       </div>
     </section>
 
