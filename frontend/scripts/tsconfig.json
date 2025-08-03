@@ -6,7 +6,8 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "outDir": "./js"
+    "outDir": "../../public/scripts/js",
+    "rootDir": "./"
   },
   "include": [
     "*.ts"
