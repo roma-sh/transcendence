@@ -13,6 +13,8 @@ import {
 } from "./tournament.js";
 import { TournamentSettings } from './types.js';
 
+import { initSignUpPage, initLogInPage } from './auth-pages.js';
+
 const tSettings : TournamentSettings = {
   numberOfPlayers: 1,
   playerAliases: [],
@@ -32,4 +34,9 @@ if (location.hash === '#game-page') {
   tournament(tSettings);
 } else if (location.hash === '#tournament-page-player-aliases') {
   addAliasesSection(tSettings);
+}
+else if (location.hash === '#sign-up-page') {
+  initSignUpPage();
+} else if (location.hash === '#log-in-page') {
+  initLogInPage();
 }

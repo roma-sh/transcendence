@@ -29,3 +29,9 @@ echo "CSS copied to public"
 # Step 6: Start the server
 echo "Starting the server..."
 node server.js
+
+
+# if you don't have typescript, you can add it to the packages:
+# npm install typescript --save-dev
+# Or you can install it globally:
+# npm install -g typescript
