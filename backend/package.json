@@ -1,5 +1,5 @@
 {
-  "name": "transcendence",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -7,20 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/roma-sh/transcendence.git"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/roma-sh/transcendence/issues"
-  },
-  "homepage": "https://github.com/roma-sh/transcendence#readme",
   "dependencies": {
     "@fastify/static": "^8.2.0",
-    "bcryptjs": "^3.0.2",
     "fastify": "^5.5.0",
     "sqlite3": "^5.1.7"
   },

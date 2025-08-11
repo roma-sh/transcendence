@@ -21,9 +21,10 @@ const fastify = Fastify({ logger: true });
 // we can write the first line as:
 // fastify.register(require('@fastify/static'), {
 fastify.register(fastifyStatic, {
-  root: path.join(__dirname, 'public'),
+  root: path.join(__dirname, '../public'),
   prefix: '/', 
 });
+console.log('Static files served from:', path.join(__dirname, 'public'));
 
 // fastify.get('/', async (request, reply) => {
 //   return reply.redirect('#welcome-page');
@@ -31,16 +32,25 @@ fastify.register(fastifyStatic, {
 
 
 // Create (or open) the SQLite database
-const user_db = new sqlite3.Database('./database/user_db.db');
+const user_db = new sqlite3.Database('../database/user_db.db');
 
 // Create table if not exists
 // The table will store:
 // id: a number that increases automatically (unique for each row).
 // name: a text field to store the user's name.
-user_db.run(`CREATE TABLE IF NOT EXISTS names (
+// user_db.run(`CREATE TABLE IF NOT EXISTS names (
+//   id INTEGER PRIMARY KEY AUTOINCREMENT,
+//   name TEXT
+// )`);
+
+
+user_db.run(`CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT
+  username TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL
 )`);
+
 
 // Route to handle POST /submit
 /*
@@ -81,6 +91,76 @@ We extract name from the body using { name } = request.body
 //                 }
 //             });
 // });
+
+// Promise wrapper for inserting user
+function insertUser(username, email, password) {
+  return new Promise((resolve, reject) => {
+    user_db.run(
+      `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+      [username, email, password],  // storing password as plain text now
+      function (err) {
+        if (err) return reject(err);
+        resolve(this.lastID);
+      }
+    );
+  });
+}
+
+// Signup route without hashing
+fastify.post('/api/auth/signup', async (request, reply) => {
+  const { username, email, password } = request.body;
+
+  if (!username || !email || !password) {
+    return reply.code(400).send({ error: 'All fields are required' });
+  }
+
+  try {
+    const userId = await insertUser(username, email, password);
+    return reply.send({ success: true, userId });
+  } catch (err) {
+    if (err.message.includes('UNIQUE constraint failed')) {
+      return reply.code(409).send({ error: 'Email already exists' });
+    }
+    return reply.code(500).send({ error: 'Server error', details: err.message });
+  }
+});
+
+
+// Login route (without hashing)
+fastify.post('/api/auth/login', async (request, reply) => {
+  const { username, password } = request.body;
+
+  try {
+    const user = await new Promise((resolve, reject) => {
+      user_db.get(
+        'SELECT * FROM users WHERE username = ? AND password = ?',
+        [username, password],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        }
+      );
+    });
+
+    if (!user) {
+      return reply.status(401).send({ message: 'Invalid credentials' });
+    }
+
+    console.log('Login successful:', user);
+    return reply.status(200).send({ user });
+
+  } catch (error) {
+    console.error('Login error:', error);
+    return reply.status(500).send({ message: 'Server error' });
+  }
+});
+
+
+
+
 
 // Start server
 fastify.listen({ port: 3000 }, (err, address) => {

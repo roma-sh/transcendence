@@ -3,6 +3,7 @@ import { initGameOptionHighlight, useGameOption } from './choose-mode.js';
 import { game } from './game.js';
 import { tournament, addAliasesSection } from "./tournament.js";
 import { initSignUpPage, initLogInPage } from './auth-pages.js';
+import { initUserProfilePage } from './user-profile.js';
 const tSettings = {
     numberOfPlayers: 1,
     playerAliases: [],
@@ -13,18 +14,29 @@ addHashForChooseModePage();
 // for the choose mode page:
 initGameOptionHighlight();
 useGameOption(tSettings);
-if (location.hash === '#game-page') {
-    game();
+// Function to handle hash-based navigation
+function handleHashChange() {
+    const hash = location.hash;
+    if (hash === '#game-page') {
+        game();
+    }
+    else if (hash === '#tournament-page') {
+        tournament(tSettings);
+    }
+    else if (hash === '#tournament-page-player-aliases') {
+        addAliasesSection(tSettings);
+    }
+    else if (hash === '#sign-up-page') {
+        initSignUpPage();
+    }
+    else if (hash === '#log-in-page') {
+        initLogInPage();
+    }
+    else if (hash === '#user-profile') {
+        initUserProfilePage();
+    }
 }
-else if (location.hash === '#tournament-page') {
-    tournament(tSettings);
-}
-else if (location.hash === '#tournament-page-player-aliases') {
-    addAliasesSection(tSettings);
-}
-else if (location.hash === '#sign-up-page') {
-    initSignUpPage();
-}
-else if (location.hash === '#log-in-page') {
-    initLogInPage();
-}
+// Run on initial load
+handleHashChange();
+// Listen for hash changes
+window.addEventListener('hashchange', handleHashChange);

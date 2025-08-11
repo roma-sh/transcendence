@@ -1,3 +1,5 @@
 /database/user_db.db
-/node_modules/
-/public/js/
+/backend/node_modules/
+/public/scripts/js/
+/public/styles/
+/public/index.html
