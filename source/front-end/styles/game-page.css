@@ -1,0 +1,13 @@
+.game-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#gameCanvas {
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  display: block;
+}
