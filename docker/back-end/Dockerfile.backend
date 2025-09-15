@@ -2,12 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY ../../source/backend/package*.json ./
+COPY package*.json ./
 
 RUN npm install
 
-COPY ../../source/backend .
+#COPY ../../source/backend/* .
+COPY index.js  ./
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+#CMD ["npm", "run", "start"]
+CMD ["node", "index.js"]

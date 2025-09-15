@@ -30,7 +30,7 @@ services:
     image: nginx:alpine
     container_name: proxy
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ../docker/proxy/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -49,6 +49,7 @@ services:
       - POSTGRES_DB=transcendence
     volumes:
       - /goinfre/$USER/ft_transcendence/db_data:/var/lib/postgresql/data
+      - ../docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     restart: always
     networks:
       - trance-net

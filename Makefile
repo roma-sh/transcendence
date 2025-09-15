@@ -8,24 +8,26 @@ COMPOSE = docker/docker-compose.yml
 
 build:
 	echo "Building . . ."
-	docker-compose -f $(COMPOSE) build
+	docker compose -f $(COMPOSE) build
 
 up:
 	echo "Starting . . ."#
-	docker-compose -f $(COMPOSE) up -d
+	docker compose -f $(COMPOSE) up -d
 
 down:
 	echo "Stopping . . ."#
-	docker-compose -f $(COMPOSE) down
+	docker compose -f $(COMPOSE) down
 
 #re
 
 logs:
-	docker-compose -f $(COMPOSE) logs -f --tail=150
+	docker compose -f $(COMPOSE) logs -f --tail=150
 
 clean:
 	echo "Cleaning . . ."
 	docker system prune -f
+
+#fclean: #deletes all volumes !
 
 setup:
 	mkdir -p /goinfre/$USER/ft_transcendence/db_data
