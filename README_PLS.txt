@@ -11,7 +11,7 @@ there will be the following containers, if you have any thoughts on mind just HM
 -> Reverse proxy (nginx setup)
 -> Frontend
 -> Backend
--> sqLite
+-> progresql
 -> (maybe hashicorp vault)
 -> (maybe monitoring software)
 
