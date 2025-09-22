@@ -1,0 +1,9 @@
+FROM hashicorp/vault:latest
+
+RUN apk add --no-cache tini jq curl bash
+
+COPY init-secrets.sh /vault/init-secrets.sh
+
+RUN chmod +x /vault/init-secrets.sh
+
+ENTRYPOINT ["/sbin/tini", "--"]

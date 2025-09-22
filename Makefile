@@ -13,7 +13,7 @@ DB_DIR = /goinfre/$USER/ft_transcendence/db_data
 
 .SILENT:
 
-all: setup build up
+all: build up
 
 build:
 	echo "$(BLUE)Building$(NC) . . ."
@@ -35,15 +35,11 @@ clean: down
 
 fclean: clean
 	echo "$(RED)Cleaning everything now$(NC) . . ."
-	docker volume prune -f
-	rm -rf $(DB_DIR)
-	$(MAKE) setup
+	docker compose -f $(COMPOSE) down -v
 
 db-reset: down
-	rm -rf $(DB_DIR)
-	docker volume prune -f
-	$(MAKE) setup
 	echo "$(RED)Database reset !$(NC)"
+	docker volume rm -f ft_transcendence_postgres_data || true
 
 logs:
 	docker compose -f $(COMPOSE) logs --tail=150

@@ -1,4 +1,4 @@
-#-SERVICES
+#-SERVICES-
 services:
 
   front-end:
@@ -9,7 +9,6 @@ services:
     restart: always
     networks:
       - trance-net
-
 
   back-end:
     build:
@@ -25,7 +24,6 @@ services:
     networks:
       - trance-net
   
-
   proxy:
     image: nginx:alpine
     container_name: proxy
@@ -48,18 +46,41 @@ services:
       - POSTGRES_PASSWORD=secretpassword
       - POSTGRES_DB=transcendence
     volumes:
-      - /goinfre/$USER/ft_transcendence/db_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ../docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     restart: always
     networks:
       - trance-net
 
-  #vault:
+  vault:
+    build:
+      context: ./vault
+      dockerfile: Dockerfile.vault
+    container_name: vault
+    ports:
+      - "8200:8200" #maybe delete or put into reverse proxy [for admin panel]
+    environment:
+      VAULT_LOCAL_CONFIG: |
+        listener "tcp" { adress = "0.0.0.0:8200" tls_disable = 1 }
+        storage "file" { path = "/vault/file" }
+        ui = true
+    volumes:
+      - vault_data:/vault/file
+    entrypoint: ["/sbin/tini", "--"]
+    command: sh -c '/vault/init-secrets.sh && exec vault server -config=/vault/config.hcl'
+    restart: always
+    networks:
+      - trance-net
 
-#-NETWORKS
+  #grafana:
+
+#-NETWORKS-
 networks:
   trance-net: 
     driver: bridge
     name: inception
 
-#-VOLUMES
+#-VOLUMES-
+volumes:
+  postgres_data:
+  vault_data:
