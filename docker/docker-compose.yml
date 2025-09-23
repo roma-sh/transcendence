@@ -1,6 +1,7 @@
 #-SERVICES-
 services:
-
+  # MAYBE PUT ALL VARIABLES INTO A ENV FILE 
+  # CHANGE TO HTTPS AND ADD SELFSIGNED CERTIFICATE
   front-end:
     build:
       context: ../source/front-end
@@ -52,27 +53,54 @@ services:
     networks:
       - trance-net
 
-  vault:
-    build:
-      context: ./vault
-      dockerfile: Dockerfile.vault
-    container_name: vault
-    ports:
-      - "8200:8200" #maybe delete or put into reverse proxy [for admin panel]
-    environment:
-      VAULT_LOCAL_CONFIG: |
-        listener "tcp" { adress = "0.0.0.0:8200" tls_disable = 1 }
-        storage "file" { path = "/vault/file" }
-        ui = true
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
     volumes:
-      - vault_data:/vault/file
-    entrypoint: ["/sbin/tini", "--"]
-    command: sh -c '/vault/init-secrets.sh && exec vault server -config=/vault/config.hcl'
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
     restart: always
     networks:
       - trance-net
 
-  #grafana:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    restart: always
+    networks:
+      - trance-net    
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    command:
+      - '--path.rootfs=/host'
+    restart: always
+    networks:
+      - trance-net
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: postgres-exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://trance:secretpassword@database:5432/transcendence?sslmode=disable
+    depends_on:
+      - database
+    restart: always
+    networks:
+      - trance-net
 
 #-NETWORKS-
 networks:
@@ -83,4 +111,5 @@ networks:
 #-VOLUMES-
 volumes:
   postgres_data:
-  vault_data:
+  grafana_data:
+  prometheus_data:
