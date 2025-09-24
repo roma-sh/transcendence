@@ -1,14 +1,33 @@
 const Fastify = require('fastify');
 const path = require('path');
 const fastifyStatic = require('@fastify/static');
-// const user_db = require('./user_db');
 
+const app = Fastify({ logger: true });
+
+// server.js (ή routes/userRoutes.js)
+const user_db = require('./db'); // the connection with the database
+
+app.get('/api/checkAlias/:alias', (request, reply) => {
+  const { alias } = request.params;
+  const sql = `SELECT username FROM users WHERE username = ?`;
+
+  user_db.get(sql, [alias], (err, row) => {
+    if (err) {
+      return reply.code(500).send({ error: 'Database error' });
+    }
+    
+    // if row exists, means it's in the database
+    if (row) {
+      return reply.code(200).send({ exists: true });
+    } else {
+      return reply.code(200).send({ exists: false });
+    }
+  });
+});
 
 // Register route files
 const authRoutes = require('./routes/auth');
 // const userRoutes = require('./routes/users');
-
-const app = Fastify({ logger: true });
 
 app.register(fastifyStatic, {
   root: path.join(__dirname, '../public'),
