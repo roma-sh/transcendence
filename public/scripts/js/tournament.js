@@ -5,6 +5,6 @@ export function tournament(tSettings) {
 }
 export function addAliasesSection(tSettings) {
     location.hash = 'tournament-page-player-aliases';
-    generateInputsForAliases(tSettings);
     registerNextClickAfterAliases(tSettings);
+    generateInputsForAliases(tSettings);
 }

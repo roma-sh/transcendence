@@ -13,6 +13,6 @@ export function tournament(tSettings: TournamentSettings) {
 
 export function addAliasesSection(tSettings: TournamentSettings) {
   location.hash = 'tournament-page-player-aliases';
-  generateInputsForAliases(tSettings);
   registerNextClickAfterAliases(tSettings);
+  generateInputsForAliases(tSettings);
 }

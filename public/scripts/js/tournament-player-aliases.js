@@ -14,15 +14,49 @@ export function generateInputsForAliases(tSettings) {
     if (aliaseInputEl)
         aliaseInputEl.innerHTML = html;
 }
+async function checkAliasExists(alias) {
+    const response = await fetch(`http://localhost:3000/api/checkAlias/${alias}`);
+    const data = await response.json();
+    return data.exists;
+}
 export function registerNextClickAfterAliases(tSettings) {
     const btnEl = document.querySelector('.js-next-btn-after-aliases');
     if (!btnEl)
         return;
-    btnEl.addEventListener('click', () => {
+    btnEl.addEventListener('click', async (e) => {
+        e.preventDefault();
         const inputsList = document.querySelectorAll('.js-player-alias-input');
-        const inputsArr = Array.from(inputsList);
-        const inputValuesArr = inputsArr.map((input) => input.value);
-        tSettings.playerAliases = inputValuesArr;
-        console.log(tSettings.playerAliases);
+        const aliases = Array.from(inputsList).map((input) => input.value.trim());
+        // Πρώτα, ελέγχουμε αν κάποιο πεδίο είναι κενό.
+        if (aliases.some(alias => !alias)) {
+            alert("Παρακαλώ συμπληρώστε όλα τα πεδία.");
+            return;
+        }
+        const aliasesExist = [];
+        const aliasesDoNotExist = [];
+        // Έλεγχος για κάθε ψευδώνυμο
+        for (const alias of aliases) {
+            const exists = await checkAliasExists(alias);
+            if (exists) {
+                aliasesExist.push(alias);
+            }
+            else {
+                aliasesDoNotExist.push(alias);
+            }
+        }
+        // Εμφάνιση των τελικών αποτελεσμάτων
+        if (aliasesDoNotExist.length > 0) {
+            alert(`Δυστυχώς, ο χρήστης(ες) "${aliasesDoNotExist.join(', ')}" δεν βρέθηκε(αν) στη βάση μας. Παρακαλώ εγγραφείτε πρώτα.`);
+        }
+        if (aliasesExist.length > 0) {
+            alert(`Οι χρήστες "${aliasesExist.join(', ')}" βρέθηκαν στη βάση μας. Μπορείτε να συνεχίσετε.`);
+            // Αν όλοι οι παίκτες υπάρχουν, αποθηκεύουμε τα ψευδώνυμα
+            if (aliasesDoNotExist.length === 0) {
+                tSettings.playerAliases = aliasesExist;
+                console.log("Όλοι οι παίκτες είναι εγγεγραμμένοι:", tSettings.playerAliases);
+                // Εδώ μπορείς να αλλάξεις σελίδα.
+                // location.hash = '#next-page';
+            }
+        }
     });
 }
