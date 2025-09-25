@@ -16,3 +16,11 @@ there will be the following containers, if you have any thoughts on mind just HM
 -> (maybe monitoring software)
 
 ! To assure the communication between containers i will always use the standard for the according ports, so no need to change something (:^)__!
+
+
+SECRETS ROADMAP TODO:
+- makefile option with hiddenfile as marker
+- creates the secrets folder with all files which will be empty
+- creates the ssl certs which are of course filled
+- docker compose already knows the location and name
+- make [image] etc have a check mechanic to check if the secrets are already implemented

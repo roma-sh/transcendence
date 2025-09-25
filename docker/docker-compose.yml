@@ -109,6 +109,21 @@ networks:
     driver: bridge
     name: inception
 
+secrets: # implement onto services && implement the alias creation with a script for each container 
+  POSTGRES_USER:
+    file: ./secrets/POSTGRES_USER.txt
+  POSTGRES_PASSWORD:
+    file: ./secrets/POSTGRES_PASSWORD.txt
+  POSTGRES_DB:
+    file: ./secrets/POSTGRES_DB.txt
+  GRAFANA_ADMIN_USER:
+    file: ./secrets/GRAFANA_ADMIN_USER.txt
+  GRAFANA_ADMIN_PASSWORD:
+    file: ./secrets/GRAFANA_ADMIN_PASSWORD.txt
+  POSTGRES_EXPORTER_DATASOURCE:
+    file: ./secrets/POSTGRES_EXPORTER_DATASOURCE.txt 
+  # DATASOURCE - case | implement alias creation or manual creation
+
 #-VOLUMES-
 volumes:
   postgres_data:
