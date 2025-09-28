@@ -7,6 +7,8 @@ const app = Fastify({ logger: true });
 // server.js (ή routes/userRoutes.js)
 const user_db = require('./db'); // the connection with the database
 
+
+// checking the database for the alias name
 app.get('/api/checkAlias/:alias', (request, reply) => {
   const { alias } = request.params;
   const sql = `SELECT username FROM users WHERE username = ?`;

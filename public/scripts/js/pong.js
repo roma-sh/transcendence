@@ -18,7 +18,18 @@ useGameOption(tSettings);
 function handleHashChange() {
     const hash = location.hash;
     if (hash === '#game-page') {
-        game();
+        if (tSettings.playerAliases && tSettings.playerAliases.length >= 2) {
+            console.log("Starting game with registered players:", tSettings.playerAliases);
+            // Καλούμε το game με τα αποθηκευμένα ονόματα
+            game(tSettings.playerAliases[0], tSettings.playerAliases[1]);
+        }
+        else {
+            // Scenario 2: Default/Local Game (Χωρίς εγγεγραμμένους παίκτες)
+            // Καλούμε το game χωρίς ορίσματα (θα χρησιμοποιήσει Player 1, Player 2)
+            console.log("Starting local game with default players.");
+            game();
+        }
+        // game();
     }
     else if (hash === '#tournament-page') {
         tournament(tSettings);

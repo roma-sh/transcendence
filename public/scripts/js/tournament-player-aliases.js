@@ -19,44 +19,64 @@ async function checkAliasExists(alias) {
     const data = await response.json();
     return data.exists;
 }
+let currentTSettings = null;
+async function permanentClickHandler(e) {
+    // Χρησιμοποιούμε τα tSettings που έχουν αποθηκευτεί τελευταία
+    if (!currentTSettings)
+        return;
+    e.preventDefault();
+    const inputsList = document.querySelectorAll('.js-player-alias-input');
+    const aliases = Array.from(inputsList).map((input) => input.value.trim());
+    // Έλεγχος για κενά πεδία
+    if (aliases.some(alias => !alias)) {
+        alert("Please fill in all fields.");
+        return;
+    }
+    const aliasesExist = [];
+    const aliasesDoNotExist = [];
+    // Έλεγχος ύπαρξης Aliases
+    for (const alias of aliases) {
+        const exists = await checkAliasExists(alias);
+        if (exists) {
+            aliasesExist.push(alias);
+        }
+        else {
+            aliasesDoNotExist.push(alias);
+        }
+    }
+    // Εμφάνιση αποτελεσμάτων & Ολοκλήρωση
+    if (aliasesDoNotExist.length > 0) {
+        alert(`Unfortunately, user(s) "${aliasesDoNotExist.join(', ')}" were not found in our database. Please sign up first.`);
+    }
+    if (aliasesExist.length > 0) {
+        //   alert(`Users "${aliasesExist.join(', ')}" were found in our database. You can proceed.`);
+        if (aliasesDoNotExist.length === 0) {
+            // Αποθηκεύουμε τα aliases στα currentTSettings
+            currentTSettings.playerAliases = aliasesExist;
+            console.log("All players are registered:", currentTSettings.playerAliases);
+            // game(aliasesExist[0], aliasesExist[1]);
+            location.hash = '#game-page';
+        }
+    }
+}
 export function registerNextClickAfterAliases(tSettings) {
     const btnEl = document.querySelector('.js-next-btn-after-aliases');
     if (!btnEl)
         return;
-    btnEl.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const inputsList = document.querySelectorAll('.js-player-alias-input');
-        const aliases = Array.from(inputsList).map((input) => input.value.trim());
-        // Πρώτα, ελέγχουμε αν κάποιο πεδίο είναι κενό.
-        if (aliases.some(alias => !alias)) {
-            alert("Παρακαλώ συμπληρώστε όλα τα πεδία.");
-            return;
-        }
-        const aliasesExist = [];
-        const aliasesDoNotExist = [];
-        // Έλεγχος για κάθε ψευδώνυμο
-        for (const alias of aliases) {
-            const exists = await checkAliasExists(alias);
-            if (exists) {
-                aliasesExist.push(alias);
-            }
-            else {
-                aliasesDoNotExist.push(alias);
-            }
-        }
-        // Εμφάνιση των τελικών αποτελεσμάτων
-        if (aliasesDoNotExist.length > 0) {
-            alert(`Δυστυχώς, ο χρήστης(ες) "${aliasesDoNotExist.join(', ')}" δεν βρέθηκε(αν) στη βάση μας. Παρακαλώ εγγραφείτε πρώτα.`);
-        }
-        if (aliasesExist.length > 0) {
-            alert(`Οι χρήστες "${aliasesExist.join(', ')}" βρέθηκαν στη βάση μας. Μπορείτε να συνεχίσετε.`);
-            // Αν όλοι οι παίκτες υπάρχουν, αποθηκεύουμε τα ψευδώνυμα
-            if (aliasesDoNotExist.length === 0) {
-                tSettings.playerAliases = aliasesExist;
-                console.log("Όλοι οι παίκτες είναι εγγεγραμμένοι:", tSettings.playerAliases);
-                // Εδώ μπορείς να αλλάξεις σελίδα.
-                // location.hash = '#next-page';
-            }
-        }
-    });
+    // 2. ΕΝΗΜΕΡΩΝΟΥΜΕ ΤΑ SETTINGS: Κάθε φορά που καλείται η συνάρτηση,
+    // απλά ενημερώνουμε την καθολική αναφορά (currentTSettings)
+    currentTSettings = tSettings;
+    // 3. Προσθέτουμε τον listener ΜΟΝΟ ΑΝ ΔΕΝ ΥΠΑΡΧΕΙ
+    // Σημείωση: Δεν χρειάζεται removeEventListener γιατί χρησιμοποιούμε
+    // την ίδια συνάρτηση-αναφορά (permanentClickHandler) κάθε φορά.
+    // Αυτό είναι ένα 'hack' για να δεις αν έχει προστεθεί
+    if (!btnEl.hasAttribute('data-listener-registered')) {
+        btnEl.addEventListener('click', permanentClickHandler);
+        // Χρησιμοποιούμε ένα data attribute για να θυμόμαστε ότι έγινε η καταχώρηση
+        btnEl.setAttribute('data-listener-registered', 'true');
+        console.log('Listener registered for the first time.');
+    }
+    else {
+        console.log('Listener already registered. Settings updated.');
+    }
 }
