@@ -40,6 +40,8 @@ clean: down
 
 fclean: clean
 	echo "$(RED)Cleaning everything now$(NC) . . ."
+	rm -rf $(SSL_DIR)
+	rm -rf $(SECRETS_DIR)
 	docker compose -f $(COMPOSE) down -v
 
 db-reset: down
@@ -52,21 +54,21 @@ logs:
 logs-f:
 	docker compose -f $(COMPOSE) logs -f --tail=150
 
-setup: # add deletion for fclean
+setup:
 	if [ ! -d $(SECRETS_DIR) ]; then \
-		mkdir -p $(SECRETS_DIR);
+		mkdir -p $(SECRETS_DIR); \
 	fi
 
 	if [ ! -f $(SECRETS_CHECKFILE) ]; then \
-		touch $(SECRETS_DIR)/POSTGRES_USER.txt; \
-		touch $(SECRETS_DIR)/POSTGRES_PASSWORD.txt; \
-		touch $(SECRETS_DIR)/POSTGRES_DB.txt; \
-		touch $(SECRETS_DIR)/GRAFANA_ADMIN_USER.txt; \
-		touch $(SECRETS_DIR)/GRAFANA_ADMIN_PASSWORD.txt; \
-		echo "postgresql://<username>:<password>@<host>:5432/<database>?sslmode=disable" > $(SECRETS_DIR)/POSTGRES_EXPORTER_DATASOURCE.txt; \
+		touch $(SECRETS_DIR)/POSTGRES_USER; \
+		touch $(SECRETS_DIR)/POSTGRES_PASSWORD; \
+		touch $(SECRETS_DIR)/POSTGRES_DB; \
+		touch $(SECRETS_DIR)/GF_SECURITY_ADMIN; \
+		touch $(SECRETS_DIR)/GF_SECURITY_ADMIN_PASSWORD; \
+		echo "postgresql://<username>:<password>@database:5432/<database>?sslmode=disable" > $(SECRETS_DIR)/POSTGRES_EXPORTER_DATASOURCE; \
 		echo "please fill the postgres exporter datasource with the accordingly"; \
-		echo "checkfile created"; \
 		touch $(SECRETS_CHECKFILE); \
+		echo "checkfile created"; \
 	fi
 
 	if [ ! -d $(SSL_DIR) ]; then \

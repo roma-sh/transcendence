@@ -1,8 +1,7 @@
 #-SERVICES-
 services:
-  # MAYBE PUT ALL VARIABLES INTO A ENV FILE 
   front-end:
-    build:
+    build: # Dockerfile.frontend
       context: ../source/front-end
       dockerfile: ../../docker/front-end/Dockerfile.frontend
     container_name: front-end
@@ -11,12 +10,12 @@ services:
       - trance-net
 
   back-end:
-    build:
+    build: # Dockerfile.backend
       context: ../source/back-end
       dockerfile: ../../docker/back-end/Dockerfile.backend
     container_name: back-end
-    environment:
-      - DATABASE_URL=postgresql://trance:secretpassword@database:5432/transcendence
+    secrets:
+      - POSTGRES_EXPORTER_DATASOURCE
     depends_on:
       - database
     init: true
@@ -43,10 +42,10 @@ services:
   database:
     image: postgres:15-alpine
     container_name: database
-    environment:
-      - POSTGRES_USER=trance
-      - POSTGRES_PASSWORD=secretpassword
-      - POSTGRES_DB=transcendence
+    secrets:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ../docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -69,9 +68,9 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+    secrets:
+      - GRAFANA_ADMIN_USER
+      - GRAFANA_ADMIN_PASSWORD
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - grafana_data:/var/lib/grafana
@@ -95,8 +94,8 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
     container_name: postgres-exporter
-    environment:
-      - DATA_SOURCE_NAME=postgresql://trance:secretpassword@database:5432/transcendence?sslmode=disable
+    secrets:
+      - POSTGRES_EXPORTER_DATASOURCE
     depends_on:
       - database
     restart: always
@@ -109,20 +108,20 @@ networks:
     driver: bridge
     name: inception
 
-secrets: # implement onto services && implement the alias creation with a script for each container 
+#-SECRETS-
+secrets:
   POSTGRES_USER:
-    file: ./secrets/POSTGRES_USER.txt
+    file: ./secrets/POSTGRES_USER
   POSTGRES_PASSWORD:
-    file: ./secrets/POSTGRES_PASSWORD.txt
+    file: ./secrets/POSTGRES_PASSWORD
   POSTGRES_DB:
-    file: ./secrets/POSTGRES_DB.txt
+    file: ./secrets/POSTGRES_DB
   GRAFANA_ADMIN_USER:
-    file: ./secrets/GRAFANA_ADMIN_USER.txt
+    file: ./secrets/GRAFANA_ADMIN_USER
   GRAFANA_ADMIN_PASSWORD:
-    file: ./secrets/GRAFANA_ADMIN_PASSWORD.txt
+    file: ./secrets/GRAFANA_ADMIN_PASSWORD
   POSTGRES_EXPORTER_DATASOURCE:
-    file: ./secrets/POSTGRES_EXPORTER_DATASOURCE.txt 
-  # DATASOURCE - case | implement alias creation or manual creation
+    file: ./secrets/POSTGRES_EXPORTER_DATASOURCE
 
 #-VOLUMES-
 volumes:
