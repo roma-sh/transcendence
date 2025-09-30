@@ -15,9 +15,12 @@ services:
       dockerfile: ../../docker/back-end/Dockerfile.backend
     container_name: back-end
     secrets:
-      - POSTGRES_EXPORTER_DATASOURCE
+      - DATA_SOURCE_NAME
+    volumes:
+      - ./tools/variable_init.sh:/usr/local/bin/variable_init.sh
     depends_on:
       - database
+    entrypoint: ["/bin/sh", "-c", "/usr/local/bin/variable_init.sh && exec /usr/local/bin/docker-entrypoint.sh"]
     init: true
     restart: always
     networks:
@@ -49,6 +52,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ../docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./tools/variable_init.sh:/usr/local/bin/variable_init.sh
+    entrypoint: ["/bin/sh", "-c", "/usr/local/bin/variable_init.sh && exec /usr/local/bin/docker-entrypoint.sh"]
     restart: always
     networks:
       - trance-net
@@ -69,11 +74,13 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     secrets:
-      - GRAFANA_ADMIN_USER
-      - GRAFANA_ADMIN_PASSWORD
+      - GF_SECURITY_ADMIN
+      - GF_SECURITY_ADMIN_PASSWORD
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - grafana_data:/var/lib/grafana
+      - ./tools/variable_init.sh:/usr/local/bin/variable_init.sh
+    entrypoint: ["/bin/sh", "-c", "/usr/local/bin/variable_init.sh && exec /run.sh"]
     ports:
       - "3000:3000"
     depends_on:
@@ -95,7 +102,10 @@ services:
     image: prometheuscommunity/postgres-exporter:latest
     container_name: postgres-exporter
     secrets:
-      - POSTGRES_EXPORTER_DATASOURCE
+      - DATA_SOURCE_NAME
+    volumes:
+      - ./tools/variable_init.sh:/usr/local/bin/variable_init.sh
+    entrypoint: ["/bin/sh", "-c", "/usr/local/bin/variable_init.sh && exec /bin/postgres_exporter"]
     depends_on:
       - database
     restart: always
@@ -116,12 +126,12 @@ secrets:
     file: ./secrets/POSTGRES_PASSWORD
   POSTGRES_DB:
     file: ./secrets/POSTGRES_DB
-  GRAFANA_ADMIN_USER:
-    file: ./secrets/GRAFANA_ADMIN_USER
-  GRAFANA_ADMIN_PASSWORD:
-    file: ./secrets/GRAFANA_ADMIN_PASSWORD
-  POSTGRES_EXPORTER_DATASOURCE:
-    file: ./secrets/POSTGRES_EXPORTER_DATASOURCE
+  GF_SECURITY_ADMIN:
+    file: ./secrets/GF_SECURITY_ADMIN
+  GF_SECURITY_ADMIN_PASSWORD:
+    file: ./secrets/GF_SECURITY_ADMIN_PASSWORD
+  DATA_SOURCE_NAME:
+    file: ./secrets/DATA_SOURCE_NAME
 
 #-VOLUMES-
 volumes:

@@ -65,7 +65,7 @@ setup:
 		touch $(SECRETS_DIR)/POSTGRES_DB; \
 		touch $(SECRETS_DIR)/GF_SECURITY_ADMIN; \
 		touch $(SECRETS_DIR)/GF_SECURITY_ADMIN_PASSWORD; \
-		echo "postgresql://<username>:<password>@database:5432/<database>?sslmode=disable" > $(SECRETS_DIR)/POSTGRES_EXPORTER_DATASOURCE; \
+		echo "postgresql://<username>:<password>@database:5432/<database>?sslmode=disable" > $(SECRETS_DIR)/DATA_SOURCE_NAME; \
 		echo "please fill the postgres exporter datasource with the accordingly"; \
 		touch $(SECRETS_CHECKFILE); \
 		echo "checkfile created"; \
