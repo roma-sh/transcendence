@@ -14,13 +14,10 @@ services:
       context: ../source/back-end
       dockerfile: ../../docker/back-end/Dockerfile.backend
     container_name: back-end
-    secrets:
-      - DATA_SOURCE_NAME
-    volumes:
-      - ./tools/variable_init.sh:/usr/local/bin/variable_init.sh
+    env_file:
+      - .env
     depends_on:
       - database
-    entrypoint: ["/bin/sh", "-c", "/usr/local/bin/variable_init.sh && exec /usr/local/bin/docker-entrypoint.sh"]
     init: true
     restart: always
     networks:
@@ -45,15 +42,11 @@ services:
   database:
     image: postgres:15-alpine
     container_name: database
-    secrets:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ../docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-      - ./tools/variable_init.sh:/usr/local/bin/variable_init.sh
-    entrypoint: ["/bin/sh", "-c", "/usr/local/bin/variable_init.sh && exec /usr/local/bin/docker-entrypoint.sh"]
+    env_file:
+      - .env
     restart: always
     networks:
       - trance-net
@@ -73,16 +66,13 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
-    secrets:
-      - GF_SECURITY_ADMIN
-      - GF_SECURITY_ADMIN_PASSWORD
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - grafana_data:/var/lib/grafana
-      - ./tools/variable_init.sh:/usr/local/bin/variable_init.sh
-    entrypoint: ["/bin/sh", "-c", "/usr/local/bin/variable_init.sh && exec /run.sh"]
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     depends_on:
       - prometheus
     restart: always
@@ -101,11 +91,8 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
     container_name: postgres-exporter
-    secrets:
-      - DATA_SOURCE_NAME
-    volumes:
-      - ./tools/variable_init.sh:/usr/local/bin/variable_init.sh
-    entrypoint: ["/bin/sh", "-c", "/usr/local/bin/variable_init.sh && exec /bin/postgres_exporter"]
+    env_file:
+      - .env
     depends_on:
       - database
     restart: always
@@ -117,21 +104,6 @@ networks:
   trance-net: 
     driver: bridge
     name: inception
-
-#-SECRETS-
-secrets:
-  POSTGRES_USER:
-    file: ./secrets/POSTGRES_USER
-  POSTGRES_PASSWORD:
-    file: ./secrets/POSTGRES_PASSWORD
-  POSTGRES_DB:
-    file: ./secrets/POSTGRES_DB
-  GF_SECURITY_ADMIN:
-    file: ./secrets/GF_SECURITY_ADMIN
-  GF_SECURITY_ADMIN_PASSWORD:
-    file: ./secrets/GF_SECURITY_ADMIN_PASSWORD
-  DATA_SOURCE_NAME:
-    file: ./secrets/DATA_SOURCE_NAME
 
 #-VOLUMES-
 volumes:

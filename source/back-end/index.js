@@ -6,7 +6,7 @@ const port = 3000;
 
 // DB Verbindung
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATA_SOURCE_NAME,
 });
 
 // kleine Middleware
