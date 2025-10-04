@@ -4,9 +4,20 @@
 #tournament-page,
 #tournament-page-player-aliases,
 #log-in-page,
-#sign-up-page {
-  display: none;
+#sign-up-page,
+#game-ready-page /* ⭐️ ΠΡΟΣΘΗΚΗ: Κρύβουμε τη νέα σελίδα ⭐️ */
+{
+    display: none;
+    /* Χρησιμοποιούμε absolute position για να μην πιάνουν χώρο οι κρυμμένες σελίδες */
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
 }
+/* {
+  display: none;
+} */
 
 #welcome-page:target,
 #choose-mode-page:target,
@@ -16,4 +27,9 @@
 #log-in-page:target,
 #sign-up-page:target {
   display: initial;
+}
+#game-ready-page:target /* ⭐️ ΠΡΟΣΘΗΚΗ: Εμφανίζουμε τη νέα σελίδα ⭐️ */
+{
+    display: flex; 
+    position: relative; /* Επαναφορά της θέσης για την ορατή σελίδα */
 }

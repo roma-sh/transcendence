@@ -69,7 +69,7 @@ async function permanentClickHandler(e: Event) {
         currentTSettings.playerAliases = aliasesExist; 
         console.log("All players are registered:", currentTSettings.playerAliases);
 		// game(aliasesExist[0], aliasesExist[1]);
-        location.hash = '#game-page';
+        location.hash = '#game-ready-page';
       }
     }
 }

@@ -27,6 +27,43 @@ app.get('/api/checkAlias/:alias', (request, reply) => {
   });
 });
 
+// ⭐️ ΝΕΟ ROUTE ΓΙΑ ΕΝΗΜΕΡΩΣΗ ΣΤΑΤΙΣΤΙΚΩΝ ΠΑΙΧΝΙΔΙΟΥ ⭐️
+app.post('/api/updateStats', (request, reply) => {
+    // Fastify automatically parses JSON body
+    const { winner, loser } = request.body;
+
+    if (!winner || !loser) {
+        return reply.code(400).send({ error: 'Missing winner or loser alias.' });
+    }
+
+    // 1. Ενημέρωση του Νικητή (προσθήκη νίκης και συνολικού παιχνιδιού)
+    user_db.run(
+        `UPDATE users SET wins = wins + 1, total_games = total_games + 1 WHERE username = ?`,
+        [winner],
+        function(err) {
+            if (err) {
+                console.error('Error updating winner stats:', err.message);
+                return reply.code(500).send({ error: 'Database error while updating winner.' });
+            }
+            
+            // 2. Ενημέρωση του Ηττημένου (προσθήκη μόνο συνολικού παιχνιδιού)
+            user_db.run(
+                `UPDATE users SET total_games = total_games + 1 WHERE username = ?`,
+                [loser],
+                function(err) {
+                    if (err) {
+                        console.error('Error updating loser stats:', err.message);
+                        // Επιστρέφουμε 500/503 αν αποτύχει η βάση.
+                        return reply.code(500).send({ error: 'Database error while updating loser.' });
+                    }
+                    reply.code(200).send({ message: 'Stats updated successfully' });
+                }
+            );
+        }
+    );
+});
+
+
 // Register route files
 const authRoutes = require('./routes/auth');
 // const userRoutes = require('./routes/users');

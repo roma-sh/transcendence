@@ -2,14 +2,45 @@ import { updatePaddleDirection, update, resetBall } from "./update-game-elems.js
 import { bindButtonEvent } from "./interact-game-elems.js";
 import { drawPaddle, drawBall, drawDividingLine, drawWinText, drawButton, drawScore } from "./draw-game-elems.js";
 // Νέα βοηθητική συνάρτηση για τη σχεδίαση του ονόματος του παίκτη
-function drawPlayerName(ctx, canvas, side, name) {
+function drawPlayerName(ctx, // Τύπος: CanvasRenderingContext2D
+canvas, // Τύπος: HTMLCanvasElement
+side, // Τύπος: Literal union
+name // Τύπος: string
+) {
+    // Διόρθωση χρώματος σε ΛΕΥΚΟ για να φαίνεται στο μαύρο φόντο του Canvas
     ctx.fillStyle = '#00000';
-    ctx.font = '20px Arial';
+    // Μικρότερο font και πιο ψηλά για να μην επικαλύπτει το σκορ
+    ctx.font = 'bold 18px Arial';
     ctx.textAlign = side === 'left' ? 'left' : 'right';
     const x = side === 'left' ? 30 : canvas.width - 30;
-    // Τοποθετούμε το όνομα ψηλά, ώστε το σκορ να είναι πιο κάτω
-    const y = 30;
+    // Διόρθωση θέσης y σε 20 (πιο ψηλά από το 30)
+    const y = 20;
     ctx.fillText(name, x, y);
+}
+/**
+ * Στέλνει αίτημα στο backend για ενημέρωση των στατιστικών παικτών
+ * (νίκες, συνολικά παιχνίδια).
+ * @param winnerAlias Το ψευδώνυμο του νικητή.
+ * @param loserAlias Το ψευδώνυμο του ηττημένου.
+ */
+async function updatePlayerStats(winnerAlias, loserAlias) {
+    // Κλήση στο backend API
+    try {
+        const response = await fetch('http://localhost:3000/api/updateStats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ winner: winnerAlias, loser: loserAlias })
+        });
+        if (response.ok) {
+            console.log(`Stats updated successfully for ${winnerAlias} and ${loserAlias}.`);
+        }
+        else {
+            console.error('Failed to update stats:', await response.text());
+        }
+    }
+    catch (error) {
+        console.error('Network error while updating stats:', error);
+    }
 }
 /**
  * Εκκινεί τον βρόχο του παιχνιδιού.
@@ -17,17 +48,16 @@ function drawPlayerName(ctx, canvas, side, name) {
  * @param player1Name Το όνομα του παίκτη 1 (Αριστερά).
  * @param player2Name Το όνομα του παίκτη 2 (Δεξιά).
  */
-// ⭐️ ΑΛΛΑΓΗ #1: ΟΡΙΣΜΟΣ ΠΡΟΑΙΡΕΤΙΚΩΝ ΟΡΙΣΜΑΤΩΝ ⭐️
 export function game(player1Name, player2Name) {
-    // ⭐️ ΑΛΛΑΓΗ #2: ΟΡΙΣΜΟΣ ΤΕΛΙΚΩΝ ΟΝΟΜΑΤΩΝ ΜΕ FALLBACK ⭐️
-    // Αν το όνομα δεν περαστεί, χρησιμοποιείται η προεπιλογή.
     const p1Name = player1Name || "Player 1";
     const p2Name = player2Name || "Player 2";
+    // Προσθήκη statsSent για να καλέσουμε το API μόνο μία φορά
     const gameState = {
         isPaused: false,
         isWin: false,
         leftScore: 0,
-        rightScore: 0
+        rightScore: 0,
+        statsSent: false // ΝΕΑ ΣΗΜΑΙΑ: Έχουν σταλεί τα στατιστικά;
     };
     const gameConfig = {
         paddleWidth: 30,
@@ -64,34 +94,45 @@ export function game(player1Name, player2Name) {
         dy: 0
     };
     resetBall(ball, canvas, gameConfig);
-    const keys = {};
+    const keys = {}; // Ρητός τύπος
     function gameLoop() {
+        // Καλούμε drawPlayerName μόνο αν το ctx είναι non-null, ωστόσο αυτός ο έλεγχος γίνεται 
+        // με ασφάλεια παρακάτω, οπότε μπορούμε να χρησιμοποιήσουμε το ctx κανονικά
         if (ctx)
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // ⭐️ ΑΛΛΑΓΗ #3: ΣΧΕΔΙΑΣΗ ΤΩΝ ΟΝΟΜΑΤΩΝ ⭐️
-        drawPlayerName(ctx, canvas, 'left', p1Name);
-        drawPlayerName(ctx, canvas, 'right', p2Name);
-        // Το Score θα πρέπει να σχεδιαστεί λίγο πιο κάτω από το όνομα
-        drawScore(ctx, canvas, 'left', gameState.leftScore);
-        drawScore(ctx, canvas, 'right', gameState.rightScore);
-        drawPaddle(leftPaddle, ctx, gameConfig);
-        drawPaddle(rightPaddle, ctx, gameConfig);
-        drawBall(ctx, gameState.isPaused, ball);
-        drawDividingLine(ctx, canvas);
-        if (gameState.isWin && ctx) {
-            const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
-            drawWinText(ctx, canvas, winner);
-            const playAgainRect = drawButton(ctx, canvas, winner, 'PLAY AGAIN', 80);
-            bindButtonEvent(canvas, playAgainRect, () => {
-                // ⭐️ ΑΛΛΑΓΗ #4: ΠΕΡΑΣΜΑ ΟΝΟΜΑΤΩΝ ΣΤΟ RESTART ⭐️
-                game(p1Name, p2Name);
-            });
-            const mainMenuRect = drawButton(ctx, canvas, winner, 'MAIN MENU', 130);
-            bindButtonEvent(canvas, mainMenuRect, () => {
-                location.hash = 'choose-mode-page';
-            });
-            return;
-        }
+        // Σχεδίαση ονομάτων
+        if (ctx) { // Προσθήκη ρητού ελέγχου πριν τη χρήση του ctx στο gameLoop
+            drawPlayerName(ctx, canvas, 'left', p1Name);
+            drawPlayerName(ctx, canvas, 'right', p2Name);
+            drawScore(ctx, canvas, 'left', gameState.leftScore);
+            drawScore(ctx, canvas, 'right', gameState.rightScore);
+            drawPaddle(leftPaddle, ctx, gameConfig);
+            drawPaddle(rightPaddle, ctx, gameConfig);
+            drawBall(ctx, gameState.isPaused, ball);
+            drawDividingLine(ctx, canvas);
+            if (gameState.isWin) {
+                const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
+                const winnerName = winner === 'left' ? p1Name : p2Name;
+                const loserName = winner === 'left' ? p2Name : p1Name;
+                // ΚΑΛΕΣΜΑ API ΓΙΑ ΣΤΑΤΙΣΤΙΚΑ:
+                // Καλούμε μόνο μία φορά, αν δεν έχουν σταλεί τα στατιστικά, και
+                // εφόσον τα ονόματα δεν είναι τα προεπιλεγμένα (δηλαδή είναι εγγεγραμμένοι χρήστες)
+                if (!gameState.statsSent && p1Name !== "Player 1" && p2Name !== "Player 2") {
+                    updatePlayerStats(winnerName, loserName);
+                    gameState.statsSent = true;
+                }
+                drawWinText(ctx, canvas, winner);
+                const playAgainRect = drawButton(ctx, canvas, winner, 'PLAY AGAIN', 80);
+                bindButtonEvent(canvas, playAgainRect, () => {
+                    game(p1Name, p2Name);
+                });
+                const mainMenuRect = drawButton(ctx, canvas, winner, 'MAIN MENU', 130);
+                bindButtonEvent(canvas, mainMenuRect, () => {
+                    location.hash = 'choose-mode-page';
+                });
+                return;
+            }
+        } // Τέλος ρητού ελέγχου ctx
         update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
         requestAnimationFrame(gameLoop);
     }

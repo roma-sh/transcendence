@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="./styles/tournament-player-count.css" />
     <link rel="stylesheet" href="./styles/tournament-player-aliases.css" />
     <link rel="stylesheet" href="./styles/auth-buttons.css" />
+    <link rel="stylesheet" href="./styles/game_ready_page.css" />
   </head>
   <body>
     <section id="welcome-page">
@@ -45,6 +46,24 @@
         <button class="start-button js-start-button">START</button>
       </div>
     </section>
+
+	<section id="game-ready-page" class="game-ready-page-container">
+		<div class="game-ready-content">
+		  <h2>Game Ready!</h2>
+		  <div class="player-info">
+			<div class="player-side left">
+			  <h3><span class="js-p1-name">Player 1</span> (Left Side)</h3>
+			  <p>Controls: UP (W), DOWN (S)</p>
+			</div>
+			<div class="divider">VS</div>
+			<div class="player-side right">
+			  <h3><span class="js-p2-name">Player 2</span> (Right Side)</h3>
+			  <p>Controls: UP (ArrowUp), DOWN (ArrowDown)</p>
+			</div>
+		  </div>
+		  <button class="go-button js-start-game-btn">GO!</button>
+		</div>
+	  </section>
 
     <section id="game-page">
       <div class="game-window">
