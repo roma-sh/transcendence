@@ -1,8 +1,16 @@
 const Fastify = require('fastify');
 const path = require('path');
 const fastifyStatic = require('@fastify/static');
+const fastifyCors = require('@fastify/cors'); 
 
 const app = Fastify({ logger: true });
+
+app.register(fastifyCors, {
+    origin: '*', 
+    methods: ['GET', 'POST', 'OPTIONS'],
+    // Επίσης, πρόσθεσε αυτό για να επιτρέψεις τα headers, αν υπάρχουν
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'], 
+});
 
 // server.js (ή routes/userRoutes.js)
 const user_db = require('./db'); // the connection with the database
@@ -63,7 +71,6 @@ app.post('/api/updateStats', (request, reply) => {
     );
 });
 
-
 // Register route files
 const authRoutes = require('./routes/auth');
 // const userRoutes = require('./routes/users');
@@ -75,7 +82,7 @@ app.register(fastifyStatic, {
 app.register(authRoutes, { prefix: '/api/auth' });
 // app.register(userRoutes, { prefix: '/api/users' });
 
-app.listen({ port: 3000 }, (err, address) => {
+app.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
