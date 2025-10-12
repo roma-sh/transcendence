@@ -10,7 +10,8 @@ import {
     drawPaddle, drawBall, drawDividingLine,
     drawWinText, drawButton, drawScore
   } from "./draw-game-elems.js";
-  
+  import { updateBotPaddle } from "./bot-ai.js";
+
   // Νέα βοηθητική συνάρτηση για τη σχεδίαση του ονόματος του παίκτη
   function drawPlayerName(
     ctx: CanvasRenderingContext2D, // Τύπος: CanvasRenderingContext2D
@@ -19,7 +20,7 @@ import {
     name: string                   // Τύπος: string
   ) {
     // Διόρθωση χρώματος σε ΛΕΥΚΟ για να φαίνεται στο μαύρο φόντο του Canvas
-    ctx.fillStyle = '#00000';
+    ctx.fillStyle = '#';
     // Μικρότερο font και πιο ψηλά για να μην επικαλύπτει το σκορ
     ctx.font = 'bold 18px Arial';
     ctx.textAlign = side === 'left' ? 'left' : 'right';
@@ -62,20 +63,26 @@ import {
    * @param player1Name Το όνομα του παίκτη 1 (Αριστερά).
    * @param player2Name Το όνομα του παίκτη 2 (Δεξιά).
    */
-  export function game(player1Name?: string, player2Name?: string) { // Τύποι: προαιρετικά strings
+  export function game(player1Name?: string, player2Name?: string) {
       
+    // 1. Ορισμός ονομάτων (ΠΡΕΠΕΙ να γίνει πρώτο!)
     const p1Name = player1Name || "Player 1";
     const p2Name = player2Name || "Player 2";
+
+    // 2. Ορισμός Bot/Skill
+    const BOT_SKILL_LEVEL = 0.6; // 60% skill (Δεν χρειάζεται να είναι εντός της συνάρτησης game)
+    const isP1Bot = p1Name.startsWith("Bot ");
+    const isP2Bot = p2Name.startsWith("Bot ");
       
     // Προσθήκη statsSent για να καλέσουμε το API μόνο μία φορά
-    const gameState: GameState & { statsSent: boolean } = { // Ρητός τύπος
+    const gameState: GameState & { statsSent: boolean } = { 
       isPaused: false,
       isWin: false,
       leftScore: 0,
       rightScore: 0,
       statsSent: false // ΝΕΑ ΣΗΜΑΙΑ: Έχουν σταλεί τα στατιστικά;
     };
-    const gameConfig: GameConfig = { // Ρητός τύπος
+    const gameConfig: GameConfig = { 
       paddleWidth: 30,
       paddleHeight: 100,
       ballRadius: 10,
@@ -97,18 +104,18 @@ import {
       return;
     }
   
-    const leftPaddle: Paddle = { // Ρητός τύπος
+    const leftPaddle: Paddle = { 
       x: 10,
       y: canvas.height / 2 - gameConfig.paddleHeight / 2,
       dy: 0
     };
-    const rightPaddle: Paddle = { // Ρητός τύπος
+    const rightPaddle: Paddle = { 
       x: canvas.width - gameConfig.paddleWidth - 10,
       y: canvas.height / 2 - gameConfig.paddleHeight / 2,
       dy: 0
     };
   
-    let ball: Ball = { // Ρητός τύπος
+    let ball: Ball = { 
       radius: gameConfig.ballRadius,
       x: canvas.width / 2,
       y: canvas.height / 2,
@@ -117,15 +124,13 @@ import {
     };
     resetBall(ball, canvas, gameConfig);
   
-    const keys: KeyMap = {}; // Ρητός τύπος
+    const keys: KeyMap = {}; 
   
     function gameLoop() {
-      // Καλούμε drawPlayerName μόνο αν το ctx είναι non-null, ωστόσο αυτός ο έλεγχος γίνεται 
-      // με ασφάλεια παρακάτω, οπότε μπορούμε να χρησιμοποιήσουμε το ctx κανονικά
       if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
   
       // Σχεδίαση ονομάτων
-      if (ctx) { // Προσθήκη ρητού ελέγχου πριν τη χρήση του ctx στο gameLoop
+      if (ctx) { 
         drawPlayerName(ctx, canvas, 'left', p1Name);
         drawPlayerName(ctx, canvas, 'right', p2Name);
   
@@ -137,6 +142,7 @@ import {
         drawBall(ctx, gameState.isPaused, ball);
         drawDividingLine(ctx, canvas);
   
+        // Έλεγχος Νίκης
         if (gameState.isWin) {
           const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
           const winnerName = winner === 'left' ? p1Name : p2Name;
@@ -144,8 +150,10 @@ import {
 
           // ΚΑΛΕΣΜΑ API ΓΙΑ ΣΤΑΤΙΣΤΙΚΑ:
           // Καλούμε μόνο μία φορά, αν δεν έχουν σταλεί τα στατιστικά, και
-          // εφόσον τα ονόματα δεν είναι τα προεπιλεγμένα (δηλαδή είναι εγγεγραμμένοι χρήστες)
-          if (!gameState.statsSent && p1Name !== "Player 1" && p2Name !== "Player 2") {
+          // εφόσον και οι δύο παίκτες δεν είναι Bots
+          const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
+
+          if (!gameState.statsSent && isPvP) {
               updatePlayerStats(winnerName, loserName);
               gameState.statsSent = true; 
           }
@@ -161,6 +169,22 @@ import {
           });
           return;
         }
+
+        // **********************************************
+        // ************ ΛΟΓΙΚΗ ΤΟΥ BOT (AI) *************
+        // **********************************************
+        if (!gameState.isPaused) {
+            // Αν ο P1 είναι Bot (Αριστερή ρακέτα)
+            if (isP1Bot) {
+                updateBotPaddle(leftPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
+            }
+            // Αν ο P2 είναι Bot (Δεξιά ρακέτα)
+            if (isP2Bot) {
+                updateBotPaddle(rightPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
+            }
+        }
+        // **********************************************
+        
       } // Τέλος ρητού ελέγχου ctx
   
       update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
@@ -168,12 +192,15 @@ import {
       requestAnimationFrame(gameLoop);
     }
   
-    window.addEventListener('keydown', (e: KeyboardEvent) => { // Ρητός τύπος για το event
+    // Οι listeners πρέπει να λαμβάνουν υπόψη αν ο παίκτης είναι Bot
+    window.addEventListener('keydown', (e: KeyboardEvent) => { 
+      // Το updatePaddleDirection χειρίζεται την κίνηση των ρακέτων με βάση τα πλήκτρα.
+      // Αν ο παίκτης είναι Bot, ο listener απλά θα αγνοηθεί για τη ρακέτα του.
       keys[e.key] = true;
       updatePaddleDirection(keys, leftPaddle, rightPaddle);
     });
   
-    window.addEventListener('keyup', (e: KeyboardEvent) => { // Ρητός τύπος για το event
+    window.addEventListener('keyup', (e: KeyboardEvent) => { 
       keys[e.key] = false;
       updatePaddleDirection(keys, leftPaddle, rightPaddle);
     });

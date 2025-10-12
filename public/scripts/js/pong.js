@@ -7,6 +7,7 @@ import { initUserProfilePage } from './user-profile.js';
 import { initGameReadyPage } from './game-ready-page.js';
 const tSettings = {
     numberOfPlayers: 1,
+    numberOfBots: 0,
     playerAliases: [],
 };
 // for the welcome page:

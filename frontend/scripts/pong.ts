@@ -21,6 +21,7 @@ import { initGameReadyPage } from './game-ready-page.js';
 
 const tSettings : TournamentSettings = {
   numberOfPlayers: 1,
+  numberOfBots: 0,
   playerAliases: [],
 };
 

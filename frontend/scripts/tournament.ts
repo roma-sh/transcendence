@@ -12,6 +12,10 @@ export function tournament(tSettings: TournamentSettings) {
 }
 
 export function addAliasesSection(tSettings: TournamentSettings) {
+
+  console.log("--- STARTING ALIASES SECTION ---");
+  console.log("Number of Players received in addAliasesSection:", tSettings.numberOfPlayers);
+  
   location.hash = 'tournament-page-player-aliases';
   registerNextClickAfterAliases(tSettings);
   generateInputsForAliases(tSettings);

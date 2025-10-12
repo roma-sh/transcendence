@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "es2020",
-    "noEmitOnError": true,
+    "noEmitOnError": false,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
@@ -10,6 +10,6 @@
     "rootDir": "./"
   },
   "include": [
-    "*.ts"
+    "**/*.ts"
   ]
 }

@@ -7,9 +7,6 @@ export function initSignUpPage(): void {
   const emailInput = signUpSection.querySelector('input[placeholder="Email"]') as HTMLInputElement;
   const passwordInput = signUpSection.querySelector('input[placeholder="Password"]') as HTMLInputElement;
 
-
-  console.log('SignUp Button found:', !!signUpButton); // Ελέγξτε αυτό!
-
   signUpButton?.addEventListener('click', async () => {
     const username = usernameInput.value.trim();
     const email = emailInput.value.trim();

@@ -22,47 +22,6 @@
 	opacity: 0.7;
   }
 
-  /* .sign-up-page
-  {
-	display: none;
-	padding: 50px;
-	text-align: center;
-  }
-  
-  .log-in-page {
-  display: none;
-  padding: 50px;
-  text-align: center;
-}
-
-.auth-form {
-  max-width: 400px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.auth-form input {
-  padding: 12px;
-  font-size: 16px;
-}
-
-.auth-submit-button {
-  padding: 12px;
-  font-size: 18px;
-  font-weight: bold;
-  background: var(--main-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.auth-submit-button:hover {
-  opacity: 0.8;
-} */
-
 .sign-up-page,
 .log-in-page {
   display: none;

@@ -40,5 +40,6 @@ export interface ButtonRect {
 
 export interface TournamentSettings {
   numberOfPlayers: number,
+  numberOfBots: number,
   playerAliases: string[]
 }
