@@ -41,11 +41,11 @@ function handleHashChange() {
   if (hash === '#game-ready-page') {
 	initGameReadyPage(tSettings);
   } else if (hash === '#game-page') {
-	if (tSettings.playerAliases && tSettings.playerAliases.length >= 2) {
-		console.log("Starting game with registered players:", tSettings.playerAliases);
+	if ((tSettings.playerAliases && tSettings.playerAliases.length >= 2) || tSettings.playerAliases.length == 200) {
+	// 	console.log("Starting game with registered players:", tSettings.playerAliases);
 		
-		// Καλούμε το game με τα αποθηκευμένα ονόματα
-		game(tSettings.playerAliases[0], tSettings.playerAliases[1]);
+	// 	// Καλούμε το game με τα αποθηκευμένα ονόματα
+	// 	game(tSettings.playerAliases[0], tSettings.playerAliases[1]);
 		
 	  } else {
 		// Scenario 2: Default/Local Game (no registered players)

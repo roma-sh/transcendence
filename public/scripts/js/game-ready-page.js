@@ -1,29 +1,28 @@
 import { game } from "./game.js";
 /**
- * Εμφανίζει τα ονόματα των παικτών στην οθόνη ετοιμότητας
- * και ρυθμίζει τον listener για την έναρξη του παιχνιδιού.
- * Χρησιμοποιεί τον ΠΡΩΤΟ και τον ΤΕΛΕΥΤΑΙΟ παίκτη από τη λίστα και τους ΑΦΑΙΡΕΙ
- * για να προετοιμάσει το επόμενο ζευγάρι.
- * @param tSettings Οι ρυθμίσεις του τουρνουά που περιέχουν τα aliases των παικτών.
+ * Displays player names on the ready screen and sets up the listener to start the game.
+ * It uses and removes the FIRST and LAST player from the list to prepare the next pair.
+ * @param tSettings The tournament settings containing player aliases.
  */
 export function initGameReadyPage(tSettings) {
     console.log("Aliases BEFORE extraction:", tSettings.playerAliases);
     console.log("List Length BEFORE extraction:", tSettings.playerAliases.length);
-    // 1. Εξαγωγή του Πρώτου (Αρχή της λίστας)
-    // shift() αφαιρεί και επιστρέφει το πρώτο στοιχείο.
+    // 1. Extract the First Player (Start of the list)
+    // shift() removes and returns the first element.
     const p1Name = tSettings.playerAliases.shift();
-    // 2. Εξαγωγή του Τελευταίου (Τέλος της λίστας)
-    // pop() αφαιρεί και επιστρέφει το τελευταίο στοιχείο.
+    // 2. Extract the Last Player (End of the list)
+    // pop() removes and returns the last element.
     const p2Name = tSettings.playerAliases.pop();
     console.log("p1Name (shift):", p1Name);
     console.log("p2Name (pop):", p2Name);
-    // Έλεγχος για να διασφαλιστεί ότι έχουμε δύο ονόματα
+    // Check to ensure we have two names
     if (!p1Name || !p2Name) {
         console.warn("Tournament phase complete or not enough players for a match.");
-        // Εδώ θα έπρεπε να υπάρχει λογική για το τέλος του τουρνουά
+        location.hash = '#welcome-page';
+        // Tournament end logic should be implemented here
         return;
     }
-    // 3. Εισαγωγή Ονομάτων στο DOM
+    // 3. Inject Names into the DOM
     const p1NameEl = document.querySelector('.js-p1-name');
     const p2NameEl = document.querySelector('.js-p2-name');
     if (p1NameEl) {
@@ -32,21 +31,24 @@ export function initGameReadyPage(tSettings) {
     if (p2NameEl) {
         p2NameEl.textContent = p2Name;
     }
-    // 4. Καταχώρηση του event listener για το κουμπί 'GO!'
+    // 4. Register the event listener for the 'GO!' button
     const goBtn = document.querySelector('.js-start-game-btn');
     if (goBtn) {
-        // Χρησιμοποιούμε μια named function για τον handler
+        // Use a named function for the handler
         const startGameHandler = () => {
-            // Καλούμε το game με τα σωστά ονόματα
+            // Call the game function with the correct names
             game(p1Name, p2Name);
-            // 🔴 ΔΙΟΡΘΩΣΗ: Προσθέστε ένα σαφές μήνυμα για το ποιοι παίζουν
+            // FIX: Add a clear message showing who is playing
             console.log(`Starting match: ${p1Name} vs ${p2Name}`);
-            // 🔴 ΔΙΟΡΘΩΣΗ: Αλλάξτε το παλιό μήνυμα ώστε να είναι σαφές ότι πρόκειται για τους ΕΠΟΜΕΝΟΥΣ παίκτες
+            // FIX: Update the remaining players message to show the NEXT players
+            if (tSettings.playerAliases.length == 0) {
+                tSettings.playerAliases.length = 200;
+            }
             console.log("Remaining players for the next match:", tSettings.playerAliases);
-            // Πάμε στη σελίδα του παιχνιδιού
+            // Navigate to the game page
             location.hash = '#game-page';
         };
-        // Προσθέτουμε τον listener, χρησιμοποιώντας { once: true }.
+        // Add the listener, using { once: true } to ensure it only runs once.
         goBtn.addEventListener('click', startGameHandler, { once: true });
     }
 }

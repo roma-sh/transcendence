@@ -1,30 +1,30 @@
-// --- 1. Βοηθητική Συνάρτηση: Δημιουργία HTML Inputs ---
+// --- 1. Helper Function: Create HTML Inputs ---
 export function generateInputsForAliases(tSettings) {
     let html = '';
-    // Υπολογισμός του δείκτη από τον οποίο ξεκινούν τα Bots
+    // Calculate the index from which Bots start
     const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
-    // Μετρητής για την σωστή αρίθμηση των Bots (ξεκινά από 1)
+    // Counter for correct Bot numbering (starts at 1)
     let botCounter = 1;
     for (let i = 0; i < tSettings.numberOfPlayers; ++i) {
-        // Ελέγχουμε αν ο τρέχων δείκτης (i) αντιστοιχεί σε Bot
+        // Check if the current index (i) corresponds to a Bot
         const isBotInput = i >= humanPlayersCount;
         let inputValue = '';
         let disabledAttribute = '';
         let inputClass = 'player-alias-input js-player-alias-input';
         if (isBotInput) {
-            // Λογική Bot: Σωστή ονομασία (Bot 1, Bot 2, κλπ.)
+            // Bot Logic: Correct naming (Bot 1, Bot 2, etc.)
             inputValue = `Bot ${botCounter}`;
             botCounter++;
             disabledAttribute = 'disabled';
             inputClass += ' bot-alias-input';
         }
         else {
-            // Λογική Ανθρώπου: Κενό value για να φαίνεται το placeholder
-            // και να μπορεί ο χρήστης να εισάγει το alias
-            // inputValue = tSettings.playerAliases[i] || ''; // Χρησιμοποιούμε κενό string
+            // Human Logic: Empty value so the placeholder is visible
+            // and the user can enter the alias
+            // inputValue = tSettings.playerAliases[i] || ''; // We use an empty string
             inputValue = '';
         }
-        // Δημιουργία του HTML για το input
+        // Create the HTML for the input
         html += `
       <div>
         <div class="player-photo"></div>
@@ -37,38 +37,38 @@ export function generateInputsForAliases(tSettings) {
       </div>
     `;
     }
-    // 🔴 ΑΦΑΙΡΟΥΜΕ ΤΗΝ ΕΚΧΩΡΗΣΗ ΣΤΟ DOM ΑΠΟ ΕΔΩ
-    // H εκχώρηση θα γίνει από τη συνάρτηση που καλεί αυτή τη generateInputsForAliases
-    // (π.χ., initTournamentPlayerAliasesPage).
-    return html; // Επιστρέφουμε μόνο το HTML string
+    // 🔴 REMOVE DOM ASSIGNMENT FROM HERE
+    // The assignment will be done by the function that calls generateInputsForAliases
+    // (e.g., initTournamentPlayerAliasesPage).
+    return html; // We return only the HTML string
 }
-// --- 2. Βοηθητική Συνάρτηση: Έλεγχος Alias ---
+// --- 2. Helper Function: Alias Check ---
 async function checkAliasExists(alias) {
     const response = await fetch(`http://127.0.0.1:3000/api/checkAlias/${alias}`);
     const data = await response.json();
     return data.exists;
 }
 let currentTSettings = null;
-// --- 3. Handler για το Κουμπί NEXT ---
+// --- 3. Handler for the NEXT Button ---
 async function permanentClickHandler(e) {
     if (!currentTSettings)
         return;
     e.preventDefault();
     const inputsList = document.querySelectorAll('.js-player-alias-input');
-    // Εξαίρεση των Bot aliases από την επικύρωση
+    // Exclude Bot aliases from validation
     const humanPlayersCount = currentTSettings.numberOfPlayers - currentTSettings.numberOfBots;
-    // Παίρνουμε μόνο τα aliases των ανθρώπινων παικτών (τα πρώτα humanPlayersCount inputs)
+    // We only get the aliases of the human players (the first humanPlayersCount inputs)
     const humanAliases = Array.from(inputsList)
         .slice(0, humanPlayersCount)
         .map((input) => input.value.trim());
-    // Έλεγχος για κενά πεδία
+    // Check for empty fields
     if (humanAliases.some(alias => !alias)) {
         alert("Please fill in all player fields.");
         return;
     }
     const aliasesExist = [];
     const aliasesDoNotExist = [];
-    // Έλεγχος αν υπάρχουν τα Aliases
+    // Check if Aliases exist
     for (const alias of humanAliases) {
         const exists = await checkAliasExists(alias);
         if (exists) {
@@ -78,25 +78,25 @@ async function permanentClickHandler(e) {
             aliasesDoNotExist.push(alias);
         }
     }
-    // Διαχείριση αποτελεσμάτων
+    // Result handling
     if (aliasesDoNotExist.length > 0) {
         alert(`Unfortunately, user(s) "${aliasesDoNotExist.join(', ')}" were not found in our database. Please sign up first.`);
-        return; // Σταματάμε αν υπάρχουν μη έγκυρα aliases
+        return; // We stop if there are invalid aliases
     }
-    // Αν φτάσουμε εδώ, όλα τα ανθρώπινα aliases είναι έγκυρα
+    // If we reach here, all human aliases are valid
     if (aliasesExist.length > 0 || currentTSettings.numberOfBots > 0) {
         // *****************************************************************
-        // ** Δημιουργία των Bot Aliases δυναμικά **
+        // ** Dynamically Create Bot Aliases **
         // *****************************************************************
         const createdBotAliases = [];
         const totalBots = currentTSettings.numberOfBots;
         for (let i = 0; i < totalBots; i++) {
             createdBotAliases.push(`Bot ${i + 1}`);
         }
-        // 6. ΣΥΝΔΥΑΣΜΟΣ Ανθρώπινων Παικτών και Bots
+        // 6. COMBINATION of Human Players and Bots
         const finalTournamentAliases = [
-            ...aliasesExist, // Επιβεβαιωμένοι άνθρωποι
-            ...createdBotAliases // Δημιουργημένα Bots
+            ...aliasesExist, // Confirmed humans
+            ...createdBotAliases // Generated Bots
         ];
         currentTSettings.playerAliases = finalTournamentAliases;
         console.log("--- FINAL TOURNAMENT ALIASES ---");
@@ -106,32 +106,32 @@ async function permanentClickHandler(e) {
         location.hash = '#game-ready-page';
     }
 }
-// --- 4. Εγγραφή Listeners ---
+// --- 4. Register Listeners ---
 export function registerNextClickAfterAliases(tSettings) {
     const btnEl = document.querySelector('.js-next-btn-after-aliases');
     const inputsContainer = document.querySelector('.aliase-inputs');
     if (!btnEl || !inputsContainer)
         return;
     // ******************************************************
-    // 1. ΔΙΟΡΘΩΣΗ: Καθαρισμός των Aliases 
-    // Πρέπει να αφαιρέσουμε τα Bot aliases ή τυχόν παλιά strings
-    // πριν δημιουργήσουμε τα inputs.
+    // 1. FIX: Clearing Aliases 
+    // We must remove Bot aliases or any old strings
+    // before creating the inputs.
     const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
-    // Διασφαλίζουμε ότι η λίστα tSettings.playerAliases περιέχει ΜΟΝΟ
-    // τα aliases των ανθρώπων (ή είναι άδεια).
-    // Χρησιμοποιούμε slice για να διατηρήσουμε μόνο τους πρώτους N παίκτες,
-    // οι οποίοι πρέπει να είναι οι άνθρωποι.
+    // We ensure that the tSettings.playerAliases list contains ONLY
+    // the human aliases (or is empty).
+    // We use slice to keep only the first N players,
+    // who must be the humans.
     if (tSettings.playerAliases.length > 0) {
         tSettings.playerAliases = tSettings.playerAliases.slice(0, humanPlayersCount);
     }
-    // 2. UPDATE SETTINGS (πριν τη δημιουργία του HTML)
+    // 2. UPDATE SETTINGS (before HTML generation)
     currentTSettings = tSettings;
     // ******************************************************
-    // 3. ΔΗΜΙΟΥΡΓΙΑ/ΕΚΧΩΡΗΣΗ ΤΟΥ HTML (Αποκατάσταση των πεδίων)
-    // Τώρα η generateInputsForAliases θα χρησιμοποιήσει τη σωστή, καθαρισμένη λίστα.
+    // 3. GENERATE/ASSIGN HTML (Restore fields)
+    // Now generateInputsForAliases will use the correct, cleaned list.
     const aliasesHtml = generateInputsForAliases(tSettings);
     inputsContainer.innerHTML = aliasesHtml;
-    // 4. ΕΓΓΡΑΦΗ LISTENER (μόνο μία φορά)
+    // 4. REGISTER LISTENER (only once)
     if (!btnEl.hasAttribute('data-listener-registered')) {
         btnEl.addEventListener('click', permanentClickHandler);
         btnEl.setAttribute('data-listener-registered', 'true');

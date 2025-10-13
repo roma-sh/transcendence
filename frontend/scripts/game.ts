@@ -159,13 +159,13 @@ import {
           }
 
           drawWinText(ctx, canvas, winner);
-          const playAgainRect = drawButton(ctx, canvas, winner, 'PLAY AGAIN', 80);
-          bindButtonEvent(canvas, playAgainRect, () => {
-            game(p1Name, p2Name);
-          });
-          const mainMenuRect = drawButton(ctx, canvas, winner, 'MAIN MENU', 130);
+          // const playAgainRect = drawButton(ctx, canvas, winner, 'PLAY AGAIN', 80);
+          // bindButtonEvent(canvas, playAgainRect, () => {
+          //   game(p1Name, p2Name);
+          // });
+          const mainMenuRect = drawButton(ctx, canvas, winner, 'NEXT GAME', 130);
           bindButtonEvent(canvas, mainMenuRect, () => {
-            location.hash = 'choose-mode-page';
+            location.hash = 'game-ready-page';
           });
           return;
         }
