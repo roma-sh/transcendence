@@ -1,5 +1,7 @@
 class WalletConnect {
     constructor() {
+        // Explicit MetaMask EIP-1193 provider (ignores Core/others)
+        this.ethereum = null;
         this.currentWallet = {
             address: '',
             network: '',
@@ -18,6 +20,7 @@ class WalletConnect {
             rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
             blockExplorerUrls: ['https://testnet.snowtrace.io/']
         };
+        this.ethereum = this.getMetaMaskProvider();
         this.checkWalletConnection();
     }
     // Check if wallet was previously connected
@@ -30,15 +33,27 @@ class WalletConnect {
             }
         }
     }
+    // Pick MetaMask provider if multiple wallets inject providers
+    getMetaMaskProvider() {
+        const eth = window.ethereum;
+        if (!eth)
+            return null;
+        if (Array.isArray(eth.providers)) {
+            // Brave and multi-injectors expose an array
+            const metamask = eth.providers.find((p) => p && p.isMetaMask);
+            return metamask || null;
+        }
+        return eth.isMetaMask ? eth : null;
+    }
     // Connect to MetaMask
     async connectWallet() {
         try {
-            if (typeof window.ethereum === 'undefined') {
-                alert('Please install MetaMask!');
+            if (!this.ethereum) {
+                alert('MetaMask not detected. Please install/enable MetaMask and try again.');
                 return false;
             }
             // Request account access
-            const accounts = await window.ethereum.request({
+            const accounts = await this.ethereum.request({
                 method: 'eth_requestAccounts'
             });
             if (accounts.length === 0) {
@@ -70,7 +85,7 @@ class WalletConnect {
     // Switch to Avalanche Fuji network
     async switchToAvalancheNetwork() {
         try {
-            await window.ethereum.request({
+            await this.ethereum.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: this.avalancheConfig.chainId }],
             });
@@ -79,7 +94,7 @@ class WalletConnect {
             // This error code indicates that the chain has not been added to MetaMask
             if (switchError.code === 4902) {
                 try {
-                    await window.ethereum.request({
+                    await this.ethereum.request({
                         method: 'wallet_addEthereumChain',
                         params: [this.avalancheConfig],
                     });
@@ -96,7 +111,9 @@ class WalletConnect {
     // Get current network
     async getNetwork() {
         try {
-            const chainId = await window.ethereum.request({
+            if (!this.ethereum)
+                return 'Unknown Network';
+            const chainId = await this.ethereum.request({
                 method: 'eth_chainId'
             });
             switch (chainId) {
@@ -112,7 +129,9 @@ class WalletConnect {
     // Get balance in AVAX
     async getBalance(address) {
         try {
-            const balance = await window.ethereum.request({
+            if (!this.ethereum)
+                return '0 AVAX';
+            const balance = await this.ethereum.request({
                 method: 'eth_getBalance',
                 params: [address, 'latest']
             });
@@ -173,8 +192,8 @@ class WalletConnect {
     }
     // Listen for account changes
     setupEventListeners() {
-        if (window.ethereum) {
-            window.ethereum.on('accountsChanged', (accounts) => {
+        if (this.ethereum) {
+            this.ethereum.on('accountsChanged', (accounts) => {
                 if (accounts.length === 0) {
                     this.disconnectWallet();
                 }
@@ -182,7 +201,7 @@ class WalletConnect {
                     this.connectWallet();
                 }
             });
-            window.ethereum.on('chainChanged', () => {
+            this.ethereum.on('chainChanged', () => {
                 window.location.reload();
             });
         }
