@@ -18,6 +18,9 @@ export function initGameReadyPage(tSettings) {
     // Check to ensure we have two names
     if (!p1Name || !p2Name) {
         console.warn("Tournament phase complete or not enough players for a match.");
+        // HERE IS T HAS TO CREATE THE NEW LISTS WITH THE WINNERS AND START THE LOGIC FROM THE START
+        // (I will store the winners in the tSettings, not in the base, 
+        // probably the wins in the base are not needed also, unless we want statistics)
         location.hash = '#welcome-page';
         // Tournament end logic should be implemented here
         return;

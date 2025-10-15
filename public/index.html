@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./styles/tournament-player-aliases.css" />
     <link rel="stylesheet" href="./styles/auth-buttons.css" />
     <link rel="stylesheet" href="./styles/game_ready_page.css" />
+    <link rel="stylesheet" href="./styles/wallet.css" />
   </head>
   <body>
     <section id="welcome-page">
@@ -30,6 +31,20 @@
       <div class="auth-button-container">
         <button class="auth-button js-sign-up-button">SIGN UP</button>
         <button class="auth-button js-log-in-button">LOG IN</button>
+        <button class="auth-button js-connect-wallet-button">CONNECT WALLET</button>
+      </div>
+    </section>
+
+    <section id="wallet-info-page">
+      <div class="wallet-info-container">
+        <h2>Wallet Connected</h2>
+        <div class="wallet-details">
+          <p><strong>Address:</strong> <span id="wallet-address"></span></p>
+          <p><strong>Network:</strong> <span id="wallet-network"></span></p>
+          <p><strong>Balance:</strong> <span id="wallet-balance"></span></p>
+        </div>
+        <button class="auth-button js-disconnect-wallet">Disconnect</button>
+        <button class="auth-button js-back-to-welcome">Back to Menu</button>
       </div>
     </section>
 

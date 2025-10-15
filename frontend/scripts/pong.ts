@@ -19,6 +19,8 @@ import { initUserProfilePage } from './user-profile.js';
 
 import { initGameReadyPage } from './game-ready-page.js';
 
+import { initWalletConnect } from './wallet-connect.js';
+
 const tSettings : TournamentSettings = {
   numberOfPlayers: 1,
   numberOfBots: 0,
@@ -33,6 +35,8 @@ addHashForChooseModePage();
 initGameOptionHighlight();
 useGameOption(tSettings);
 
+// Initialize wallet connection - add this after the other initializations
+initWalletConnect();
 
 // Function to handle hash-based navigation
 function handleHashChange() {
