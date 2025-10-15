@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "es2020",
+    "noEmitOnError": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "outDir": "../../public/scripts/js",
+    "rootDir": "./"
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
