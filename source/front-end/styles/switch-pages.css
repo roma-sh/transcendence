@@ -1,0 +1,15 @@
+#welcome-page,
+#choose-mode-page,
+#game-page,
+#tournament-page,
+#tournament-page-player-aliases {
+  display: none;
+}
+
+#welcome-page:target,
+#choose-mode-page:target,
+#game-page:target,
+#tournament-page:target,
+#tournament-page-player-aliases:target {
+  display: initial;
+}

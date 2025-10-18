@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pong</title>
+    <link rel="stylesheet" href="./styles/pong.css" />
+    <link rel="stylesheet" href="./styles/general.css" />
+    <link rel="stylesheet" href="./styles/switch-pages.css" />
+    <link rel="stylesheet" href="./styles/choose-mode.css" />
+    <link rel="stylesheet" href="./styles/game-page.css" />
+    <link rel="stylesheet" href="./styles/tournament-player-count.css" />
+    <link rel="stylesheet" href="./styles/tournament-player-aliases.css" />
+  </head>
+  <body>
+    <section id="welcome-page">
+      <div class="banner">
+        <div class="paddle paddle-left"></div>
+        <div class="middle-section">
+          <h1 id="game-name">PONG</h1>
+          <div id="ball"></div>
+        </div>
+        <div class="paddle paddle-right"></div>
+      </div>
+      <div class="play-button-container">
+        <button class="play-button js-play-button">PLAY</button>
+      </div>
+    </section>
+
+    <section id="choose-mode-page">
+      <div class="game-options">
+        <div class="game-option-1 js-game-option" data-option="quick-play">
+          <p>Quick Play</p>
+        </div>
+        <div class="game-option-2 js-game-option" data-option="tournament">
+          <p>Tournament</p>
+        </div>
+      </div>
+      <div class="start-button-container">
+        <button class="start-button js-start-button">START</button>
+      </div>
+    </section>
+
+    <section id="game-page">
+      <div class="game-window">
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+      </div>
+    </section>
+
+    <section id="tournament-page">
+      <div class="player-count">
+        <p>Enter number of players</p>
+        <input type="number"
+          id="player-count-input"
+          name="playerCount"
+          value="2" max="100" min="2">
+        <button class="next-btn-after-count
+          js-next-btn-after-count">NEXT</button>
+      </div>
+    </section>
+
+    <section id="tournament-page-player-aliases">
+      <div class="player-aliases js-player-aliases">
+        <p id="enter-aliases-hint">Enter aliases</p>
+        <div class="aliase-inputs"></div>
+        <button class="next-btn-after-aliases
+          js-next-btn-after-aliases">NEXT</button>
+      </div>
+    </section>
+
+    <script type="module" src="./scripts/js/pong.js"></script>
+  </body>
+</html>

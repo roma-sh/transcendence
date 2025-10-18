@@ -1,0 +1,112 @@
+#-SERVICES-
+services:
+  front-end:
+    build: # Dockerfile.frontend
+      context: ../source/front-end
+      dockerfile: ../../docker/front-end/Dockerfile.frontend
+    container_name: front-end
+    restart: always
+    networks:
+      - trance-net
+
+  back-end:
+    build: # Dockerfile.backend
+      context: ../source/back-end
+      dockerfile: ../../docker/back-end/Dockerfile.backend
+    container_name: back-end
+    env_file:
+      - .env
+    depends_on:
+      - database
+    init: true
+    restart: always
+    networks:
+      - trance-net
+  
+  proxy:
+    image: nginx:alpine
+    container_name: proxy
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - ../docker/proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../docker/proxy/certs:/etc/nginx/certs:ro
+    depends_on:
+      - front-end
+      - back-end
+    restart: always
+    networks:
+      - trance-net
+
+  database:
+    image: postgres:15-alpine
+    container_name: database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - trance-net
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    restart: always
+    networks:
+      - trance-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - prometheus
+    restart: always
+    networks:
+      - trance-net    
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    command:
+      - '--path.rootfs=/host'
+    restart: always
+    networks:
+      - trance-net
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: postgres-exporter
+    env_file:
+      - .env
+    depends_on:
+      - database
+    restart: always
+    networks:
+      - trance-net
+
+#-NETWORKS-
+networks:
+  trance-net: 
+    driver: bridge
+    name: inception
+
+#-VOLUMES-
+volumes:
+  postgres_data:
+  grafana_data:
+  prometheus_data:
