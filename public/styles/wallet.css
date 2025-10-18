@@ -1,0 +1,46 @@
+/* Wallet Info Page Styles */
+#wallet-info-page {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.wallet-info-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.wallet-details {
+    text-align: left;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f5f5f5;
+    border-radius: 5px;
+}
+
+.wallet-details p {
+    margin: 0.5rem 0;
+    font-family: 'Courier New', monospace;
+}
+
+/* Connected state for wallet button */
+.auth-button[style*="background-color: #4CAF50"] {
+    background-color: #4CAF50 !important;
+}
+
+.auth-button[style*="background-color: #4CAF50"]:hover {
+    background-color: #45a049 !important;
+}
+
+
