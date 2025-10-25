@@ -1,4 +1,6 @@
+// import { winnerArray } from "./types.js";
 import { game } from "./game.js";
+import { globalState } from "./global_state.js";
 /**
  * Displays player names on the ready screen and sets up the listener to start the game.
  * It uses and removes the FIRST and LAST player from the list to prepare the next pair.
@@ -18,9 +20,15 @@ export function initGameReadyPage(tSettings) {
     // Check to ensure we have two names
     if (!p1Name || !p2Name) {
         console.warn("Tournament phase complete or not enough players for a match.");
+        // HERE IS T HAS TO CREATE THE NEW LISTS WITH THE WINNERS AND START THE LOGIC FROM THE START
+        // (I will store the winners in the tSettings, not in the base, 
+        // probably the wins in the base are not needed also, unless we want statistics)
         location.hash = '#welcome-page';
         // Tournament end logic should be implemented here
         return;
+    }
+    if (tSettings.playerAliases.length == 200) {
+        location.hash = '#welcome-page';
     }
     // 3. Inject Names into the DOM
     const p1NameEl = document.querySelector('.js-p1-name');
@@ -38,6 +46,7 @@ export function initGameReadyPage(tSettings) {
         const startGameHandler = () => {
             // Call the game function with the correct names
             game(p1Name, p2Name);
+            console.log("Total winners so far:", globalState.globalWinnerAliases);
             // FIX: Add a clear message showing who is playing
             console.log(`Starting match: ${p1Name} vs ${p2Name}`);
             // FIX: Update the remaining players message to show the NEXT players

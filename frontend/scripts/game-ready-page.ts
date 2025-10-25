@@ -1,5 +1,7 @@
 import { TournamentSettings } from "./types.js";
+// import { winnerArray } from "./types.js";
 import { game } from "./game.js";
+import { addGlobalWinner, globalState } from "./global_state.js";
 
 /**
  * Displays player names on the ready screen and sets up the listener to start the game.
@@ -33,6 +35,12 @@ export function initGameReadyPage(tSettings: TournamentSettings) {
     // Tournament end logic should be implemented here
     return;
   }
+
+  if (tSettings.playerAliases.length == 200)
+  {
+    location.hash = '#welcome-page'
+
+  }
   
   // 3. Inject Names into the DOM
   const p1NameEl = document.querySelector('.js-p1-name');
@@ -53,7 +61,7 @@ export function initGameReadyPage(tSettings: TournamentSettings) {
         // Call the game function with the correct names
         game(p1Name, p2Name); 
         
-
+        console.log("Total winners so far:", globalState.globalWinnerAliases);
         // FIX: Add a clear message showing who is playing
         console.log(`Starting match: ${p1Name} vs ${p2Name}`);
     

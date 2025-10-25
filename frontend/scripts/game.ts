@@ -1,6 +1,7 @@
 import {
     GameState, Paddle, KeyMap,
-    Ball, GameConfig, ButtonRect
+    Ball, GameConfig, ButtonRect,
+    TournamentSettings
   } from "./types.js";
   import {
     updatePaddleDirection, update, resetBall
@@ -11,6 +12,7 @@ import {
     drawWinText, drawButton, drawScore
   } from "./draw-game-elems.js";
   import { updateBotPaddle } from "./bot-ai.js";
+  import { addGlobalWinner } from "./global_state.js";
 
   // Νέα βοηθητική συνάρτηση για τη σχεδίαση του ονόματος του παίκτη
   function drawPlayerName(
@@ -48,7 +50,7 @@ import {
           });
   
           if (response.ok) {
-              console.log(`Stats updated successfully for ${winnerAlias} and ${loserAlias}.`);
+              console.log(`Stats updated successfully for winner : ${winnerAlias} and loser : ${loserAlias}.`);
           } else {
               console.error('Failed to update stats:', await response.text());
           }
@@ -86,7 +88,7 @@ import {
       paddleWidth: 30,
       paddleHeight: 100,
       ballRadius: 10,
-      maxScore: 5,
+      maxScore: 2,
       ballInitSpeed: 9
     };
   
@@ -148,6 +150,7 @@ import {
           const winnerName = winner === 'left' ? p1Name : p2Name;
           const loserName = winner === 'left' ? p2Name : p1Name;
 
+          addGlobalWinner(winnerName);
           // ΚΑΛΕΣΜΑ API ΓΙΑ ΣΤΑΤΙΣΤΙΚΑ:
           // Καλούμε μόνο μία φορά, αν δεν έχουν σταλεί τα στατιστικά, και
           // εφόσον και οι δύο παίκτες δεν είναι Bots
@@ -165,6 +168,7 @@ import {
           // });
           const mainMenuRect = drawButton(ctx, canvas, winner, 'NEXT GAME', 130);
           bindButtonEvent(canvas, mainMenuRect, () => {
+            console.log("Let's go back to game ready page");
             location.hash = 'game-ready-page';
           });
           return;
