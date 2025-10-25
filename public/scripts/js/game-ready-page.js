@@ -8,28 +8,26 @@ import { globalState } from "./global_state.js";
  */
 export function initGameReadyPage(tSettings) {
     console.log("Aliases BEFORE extraction:", tSettings.playerAliases);
-    console.log("List Length BEFORE extraction:", tSettings.playerAliases.length);
     // 1. Extract the First Player (Start of the list)
     // shift() removes and returns the first element.
     const p1Name = tSettings.playerAliases.shift();
     // 2. Extract the Last Player (End of the list)
     // pop() removes and returns the last element.
     const p2Name = tSettings.playerAliases.pop();
-    console.log("p1Name (shift):", p1Name);
-    console.log("p2Name (pop):", p2Name);
-    // Check to ensure we have two names
     if (!p1Name || !p2Name) {
+        // if (globalState.globalWinnerAliases.length > 1)
         console.warn("Tournament phase complete or not enough players for a match.");
-        // HERE IS T HAS TO CREATE THE NEW LISTS WITH THE WINNERS AND START THE LOGIC FROM THE START
-        // (I will store the winners in the tSettings, not in the base, 
-        // probably the wins in the base are not needed also, unless we want statistics)
         location.hash = '#welcome-page';
-        // Tournament end logic should be implemented here
         return;
     }
-    if (tSettings.playerAliases.length == 200) {
-        location.hash = '#welcome-page';
-    }
+    console.log("p1Name (shift):", p1Name);
+    console.log("p2Name (pop):", p2Name);
+    console.log("Remaining players for the next match out of if loop : ", tSettings.playerAliases.length);
+    // if (tSettings.playerAliases.length == 200)
+    // {
+    //   console.log("Remaining players for the next match: ", tSettings.playerAliases.length); 
+    //   location.hash = '#welcome-page'
+    // }
     // 3. Inject Names into the DOM
     const p1NameEl = document.querySelector('.js-p1-name');
     const p2NameEl = document.querySelector('.js-p2-name');
@@ -46,10 +44,9 @@ export function initGameReadyPage(tSettings) {
         const startGameHandler = () => {
             // Call the game function with the correct names
             game(p1Name, p2Name);
-            console.log("Total winners so far:", globalState.globalWinnerAliases);
+            console.log("Total winners so far:", globalState.globalWinnerAliases.length, globalState.globalWinnerAliases);
             // FIX: Add a clear message showing who is playing
             console.log(`Starting match: ${p1Name} vs ${p2Name}`);
-            // FIX: Update the remaining players message to show the NEXT players
             if (tSettings.playerAliases.length == 0) {
                 tSettings.playerAliases.length = 200;
             }

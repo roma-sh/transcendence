@@ -120,13 +120,14 @@ export function game(player1Name, player2Name) {
                 const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
                 const winnerName = winner === 'left' ? p1Name : p2Name;
                 const loserName = winner === 'left' ? p2Name : p1Name;
-                addGlobalWinner(winnerName);
                 // ΚΑΛΕΣΜΑ API ΓΙΑ ΣΤΑΤΙΣΤΙΚΑ:
                 // Καλούμε μόνο μία φορά, αν δεν έχουν σταλεί τα στατιστικά, και
                 // εφόσον και οι δύο παίκτες δεν είναι Bots
                 const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
-                if (!gameState.statsSent && isPvP) {
-                    updatePlayerStats(winnerName, loserName);
+                if (!gameState.statsSent) {
+                    addGlobalWinner(winnerName);
+                    if (isPvP)
+                        updatePlayerStats(winnerName, loserName);
                     gameState.statsSent = true;
                 }
                 drawWinText(ctx, canvas, winner);
