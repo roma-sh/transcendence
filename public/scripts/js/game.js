@@ -2,6 +2,7 @@ import { updatePaddleDirection, update, resetBall } from "./update-game-elems.js
 import { bindButtonEvent } from "./interact-game-elems.js";
 import { drawPaddle, drawBall, drawDividingLine, drawWinText, drawButton, drawScore } from "./draw-game-elems.js";
 import { updateBotPaddle } from "./bot-ai.js";
+import { tSettings } from "./pong.js";
 // Νέα βοηθητική συνάρτηση για τη σχεδίαση του ονόματος του παίκτη
 function drawPlayerName(ctx, // Τύπος: CanvasRenderingContext2D
 canvas, // Τύπος: HTMLCanvasElement
@@ -69,7 +70,7 @@ export function game(player1Name, player2Name) {
         paddleWidth: 30,
         paddleHeight: 100,
         ballRadius: 10,
-        maxScore: 5,
+        maxScore: 2,
         ballInitSpeed: 9
     };
     const canvas = document.getElementById('gameCanvas');
@@ -119,6 +120,8 @@ export function game(player1Name, player2Name) {
                 const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
                 const winnerName = winner === 'left' ? p1Name : p2Name;
                 const loserName = winner === 'left' ? p2Name : p1Name;
+                tSettings.winnersAliases.push(winnerName);
+                console.log(`Winner of this match: ${winnerName}`);
                 // ΚΑΛΕΣΜΑ API ΓΙΑ ΣΤΑΤΙΣΤΙΚΑ:
                 // Καλούμε μόνο μία φορά, αν δεν έχουν σταλεί τα στατιστικά, και
                 // εφόσον και οι δύο παίκτες δεν είναι Bots
@@ -132,11 +135,20 @@ export function game(player1Name, player2Name) {
                 // bindButtonEvent(canvas, playAgainRect, () => {
                 //   game(p1Name, p2Name);
                 // });
-                const mainMenuRect = drawButton(ctx, canvas, winner, 'NEXT GAME', 130);
-                bindButtonEvent(canvas, mainMenuRect, () => {
-                    location.hash = 'game-ready-page';
-                });
-                return;
+                if (p1Name == "Player 1" && p2Name == "Player 2") {
+                    const mainMenuRect = drawButton(ctx, canvas, winner, 'BACK TO MAIN', 130);
+                    bindButtonEvent(canvas, mainMenuRect, () => {
+                        location.hash = 'welcome-page';
+                    });
+                }
+                else {
+                    console.log("Hello from the next game button");
+                    const mainMenuRect = drawButton(ctx, canvas, winner, 'NEXT GAME', 130);
+                    bindButtonEvent(canvas, mainMenuRect, () => {
+                        location.hash = 'game-ready-page';
+                    });
+                }
+                return; // Τερματισμός του βρόχου παιχνιδιού μετά τη νίκη
             }
             // **********************************************
             // ************ ΛΟΓΙΚΗ ΤΟΥ BOT (AI) *************
@@ -155,6 +167,7 @@ export function game(player1Name, player2Name) {
         } // Τέλος ρητού ελέγχου ctx
         update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
         requestAnimationFrame(gameLoop);
+        return null;
     }
     // Οι listeners πρέπει να λαμβάνουν υπόψη αν ο παίκτης είναι Bot
     window.addEventListener('keydown', (e) => {

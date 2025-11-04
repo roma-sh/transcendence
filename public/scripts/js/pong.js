@@ -1,15 +1,15 @@
 import { setInitialWelcomePage, addHashForChooseModePage } from './welcome-page.js';
 import { initGameOptionHighlight, useGameOption } from './choose-mode.js';
-import { game } from './game.js';
 import { tournament, addAliasesSection } from "./tournament.js";
 import { initSignUpPage, initLogInPage } from './auth-pages.js';
 import { initUserProfilePage } from './user-profile.js';
 import { initGameReadyPage } from './game-ready-page.js';
 import { initWalletConnect } from './wallet-connect.js';
-const tSettings = {
+export const tSettings = {
     numberOfPlayers: 1,
     numberOfBots: 0,
     playerAliases: [],
+    winnersAliases: []
 };
 // for the welcome page:
 setInitialWelcomePage();
@@ -26,7 +26,7 @@ function handleHashChange() {
         initGameReadyPage(tSettings);
     }
     else if (hash === '#game-page') {
-        if ((tSettings.playerAliases && tSettings.playerAliases.length >= 2) || tSettings.playerAliases.length == 200) {
+        if ((tSettings.playerAliases && tSettings.playerAliases.length >= 2)) {
             // 	console.log("Starting game with registered players:", tSettings.playerAliases);
             // 	// Καλούμε το game με τα αποθηκευμένα ονόματα
             // 	game(tSettings.playerAliases[0], tSettings.playerAliases[1]);
@@ -34,8 +34,8 @@ function handleHashChange() {
         else {
             // Scenario 2: Default/Local Game (no registered players)
             // We call the game without arguments (θα χρησιμοποιήσει Player 1, Player 2)
-            console.log("Starting local game with default players.");
-            game();
+            // console.log("Starting local game with default players.");
+            // game(); 
         }
     }
     else if (hash === '#tournament-page') {
