@@ -14,7 +14,6 @@ export async function initGameReadyPage(tSettings: TournamentSettings) {
       tSettings.secondPlaceAliases = [];
       const firstEncoded = encodeURIComponent(tSettings.firstPlaceAlias);
       const secondEncoded = encodeURIComponent(tSettings.secondPlaceAlias);
-      // location.hash = '#welcome-page';
       location.hash = `#winner-page?first=${firstEncoded}&second=${secondEncoded}`;
       return;
     }

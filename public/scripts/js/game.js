@@ -3,19 +3,11 @@ import { bindButtonEvent } from "./interact-game-elems.js";
 import { drawPaddle, drawBall, drawDividingLine, drawWinText, drawButton, drawScore } from "./draw-game-elems.js";
 import { updateBotPaddle } from "./bot-ai.js";
 import { tSettings } from "./pong.js";
-// Νέα βοηθητική συνάρτηση για τη σχεδίαση του ονόματος του παίκτη
-function drawPlayerName(ctx, // Τύπος: CanvasRenderingContext2D
-canvas, // Τύπος: HTMLCanvasElement
-side, // Τύπος: Literal union
-name // Τύπος: string
-) {
-    // Διόρθωση χρώματος σε ΛΕΥΚΟ για να φαίνεται στο μαύρο φόντο του Canvas
+function drawPlayerName(ctx, canvas, side, name) {
     ctx.fillStyle = '#';
-    // Μικρότερο font και πιο ψηλά για να μην επικαλύπτει το σκορ
     ctx.font = 'bold 18px Arial';
     ctx.textAlign = side === 'left' ? 'left' : 'right';
     const x = side === 'left' ? 30 : canvas.width - 30;
-    // Διόρθωση θέσης y σε 20 (πιο ψηλά από το 30)
     const y = 20;
     ctx.fillText(name, x, y);
 }
@@ -24,7 +16,6 @@ name // Τύπος: string
  * @param loserAlias
  */
 async function updatePlayerStats(winnerAlias, loserAlias) {
-    // Κλήση στο backend API
     try {
         const response = await fetch('http://localhost:3000/api/updateStats', {
             method: 'POST',
