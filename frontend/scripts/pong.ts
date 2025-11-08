@@ -25,7 +25,9 @@ export const tSettings : TournamentSettings = {
   numberOfPlayers: 1,
   numberOfBots: 0,
   playerAliases: [],
-  winnersAliases: []
+  winnersAliases: [],
+  secondplaceAliases: [],
+  secondPlaceAlias: ""
 };
 
 // for the welcome page:

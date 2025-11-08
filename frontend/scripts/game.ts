@@ -58,30 +58,21 @@ import {
       }
   }
 
-  /**
-   * Εκκινεί τον βρόχο του παιχνιδιού.
-   * Οι παράμετροι player1Name και player2Name είναι προαιρετικές.
-   * @param player1Name Το όνομα του παίκτη 1 (Αριστερά).
-   * @param player2Name Το όνομα του παίκτη 2 (Δεξιά).
-   */
   export function game(player1Name?: string, player2Name?: string): void {
 
-    // 1. Ορισμός ονομάτων (ΠΡΕΠΕΙ να γίνει πρώτο!)
     const p1Name = player1Name || "Player 1";
     const p2Name = player2Name || "Player 2";
 
-    // 2. Ορισμός Bot/Skill
-    const BOT_SKILL_LEVEL = 0.6; // 60% skill (Δεν χρειάζεται να είναι εντός της συνάρτησης game)
+    const BOT_SKILL_LEVEL = 0.6;
     const isP1Bot = p1Name.startsWith("Bot ");
     const isP2Bot = p2Name.startsWith("Bot ");
       
-    // Προσθήκη statsSent για να καλέσουμε το API μόνο μία φορά
     const gameState: GameState & { statsSent: boolean } = { 
       isPaused: false,
       isWin: false,
       leftScore: 0,
       rightScore: 0,
-      statsSent: false // ΝΕΑ ΣΗΜΑΙΑ: Έχουν σταλεί τα στατιστικά;
+      statsSent: false
     };
     const gameConfig: GameConfig = { 
       paddleWidth: 30,
@@ -130,7 +121,6 @@ import {
     function gameLoop() {
       if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-      // Σχεδίαση ονομάτων
       if (ctx) { 
         drawPlayerName(ctx, canvas, 'left', p1Name);
         drawPlayerName(ctx, canvas, 'right', p2Name);
@@ -143,18 +133,28 @@ import {
         drawBall(ctx, gameState.isPaused, ball);
         drawDividingLine(ctx, canvas);
   
-        // Έλεγχος Νίκης
         if (gameState.isWin) {
           const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
           const winnerName = winner === 'left' ? p1Name : p2Name;
           const loserName = winner === 'left' ? p2Name : p1Name;
 
+          // if (tSettings.thirdPlaceAliases.length > 0)
+          // {
+          //   tSettings.thirdPlaceAlias = winnerName;
+          //   console.log ("Third place winner :", tSettings.thirdPlaceAlias);
+          // }
+          // else
+          // {
           tSettings.winnersAliases.push(winnerName);
+          // }
+          console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
+          if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
+          {
+            tSettings.secondplaceAliases.push(loserName);
+            console.log("Losers for second place of this match:", tSettings.secondplaceAliases);
+          }
           console.log(`Winner of this match: ${winnerName}`);
 
-          // ΚΑΛΕΣΜΑ API ΓΙΑ ΣΤΑΤΙΣΤΙΚΑ:
-          // Καλούμε μόνο μία φορά, αν δεν έχουν σταλεί τα στατιστικά, και
-          // εφόσον και οι δύο παίκτες δεν είναι Bots
           const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
 
           if (!gameState.statsSent && isPvP) {
@@ -163,12 +163,6 @@ import {
           }
 
           drawWinText(ctx, canvas, winner);
-          // const playAgainRect = drawButton(ctx, canvas, winner, 'PLAY AGAIN', 80);
-          // bindButtonEvent(canvas, playAgainRect, () => {
-          //   game(p1Name, p2Name);
-          // });
-
-
 
           if (p1Name == "Player 1" && p2Name == "Player 2")
           {
@@ -188,12 +182,9 @@ import {
 
           
 
-          return; // Τερματισμός του βρόχου παιχνιδιού μετά τη νίκη
+          return;
         }
 
-        // **********************************************
-        // ************ ΛΟΓΙΚΗ ΤΟΥ BOT (AI) *************
-        // **********************************************
         if (!gameState.isPaused) {
             // Αν ο P1 είναι Bot (Αριστερή ρακέτα)
             if (isP1Bot) {
@@ -203,10 +194,8 @@ import {
             if (isP2Bot) {
                 updateBotPaddle(rightPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
             }
-        }
-        // **********************************************
-        
-      } // Τέλος ρητού ελέγχου ctx
+        } 
+      }
   
       update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
   
@@ -214,10 +203,7 @@ import {
       return null;
     }
   
-    // Οι listeners πρέπει να λαμβάνουν υπόψη αν ο παίκτης είναι Bot
     window.addEventListener('keydown', (e: KeyboardEvent) => { 
-      // Το updatePaddleDirection χειρίζεται την κίνηση των ρακέτων με βάση τα πλήκτρα.
-      // Αν ο παίκτης είναι Bot, ο listener απλά θα αγνοηθεί για τη ρακέτα του.
       keys[e.key] = true;
       updatePaddleDirection(keys, leftPaddle, rightPaddle);
     });

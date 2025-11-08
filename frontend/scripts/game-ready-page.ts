@@ -11,6 +11,10 @@ export async function initGameReadyPage(tSettings: TournamentSettings) {
   if (tSettings.playerAliases.length == 0) {
     if (tSettings.winnersAliases.length == 1) {
       tSettings.playerAliases = [];
+      tSettings.secondPlaceAlias = tSettings.secondplaceAliases.pop()!;
+      console.log("First place winner : ", tSettings.winnersAliases[0]);
+      console.log("Second place winner : ", tSettings.secondPlaceAlias);
+      tSettings.firstPlaceAlias = tSettings.winnersAliases.pop()!;
       tSettings.winnersAliases = [];
       location.hash = '#welcome-page';
       return;
