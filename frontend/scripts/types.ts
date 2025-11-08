@@ -43,7 +43,7 @@ export interface TournamentSettings {
   numberOfBots: number,
   playerAliases: string[],
   winnersAliases: string[],
-  secondplaceAliases: string[],
+  secondPlaceAliases: string[],
   secondPlaceAlias: string,
   firstPlaceAlias: string
 }

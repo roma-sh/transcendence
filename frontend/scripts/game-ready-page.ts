@@ -1,33 +1,30 @@
 import { TournamentSettings } from "./types.js";
 import { game } from "./game.js";
 
-/**
- * Displays player names on the ready screen and sets up the listener to start the game.
- * It uses and removes the FIRST and LAST player from the list to prepare the next pair.
- * @param tSettings The tournament settings containing player aliases.
- */
 export async function initGameReadyPage(tSettings: TournamentSettings) {
 
   if (tSettings.playerAliases.length == 0) {
     if (tSettings.winnersAliases.length == 1) {
       tSettings.playerAliases = [];
-      tSettings.secondPlaceAlias = tSettings.secondplaceAliases.pop()!;
+      tSettings.secondPlaceAlias = tSettings.secondPlaceAliases.pop()!;
       console.log("First place winner : ", tSettings.winnersAliases[0]);
       console.log("Second place winner : ", tSettings.secondPlaceAlias);
       tSettings.firstPlaceAlias = tSettings.winnersAliases.pop()!;
       tSettings.winnersAliases = [];
-      location.hash = '#welcome-page';
+      tSettings.secondPlaceAliases = [];
+      const firstEncoded = encodeURIComponent(tSettings.firstPlaceAlias);
+      const secondEncoded = encodeURIComponent(tSettings.secondPlaceAlias);
+      // location.hash = '#welcome-page';
+      location.hash = `#winner-page?first=${firstEncoded}&second=${secondEncoded}`;
       return;
     }
     console.log('Winners: ' + tSettings.winnersAliases);
     tSettings.playerAliases = tSettings.winnersAliases.slice(); // Copy winners to the next round
     tSettings.winnersAliases = []; // Clear winners for the next round
-    console.log("All matches in this round completed. Preparing for the next round.");
-    location.hash = '#game-ready-page';
+    console.log("All matches in this round completed. Preparing for the next round. Players left : ", tSettings.playerAliases.length);
+    // location.hash = '#game-ready-page';
   }
 
-
-  
   console.log("Aliases BEFORE extraction:", tSettings.playerAliases);
   console.log("List Length BEFORE extraction:", tSettings.playerAliases.length);
   

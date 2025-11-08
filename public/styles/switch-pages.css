@@ -6,7 +6,8 @@
 #log-in-page,
 #sign-up-page,
 #game-ready-page /* ⭐️ ΠΡΟΣΘΗΚΗ: Κρύβουμε τη νέα σελίδα ⭐️ */,
-#wallet-info-page
+#wallet-info-page,
+#winner-page
 {
     display: none;
     /* Χρησιμοποιούμε absolute position για να μην πιάνουν χώρο οι κρυμμένες σελίδες */
@@ -27,7 +28,8 @@
 #tournament-page-player-aliases:target,
 #log-in-page:target,
 #sign-up-page:target,
-#wallet-info-page:target {
+#wallet-info-page:target,
+#winner-page {
   display: initial;
 }
 #game-ready-page:target /* ⭐️ ΠΡΟΣΘΗΚΗ: Εμφανίζουμε τη νέα σελίδα ⭐️ */

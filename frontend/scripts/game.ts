@@ -34,10 +34,8 @@ import {
   }
   
   /**
-   * Στέλνει αίτημα στο backend για ενημέρωση των στατιστικών παικτών
-   * (νίκες, συνολικά παιχνίδια).
-   * @param winnerAlias Το ψευδώνυμο του νικητή.
-   * @param loserAlias Το ψευδώνυμο του ηττημένου.
+   * @param winnerAlias 
+   * @param loserAlias 
    */
   async function updatePlayerStats(winnerAlias: string, loserAlias: string) {
       // Κλήση στο backend API
@@ -138,20 +136,13 @@ import {
           const winnerName = winner === 'left' ? p1Name : p2Name;
           const loserName = winner === 'left' ? p2Name : p1Name;
 
-          // if (tSettings.thirdPlaceAliases.length > 0)
-          // {
-          //   tSettings.thirdPlaceAlias = winnerName;
-          //   console.log ("Third place winner :", tSettings.thirdPlaceAlias);
-          // }
-          // else
-          // {
           tSettings.winnersAliases.push(winnerName);
-          // }
+
           console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
           if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
           {
-            tSettings.secondplaceAliases.push(loserName);
-            console.log("Losers for second place of this match:", tSettings.secondplaceAliases);
+            tSettings.secondPlaceAliases.push(loserName);
+            console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
           }
           console.log(`Winner of this match: ${winnerName}`);
 
@@ -179,19 +170,16 @@ import {
               location.hash = 'game-ready-page';
             });
           }
-
-          
-
           return;
         }
 
         if (!gameState.isPaused) {
-            // Αν ο P1 είναι Bot (Αριστερή ρακέτα)
-            if (isP1Bot) {
+            if (isP1Bot) 
+            {
                 updateBotPaddle(leftPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
             }
-            // Αν ο P2 είναι Bot (Δεξιά ρακέτα)
-            if (isP2Bot) {
+            if (isP2Bot)
+            {
                 updateBotPaddle(rightPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
             }
         } 
