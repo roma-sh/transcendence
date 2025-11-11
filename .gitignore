@@ -17,8 +17,6 @@ blockchain/.env
 .DS_Store
 *.log
 
-# /database/user_db.db
-# /backend/node_modules/
-# /public/scripts/js/
-# /public/styles/
-# /public/index.html
+database/user_db.db
+backend/node_modules/
+public/

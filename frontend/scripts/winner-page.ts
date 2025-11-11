@@ -5,20 +5,20 @@ interface TSettings {
 export function initWinnerAnnouncementPage(tSettings: TSettings): void {
 
     const winnerSection = document.getElementById('winner-page');
-    
+
     document.querySelectorAll('section').forEach(section => {
         section.style.display = 'none';
     });
-    
+
     if (winnerSection) {
         winnerSection.style.display = 'block'; 
     }
 
     const firstPlaceElement = document.getElementById('first-place-winner');
     const secondPlaceElement = document.getElementById('second-place-winner');
-    
+
     const welcomeButton = document.querySelector('.js-go-to-welcome-button') as HTMLButtonElement | null;
-    
+
     displayWinners(firstPlaceElement, secondPlaceElement); 
 
     if (welcomeButton) {
@@ -29,12 +29,12 @@ export function initWinnerAnnouncementPage(tSettings: TSettings): void {
 }
 
 function displayWinners(firstPlaceElement: HTMLElement | null, secondPlaceElement: HTMLElement | null): void {
-    
+
     const hash = location.hash;
-    
+
     const queryString = hash.includes('?') ? hash.substring(hash.indexOf('?') + 1) : '';
     const urlParams = new URLSearchParams(queryString);
-    
+
     const firstPlace = urlParams.get('first'); 
     const secondPlace = urlParams.get('second'); 
 

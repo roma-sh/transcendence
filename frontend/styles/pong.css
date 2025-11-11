@@ -49,12 +49,12 @@
 
 .play-button {
   background: var(--main-color);
-  padding: 20px 100px;
+  padding: 15px 60px;
   border: none;
   border-radius: 45px;
   color: white;
   cursor: pointer;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: bold;
   font-family: Arial;
   transition: opacity 0.15s;
