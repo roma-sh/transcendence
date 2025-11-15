@@ -14,12 +14,24 @@
     <link rel="stylesheet" href="./styles/auth-buttons.css" />
     <link rel="stylesheet" href="./styles/game_ready_page.css" />
     <link rel="stylesheet" href="./styles/wallet.css" />
+    <link rel="stylesheet" href="./styles/user-menu.css">
   </head>
   <body>
     <section id="welcome-page">
       <div class="init-buttons js-init-buttons">
         <button class="auth-button sign-up-button js-sign-up-button">SIGN UP</button>
         <button class="auth-button log-in-button js-log-in-button">LOG IN</button>
+      </div>
+      <div class=
+        "user-menu-button-container
+        js-user-menu-button-container
+        user-menu-button-container-hidden">
+          <button class="user-menu-button js-user-menu-button"></button>
+          <div class="user-dropdown js-user-dropdown">
+            <a href="#">Profile</a>
+            <a href="#">Settings</a>
+            <button>Log out</button>
+          </div>
       </div>
       <div class="banner">
         <div class="paddle paddle-left"></div>

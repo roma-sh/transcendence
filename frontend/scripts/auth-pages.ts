@@ -1,3 +1,5 @@
+import { setUserMenu } from "./user-menu.js";
+
 export function initSignUpPage(): void {
   const signUpSection = document.querySelector('#sign-up-page') as HTMLElement;
   if (!signUpSection) return;
@@ -82,8 +84,8 @@ export function initLogInPage(): void {
     }
 
     if (response.ok) {
-      console.log(result);
       updateUIForAuthState(true);
+      setUserMenu();
       alert('Logged in successfully!');
       localStorage.setItem('userName', result.user.username);
       location.hash = '#welcome-page';
