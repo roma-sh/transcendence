@@ -1,0 +1,158 @@
+/* main layout */
+.profile {
+	margin: 0 auto;
+	font-family: Arial, sans-serif;
+	color: #222;
+	width: 100%;
+	max-width: none;
+	padding: 32px 24px;
+}
+
+/* header */
+.profile__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.profile__header h1 {
+	margin: 0;
+	font-size: 22px;
+	font-weight: 700;
+}
+.profile__back {
+	color: #6b7280;
+	text-decoration: none;
+}
+.profile__back:hover {
+	text-decoration: underline;
+}
+
+/* card */
+.card {
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 16px;
+	padding: 16px;
+	margin-top: 16px;
+}
+
+/* top identity row */
+.identity {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.avatar {
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	display: grid;
+	place-items: center;
+	background: #3a3434;
+	color: #fff;
+	font-weight: 700;
+	font-size: 18px;
+}
+.who {
+	flex: 1;
+}
+.name {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+}
+.muted {
+	margin: 2px 0 0;
+	color: #6b7280;
+	font-size: 12px;
+}
+
+/* stats */
+.stats {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 8px;
+	margin-top: 12px;
+}
+.stat {
+	text-align: center;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	background: #fafafa;
+	padding: 10px;
+}
+.num {
+	font-weight: 700;
+}
+.label {
+	color: #6b7280;
+	font-size: 12px;
+}
+
+/* info grid */
+.grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 12px;
+	margin-top: 12px;
+}
+.field label {
+	display: block;
+	color: #6b7280;
+	font-size: 12px;
+	margin-bottom: 4px;
+}
+.value {
+	padding: 10px 12px;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+}
+
+/* badge */
+.badge {
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 700;
+}
+.badge-ok {
+	background: #e7f7eb;
+	color: #15803d;
+}
+
+/* buttons */
+.actions {
+	display: flex;
+	gap: 10px;
+	margin-top: 14px;
+}
+.btn {
+	padding: 10px 14px;
+	border-radius: 999px;
+	font-weight: 700;
+	font-size: 14px;
+	cursor: pointer;
+}
+.btn-primary {
+	background: #3a3434;
+	color: #fff;
+	border: none;
+}
+.btn-primary:hover {
+	opacity: 0.9;
+}
+.btn-ghost {
+	background: #fff;
+	border: 1px solid #e5e7eb;
+}
+.btn-ghost:hover {
+	background: #f8f8f8;
+}
+
+/* mobile */
+@media (max-width: 640px) {
+	.grid {
+		grid-template-columns: 1fr;
+	}
+}

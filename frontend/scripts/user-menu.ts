@@ -1,3 +1,5 @@
+import { initProfilePage } from "./profile-page.js";
+
 export function setUserMenu() {
 	updateUIforUserMenu(true);
 	setUserMenuName();
@@ -29,18 +31,25 @@ function setUserMenuName() {
 }
 
 function setupDropdown() {
-  const btn = document.querySelector('.js-user-menu-button') as HTMLButtonElement | null;
-  const menu = document.querySelector('.js-user-dropdown') as HTMLElement | null;
-  if (!btn || !menu) return;
+	const btn = document.querySelector('.js-user-menu-button') as HTMLButtonElement | null;
+	const menu = document.querySelector('.js-user-dropdown') as HTMLElement | null;
+	if (!btn || !menu) return;
 
-  btn.addEventListener('click', () => {
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-  });
-
-  document.addEventListener('click', (e) => {
-  const target = e.target as Node;
-  if (!btn.contains(target) && !menu.contains(target)) {
-    menu.style.display = 'none';
-  }
+	btn.addEventListener('click', () => {
+		menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 	});
+
+	document.addEventListener('click', (e) => {
+		const target = e.target as Node;
+		if (!btn.contains(target) && !menu.contains(target)) {
+			menu.style.display = 'none';
+		}
+	});
+
+	const profileLink = document.querySelector('.js-profile-link') as HTMLElement | null;
+
+	profileLink?.addEventListener('click', () => {
+		location.hash = '#profile-page';
+		initProfilePage();
+	})
 }

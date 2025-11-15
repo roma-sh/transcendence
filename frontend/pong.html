@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./styles/game_ready_page.css" />
     <link rel="stylesheet" href="./styles/wallet.css" />
     <link rel="stylesheet" href="./styles/user-menu.css">
+    <link rel="stylesheet" href="./styles/profile-page.css">
   </head>
   <body>
     <section id="welcome-page">
@@ -28,8 +29,8 @@
         user-menu-button-container-hidden">
           <button class="user-menu-button js-user-menu-button"></button>
           <div class="user-dropdown js-user-dropdown">
-            <a href="#">Profile</a>
-            <a href="#">Settings</a>
+            <div class="js-profile-link">Profile</div>
+            <div class="js-settings-link">Settings</div>
             <button>Log out</button>
           </div>
       </div>
@@ -155,20 +156,63 @@
     </section>
 
 
-  <section id="log-in-page">
-    <div class="auth-form">
-      <h2>Log In</h2>
-      <input type="text" id="login-username-email" placeholder="Username or Email" />
-      <input type="password" id="login-password" placeholder="Password" />
-      <button id="login-button" class="auth-submit-button">Login</button>
-    </div>
-  </section>
-
-
-    <section id="user-profile">
+    <section id="log-in-page">
+      <div class="auth-form">
+        <h2>Log In</h2>
+        <input type="text" id="login-username-email" placeholder="Username or Email" />
+        <input type="password" id="login-password" placeholder="Password" />
+        <button id="login-button" class="auth-submit-button">Login</button>
+      </div>
     </section>
 
-    
+    <section id="profile-page" class="profile">
+      <header class="profile__header">
+        <a href="/" class="profile__back">← Back</a>
+        <h1>Profile</h1>
+        <div></div>
+      </header>
+
+      <div class="card">
+        <div class="identity">
+          <div class="avatar js-avatar"></div>
+          <div class="who">
+            <h2 class="name js-name"></h2>
+            <p class="muted js-username"></p>
+          </div>
+          <button class="btn btn-ghost js-edit" type="button">Edit</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="num js-wins">0</div><div class="label">Wins</div></div>
+          <div class="stat"><div class="num js-losses">0</div><div class="label">Losses</div></div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label>Full name</label>
+            <div class="value js-fullname"></div>
+          </div>
+          <div class="field">
+            <label>Username</label>
+            <div class="value js-username2"></div>
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <div class="value js-email"></div>
+          </div>
+          <div class="field">
+            <label>Wallet</label>
+            <div class="value"><span class="badge badge-ok js-wallet">Connected</span></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary js-change-pass" type="button">Change password</button>
+          <button class="btn btn-ghost js-logout" type="button">Log out</button>
+        </div>
+      </div>
+    </section>
+
     <script type="module" src="./scripts/js/pong.js"></script>
   </body>
 </html>

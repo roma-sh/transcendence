@@ -7,18 +7,11 @@
 #sign-up-page,
 #game-ready-page,
 #wallet-info-page,
-#winner-page
+#winner-page,
+#profile-page
 {
-    display: none;
-    position: absolute; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100vh;
-}
-/* {
   display: none;
-} */
+}
 
 #welcome-page:target,
 #choose-mode-page:target,
@@ -28,6 +21,7 @@
 #log-in-page:target,
 #sign-up-page:target,
 #wallet-info-page:target,
+#profile-page:target,
 #winner-page {
   display: initial;
 }
