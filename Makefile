@@ -14,7 +14,6 @@ SSL_KEY		= $(SSL_DIR)/selfsigned.key
 
 # re only recreates the instance and keeps the DB
 # to delete the database fclean and all is needed seperately to reset completely
-# db-reset only resets the database
 
 .SILENT:
 
@@ -49,10 +48,6 @@ fclean: clean
 	rm -rf $(SSL_DIR)
 	rm -rf $(ENV_FILE)
 	rm -rf $(CHECKFILE)
-
-db-reset: down
-	echo "$(RED)Database reset !$(NC)"
-	docker volume rm -f ft_transcendence_postgres_data || true
 
 logs:
 	docker compose -f $(COMPOSE) logs --tail=150

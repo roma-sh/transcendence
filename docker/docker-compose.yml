@@ -5,6 +5,8 @@ services:
       context: ../
       dockerfile: docker/Dockerfile.backend
     container_name: back-end
+    volumes:
+      - db_data:/usr/app/database
     env_file:
       - .env
     restart:  always
@@ -80,6 +82,6 @@ networks:
 
 #-VOLUMES-
 volumes:
-
+  db_data:
   grafana_data:
   prometheus_data:
