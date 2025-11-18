@@ -1,4 +1,10 @@
 export function initProfilePage() {
+
+	const profileBackBtn = document.querySelector('.js-profile__back') as HTMLButtonElement;
+	profileBackBtn.addEventListener("click", () => {
+		location.hash = 'welcome-page';
+	});
+
 	const name = localStorage.getItem('userName') as string;
 
 	setText('.js-name', name);

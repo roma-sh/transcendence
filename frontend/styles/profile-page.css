@@ -20,11 +20,15 @@
 	font-weight: 700;
 }
 .profile__back {
-	color: #6b7280;
-	text-decoration: none;
+	color: var(--main-color);
+	background-color: white;
+	border: 1px solid var(--main-color);
+	border-radius: 3px;
+	margin-left: 5px;
+	transition: opacity 0.15s;
 }
 .profile__back:hover {
-	text-decoration: underline;
+	opacity: 0.7;
 }
 
 /* card */
