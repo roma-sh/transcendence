@@ -1,4 +1,4 @@
-import { Paddle, Ball, GameConfig, ButtonRect } from "./types.js";
+import { Paddle, Ball, GameConfig, ButtonRect, GameSettings } from "./types.js";
 
 export function drawScore (
   ctx: CanvasRenderingContext2D | null,
@@ -26,11 +26,12 @@ export function drawScore (
 export function drawPaddle(
   paddle : Paddle,
   ctx: CanvasRenderingContext2D | null,
-  gameConfig : GameConfig) {
+  gameConfig : GameConfig,
+  settings : GameSettings) {
 
   const radius = 8;
   if (ctx) {
-    ctx.fillStyle = 'rgb(70, 61, 61)';
+    ctx.fillStyle = settings.paddleColor;
     ctx.beginPath();
     ctx.moveTo(paddle.x + radius, paddle.y);
     ctx.lineTo(paddle.x + gameConfig.paddleWidth - radius, paddle.y);
@@ -55,7 +56,8 @@ export function drawPaddle(
 export function drawBall(
   ctx: CanvasRenderingContext2D | null,
   isPaused : boolean,
-  ball : Ball ) {
+  ball : Ball,
+  settings : GameSettings) {
 
   if (isPaused) return;
   if (ctx) {
@@ -67,7 +69,7 @@ export function drawBall(
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
 
-    ctx.fillStyle = '#FFA500';
+    ctx.fillStyle = settings.ballColor;
     ctx.fill();
     ctx.closePath();
 

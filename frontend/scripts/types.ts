@@ -47,3 +47,12 @@ export interface TournamentSettings {
   secondPlaceAlias: string,
   firstPlaceAlias: string
 }
+
+export interface GameSettings {
+	ballSpeed: number;
+	paddleSpeed: number;
+	ballColor: string;
+	paddleColor: string;
+	bgColor: string;
+	scoreToWin: number;
+};

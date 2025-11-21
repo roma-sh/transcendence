@@ -1,22 +1,23 @@
-import { GameState, KeyMap, Paddle, Ball, GameConfig } from "./types.js";
+import { GameState, KeyMap, Paddle, Ball, GameConfig, GameSettings } from "./types.js";
 
 export function updatePaddleDirection (
   keys : KeyMap,
   leftPaddle : Paddle,
-  rightPaddle : Paddle) {
+  rightPaddle : Paddle,
+  settings : GameSettings) {
 
   if (keys['w'] || keys['W']) {
-    leftPaddle.dy = -7;
+    leftPaddle.dy = -settings.paddleSpeed;
   } else if (keys['s'] || keys['S']) {
-    leftPaddle.dy = 7;
+    leftPaddle.dy = settings.paddleSpeed;
   } else {
     leftPaddle.dy = 0;
   }
 
   if (keys['ArrowUp']) {
-    rightPaddle.dy = -7;
+    rightPaddle.dy = -settings.paddleSpeed;
   } else if (keys['ArrowDown']) {
-    rightPaddle.dy = 7;
+    rightPaddle.dy = settings.paddleSpeed;
   } else {
     rightPaddle.dy = 0;
   }

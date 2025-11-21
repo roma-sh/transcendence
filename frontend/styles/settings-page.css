@@ -1,0 +1,70 @@
+/* Settings form layout */
+.settings-form {
+	display: grid;
+	gap: 12px;
+	margin-top: 12px;
+	/* max-width: 520px; */
+	min-width: 500px;
+}
+
+/* row with slider / color + value text */
+.settings-value-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.settings-form input[type="range"] {
+	flex: 1;
+}
+
+.settings-value {
+	min-width: 24px;
+	text-align: right;
+	font-size: 13px;
+	color: #6b7280;
+}
+
+.settings-color-text {
+	font-size: 13px;
+	color: #6b7280;
+}
+
+/* helper text under a field */
+.settings-helper {
+	margin: 4px 0 0;
+	font-size: 11px;
+	color: #9ca3af;
+}
+
+/* small status message next to buttons */
+.settings-message {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+.settings-value-row input[type="number"] {
+	width: 80px;
+}
+
+.card-settings-page {
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 16px;
+	padding: 16px;
+	margin-top: 16px;
+	display: flex;
+	justify-content: center;
+}
+
+.settings__back {
+	color: var(--main-color);
+	background-color: white;
+	border: 1px solid var(--main-color);
+	border-radius: 3px;
+	margin-left: 5px;
+	transition: opacity 0.15s;
+}
+.settings__back:hover {
+	opacity: 0.7;
+}

@@ -8,7 +8,8 @@
 #game-ready-page,
 #wallet-info-page,
 #winner-page,
-#profile-page
+#profile-page,
+#settings-page
 {
   display: none;
 }
@@ -22,6 +23,7 @@
 #sign-up-page:target,
 #wallet-info-page:target,
 #profile-page:target,
+#settings-page:target,
 #winner-page {
   display: initial;
 }

@@ -1,4 +1,5 @@
 import { initProfilePage } from "./profile-page.js";
+import { initSettingsPage } from "./settings-page.js";
 
 export function setUserMenu() {
 	updateUIforUserMenu(true);
@@ -51,5 +52,12 @@ function setupDropdown() {
 	profileLink?.addEventListener('click', () => {
 		location.hash = '#profile-page';
 		initProfilePage();
-	})
+	});
+
+	const settingsLink = document.querySelector('.js-settings-link') as HTMLElement | null;
+
+	settingsLink?.addEventListener('click', () => {
+		location.hash = '#settings-page';
+		initSettingsPage();
+	});
 }

@@ -12,6 +12,7 @@ import {
   } from "./draw-game-elems.js";
   import { updateBotPaddle } from "./bot-ai.js";
   import { tSettings } from "./pong.js";
+  import { loadGameSettings } from "./settings-page.js";
 
   function drawPlayerName(
     ctx: CanvasRenderingContext2D,
@@ -53,6 +54,8 @@ import {
 
   export function game(player1Name?: string, player2Name?: string): void {
 
+    let settings = loadGameSettings();
+
     const p1Name = player1Name || "Player 1";
     const p2Name = player2Name || "Player 2";
 
@@ -71,8 +74,8 @@ import {
       paddleWidth: 30,
       paddleHeight: 100,
       ballRadius: 10,
-      maxScore: 2,
-      ballInitSpeed: 9
+      maxScore: settings.scoreToWin,
+      ballInitSpeed: settings.ballSpeed
     };
   
     const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -112,18 +115,20 @@ import {
     const keys: KeyMap = {}; 
   
     function gameLoop() {
-      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-      if (ctx) { 
+      if (ctx) {
+
+        ctx.fillStyle = settings.bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         drawPlayerName(ctx, canvas, 'left', p1Name);
         drawPlayerName(ctx, canvas, 'right', p2Name);
   
         drawScore(ctx, canvas, 'left',  gameState.leftScore);
         drawScore(ctx, canvas, 'right', gameState.rightScore);
   
-        drawPaddle(leftPaddle, ctx, gameConfig);
-        drawPaddle(rightPaddle, ctx, gameConfig);
-        drawBall(ctx, gameState.isPaused, ball);
+        drawPaddle(leftPaddle, ctx, gameConfig, settings);
+        drawPaddle(rightPaddle, ctx, gameConfig, settings);
+        drawBall(ctx, gameState.isPaused, ball, settings);
         drawDividingLine(ctx, canvas);
   
         if (gameState.isWin) {
@@ -188,12 +193,12 @@ import {
   
     window.addEventListener('keydown', (e: KeyboardEvent) => { 
       keys[e.key] = true;
-      updatePaddleDirection(keys, leftPaddle, rightPaddle);
+      updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
     });
   
     window.addEventListener('keyup', (e: KeyboardEvent) => { 
       keys[e.key] = false;
-      updatePaddleDirection(keys, leftPaddle, rightPaddle);
+      updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
     });
   
     gameLoop();
