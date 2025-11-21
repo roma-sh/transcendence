@@ -57,6 +57,7 @@ export function initLogInPage() {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-cache',
                 },
+                credentials: 'include',
                 body: JSON.stringify({ username: identifier, password }),
             });
             console.log('Response status:', response.status);

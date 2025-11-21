@@ -18,7 +18,7 @@ blockchain/.env
 *.log
 
 # /database/user_db.db
-# /backend/node_modules/
+/backend/node_modules/
 # /public/scripts/js/
 # /public/styles/
 # /public/index.html
