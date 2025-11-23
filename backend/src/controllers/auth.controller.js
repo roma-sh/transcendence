@@ -1,6 +1,7 @@
 // import the file "auth.service.js" from services folder
 // to use its functions here
 const { insertUser, getUser } = require('../services/auth.service');
+const { setUserOnline } = require('../services/profile.service');
 
 
 // when the browser sends a signup request, this controller handles it
@@ -120,6 +121,12 @@ async function loginController(request, reply) {
     if (!user) {
       return reply.code(401).send({ message: 'Invalid credentials' });
     }
+  // set user.online = 1 in the database
+  const updated = await setUserOnline(user.id);
+
+  if (updated === 0) {
+    console.warn(`Warning: user ${user.id} found but online status was NOT updated`);
+  }
 
     // set session user id
     request.session.userId = user.id; // users table expected to have `id` column

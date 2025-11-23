@@ -20,6 +20,7 @@ user_db.run(`
     password TEXT NOT NULL,
     total_games INTEGER DEFAULT 0,
     wins INTEGER DEFAULT 0
+    online INTEGER DEFAULT 0
   )
 `);
 
