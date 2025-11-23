@@ -14,9 +14,9 @@ export async function initUserProfilePage() {
         return;
     try {
         // Fetch user profile from server
-        const response = await fetch('http://127.0.0.1:3000/api/auth/profile', {
+        const response = await fetch('http://localhost:3000/api/profile', {
             method: 'GET',
-            credentials: 'include', // ✅ send session cookie automatically
+            credentials: 'include',
         });
         // If not logged in or request fails, show Guest
         if (!response.ok) {
