@@ -23,18 +23,22 @@ async function profileController(request, reply) {
 }
 
 async function isUserOnlineController(request, reply) {
-  const { id } = request.params; // user ID from URL
+  const userId = request.session.userId; // get logged-in user ID
+
+  if (!userId) {
+    return reply.code(401).send({ message: "Not logged in" });
+  }
 
   try {
-    const online = await isUserOnline(id);
+    const online = await isUserOnline(userId);
 
     if (online === null) {
       return reply.code(404).send({ message: "User not found" });
     }
 
     return reply.send({
-      userId: id,
-      online: online === 1 // convert 0/1 to boolean true/false
+      userId,
+      online: online === 1 // convert 0/1 to boolean
     });
 
   } catch (err) {
@@ -42,6 +46,7 @@ async function isUserOnlineController(request, reply) {
     return reply.code(500).send({ message: "Server error" });
   }
 }
+
 
 
 module.exports = { profileController , isUserOnlineController};

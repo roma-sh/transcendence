@@ -1,6 +1,6 @@
 # Backend
 
-We are using Fastify framework and SQLite3, handling authentication, user management, and game statistics.
+We are using Fastify (framework for node.js) and SQLite3, handling authentication, user management, and game statistics.
 
 ---
 

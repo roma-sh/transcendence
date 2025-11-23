@@ -11,7 +11,6 @@ const user_db = new sqlite3.Database(dbPath, (err) => {
     console.log('✅ Connected to SQLite database at:', dbPath);
   }
 });
-
 user_db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,8 +18,8 @@ user_db.run(`
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     total_games INTEGER DEFAULT 0,
-    wins INTEGER DEFAULT 0
-    online INTEGER DEFAULT 0
+    wins INTEGER DEFAULT 0,
+    is_online INTEGER DEFAULT 0
   )
 `);
 

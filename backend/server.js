@@ -2,8 +2,8 @@ const Fastify = require('fastify');
 const fastifyStatic = require('@fastify/static');
 const fastifyCors = require('@fastify/cors');
 const path = require('path');
-const cookie = require('@fastify/cookie');
-const session = require('@fastify/session');
+const fastifyCookie = require('@fastify/cookie');
+const fastifySession = require('@fastify/session');
 
 const app = Fastify({ logger: true });
 
@@ -29,7 +29,8 @@ app.register(fastifyStatic, {
 app.register(require('./src/routes/auth.routes'), { prefix: '/api/auth' });
 app.register(require('./src/routes/alias.routes'), { prefix: '/api/alias' });
 app.register(require('./src/routes/stats.routes'), { prefix: '/api/stats' });
-app.register(require('./src/routes/profile.routes'), { prefix: '/api' });
+app.register(require('./src/routes/profile.route'), { prefix: '/api' });
+
 
 app.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {
   if (err) {

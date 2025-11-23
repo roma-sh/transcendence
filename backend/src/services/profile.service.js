@@ -5,7 +5,7 @@ const user_db = require(path.join(__dirname, '../db/db'));
 function getUserById(userId) {
   return new Promise((resolve, reject) => {
     user_db.get(
-      `SELECT id, username, email FROM users WHERE id = ?`,
+      `SELECT id, username, email, is_online FROM users WHERE id = ?`,
       [userId],
       (err, row) => {
         if (err) return reject(err);
@@ -18,7 +18,7 @@ function getUserById(userId) {
 function setUserOnline(userId) {
   return new Promise((resolve, reject) => {
     user_db.run(
-      `UPDATE users SET online = 1 WHERE id = ?`,
+      `UPDATE users SET is_online = 1 WHERE id = ?`,
       [userId],
       function (err) {
         if (err) return reject(err);
@@ -33,7 +33,7 @@ function setUserOnline(userId) {
 function isUserOnline(userId) {
   return new Promise((resolve, reject) => {
     user_db.get(
-      `SELECT online FROM users WHERE id = ?`,
+      `SELECT is_online FROM users WHERE id = ?`,
       [userId],
       (err, row) => {
         if (err) return reject(err);
@@ -42,7 +42,7 @@ function isUserOnline(userId) {
         if (!row) return resolve(null);
 
         // row.online is 0 or 1
-        resolve(row.online);
+        resolve(row.is_online);
       }
     );
   });
