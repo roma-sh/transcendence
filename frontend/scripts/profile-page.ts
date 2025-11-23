@@ -1,6 +1,6 @@
 export function initProfilePage() {
 
-	const profileBackBtn = document.querySelector('.js-profile__back') as HTMLButtonElement;
+	const profileBackBtn = document.querySelector('.js-profile__back_btn') as HTMLButtonElement;
 	profileBackBtn.addEventListener("click", () => {
 		location.hash = 'welcome-page';
 	});

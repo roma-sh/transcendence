@@ -1,6 +1,10 @@
 import { setUserMenu } from "./user-menu.js";
+import { setupBackButton } from "./welcome-page.js";
 
 export function initSignUpPage(): void {
+
+  setupBackButton('js-sign-up-back-btn', 'welcome-page');
+
   const signUpSection = document.querySelector('#sign-up-page') as HTMLElement;
   if (!signUpSection) return;
 
@@ -44,6 +48,8 @@ export function initSignUpPage(): void {
 
 
 export function initLogInPage(): void {
+
+  setupBackButton('js-log-in-back-btn', 'welcome-page');
 
   const logInSection = document.querySelector('#log-in-page') as HTMLElement;
   if (!logInSection) return;

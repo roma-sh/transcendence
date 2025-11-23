@@ -19,7 +19,7 @@
 	font-size: 22px;
 	font-weight: 700;
 }
-.profile__back {
+/* .back_btn {
 	color: var(--main-color);
 	background-color: white;
 	border: 1px solid var(--main-color);
@@ -27,8 +27,30 @@
 	margin-left: 5px;
 	transition: opacity 0.15s;
 }
-.profile__back:hover {
+.back_btn:hover {
 	opacity: 0.7;
+} */
+
+.back_btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+
+	color: var(--main-color);
+	background: transparent;
+	border: none;
+
+	font-size: 16px;
+	font-weight: 600;
+	padding: 8px 12px;
+	border-radius: 10px;
+
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.back_btn:hover {
+	background: rgba(0,0,0,0.06);
 }
 
 .card {

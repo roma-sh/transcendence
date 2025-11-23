@@ -1,5 +1,6 @@
 import { TournamentSettings } from "./types.js";
 import { game } from "./game.js";
+import { setupBackButton } from "./welcome-page.js";
 
 export async function initGameReadyPage(tSettings: TournamentSettings) {
 
@@ -60,7 +61,8 @@ export async function initGameReadyPage(tSettings: TournamentSettings) {
 
         // FIX: Add a clear message showing who is playing
         console.log(`Starting match: ${p1Name} vs ${p2Name}`);
-        
+
+        setupBackButton('js-game-page-back-btn', 'game-ready-page');
         location.hash = '#game-page';
         game(p1Name, p2Name);
         // FIX: Update the remaining players message to show the NEXT players

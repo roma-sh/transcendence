@@ -9,6 +9,7 @@ export function addHashForChooseModePage() {
   const logInButtonEl = document.querySelector('.js-log-in-button');
 
   playButtonEl?.addEventListener('click', () => {
+    setupBackButton('js-choose-mode-back-btn', 'welcome-page');
     location.hash = 'choose-mode-page';
   });
 
@@ -19,4 +20,14 @@ export function addHashForChooseModePage() {
   logInButtonEl?.addEventListener('click', () => {
     location.hash = 'log-in-page';
   });
+}
+
+export function setupBackButton(btn_name: string, targetHash: string) {
+  const btn = document.querySelector(`.${btn_name}`) as HTMLButtonElement | null;
+
+  if (btn) {
+    btn.onclick = () => {
+      location.hash = targetHash;
+    };
+  }
 }
