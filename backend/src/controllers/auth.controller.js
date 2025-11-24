@@ -2,7 +2,7 @@
 // to use its functions here
 const { insertUser, getUser } = require('../services/auth.service');
 const { setUserOnline } = require('../services/profile.service');
-
+const { isValidEmail, isStrongPassword, isValidUsername } = require('../utils/validators');
 
 // when the browser sends a signup request, this controller handles it
 // request: contains the data sent by the client (browser)
@@ -96,9 +96,34 @@ const { setUserOnline } = require('../services/profile.service');
 
 async function signupController(request, reply) {
   const { username, email, password } = request.body;
+
+  // Validate required fields
   if (!username || !email || !password) {
     return reply.code(400).send({ error: 'All fields are required' });
   }
+
+  // Validate username
+  if (!isValidUsername(username)) {
+    return reply.code(400).send({
+      error: 'Invalid username. Must be at least 3 characters and contain only letters, numbers, or underscores.'
+    });
+  }
+
+  // Validate email format
+  if (!isValidEmail(email)) {
+    return reply.code(400).send({
+      error: 'Invalid email format. Please enter a valid email.'
+    });
+  }
+
+  // Validate password strength
+  if (!isStrongPassword(password)) {
+    return reply.code(400).send({
+      error:
+        'Weak password. Must be 8+ characters and include upper & lower case letters, a number, and a special character.'
+    });
+  }
+
   try {
     const newId = await insertUser(username, email, password);
     return reply.code(201).send({ message: 'User created', id: newId });
