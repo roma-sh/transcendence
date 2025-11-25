@@ -1,5 +1,5 @@
-import { setUserMenu } from "./user-menu.js";
 import { setupBackButton } from "./welcome-page.js";
+import { initWelcomePage } from "./welcome-page.js";
 
 export function initSignUpPage(): void {
 
@@ -90,11 +90,8 @@ export function initLogInPage(): void {
     }
 
     if (response.ok) {
-      updateUIForAuthState(true);
-      setUserMenu();
-      alert('Logged in successfully!');
       localStorage.setItem('userName', result.user.username);
-      location.hash = '#welcome-page';
+      initWelcomePage();
     } else {
       alert(result.error || 'Invalid username/email or password');
     }
@@ -104,21 +101,4 @@ export function initLogInPage(): void {
   }
 });
 
-}
-
-/** Toggles auth buttons and game buttons depending
- * on whether the user is logged in. */
-function updateUIForAuthState(isLoggedIn: boolean): void {
-  const initButtons = document.querySelector(".js-init-buttons");
-  const mainButtons = document.querySelector(".js-main-buttons");
-
-  if (!mainButtons || !initButtons) return;
-
-  if (isLoggedIn) {
-    initButtons.classList.add("init-buttons-hidden");
-    mainButtons.classList.remove("main-buttons-hidden");
-  } else {
-    initButtons.classList.remove("init-buttons-hidden");
-    mainButtons.classList.add("main-buttons-hidden");
-  }
 }

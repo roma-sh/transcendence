@@ -1,6 +1,28 @@
-export function setInitialWelcomePage() {
+import {
+  updateUIForAuthState,
+  updateUIforUserMenu,
+  setUserMenuName,
+  setupDropdown
+} from "./user-menu.js";
+
+export function setInitHash() {
   if (!location.hash)
     location.hash = 'welcome-page';
+}
+
+export async function initWelcomePage() {
+  await updateWelcomePageUI();
+  location.hash = '#welcome-page';
+}
+
+async function updateWelcomePageUI() {
+
+	const isLoggedIn = await isUserOnline();
+
+	updateUIForAuthState(isLoggedIn);
+	updateUIforUserMenu(isLoggedIn);
+	setUserMenuName();
+	setupDropdown();
 }
 
 export function addHashForChooseModePage() {
@@ -29,5 +51,35 @@ export function setupBackButton(btn_name: string, targetHash: string) {
     btn.onclick = () => {
       location.hash = targetHash;
     };
+  }
+}
+
+async function isUserOnline(): Promise<true | false> {
+  try {
+    const res = await fetch('http://localhost:3000/api/useronline');
+
+    if (!res.ok) {
+      console.log("in userOnline function response is not ok");
+      return false;
+    }
+
+    const data = await res.json();
+    console.log('data: ', data);
+
+
+    if (data.online === 1) {
+      console.log("in userOnline function data.online === 1");
+      return true;
+    }
+    if (data.online === 0) {
+      console.log("in userOnline function data.online === 0");
+      return false;
+    }
+
+    console.log("in userOnline function fallback");
+    return false; // fallback
+  } catch (err) {
+    console.error('Connection error:', err);
+    return false;
   }
 }

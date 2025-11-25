@@ -1,13 +1,7 @@
 import { initProfilePage } from "./profile-page.js";
 import { initSettingsPage } from "./settings-page.js";
 
-export function setUserMenu() {
-	updateUIforUserMenu(true);
-	setUserMenuName();
-	setupDropdown();
-}
-
-function updateUIforUserMenu(isLoggedIn: boolean) {
+export function updateUIforUserMenu(isLoggedIn: boolean) {
 	const buttonCont = document.querySelector(
 		'.js-user-menu-button-container'
 	);
@@ -21,7 +15,7 @@ function updateUIforUserMenu(isLoggedIn: boolean) {
 	}
 }
 
-function setUserMenuName() {
+export function setUserMenuName() {
 	const userName = localStorage.getItem('userName');
 
 	const userMenuBtn = document.querySelector(
@@ -31,7 +25,7 @@ function setUserMenuName() {
 	userMenuBtn.textContent = userName;
 }
 
-function setupDropdown() {
+export function setupDropdown() {
 	const btn = document.querySelector('.js-user-menu-button') as HTMLButtonElement | null;
 	const menu = document.querySelector('.js-user-dropdown') as HTMLElement | null;
 	if (!btn || !menu) return;
@@ -60,4 +54,22 @@ function setupDropdown() {
 		location.hash = '#settings-page';
 		initSettingsPage();
 	});
+}
+
+/** Toggles auth buttons and game buttons (play and connect wallet)
+ * depending on whether the user is logged in. */
+export function updateUIForAuthState(isLoggedIn: boolean): void {
+
+  const authBtns = document.querySelector(".js-signup-login-btns");
+  const playConnectWalletBtns = document.querySelector(".js-play-connect-wallet-btns");
+
+  if (!playConnectWalletBtns || !authBtns) return;
+
+  if (isLoggedIn) {
+    authBtns.classList.add("signup-login-btns-hidden");
+    playConnectWalletBtns.classList.remove("play-connect-wallet-btns-hidden");
+  } else {
+    authBtns.classList.remove("signup-login-btns-hidden");
+    playConnectWalletBtns.classList.add("play-connect-wallet-btns-hidden");
+  }
 }

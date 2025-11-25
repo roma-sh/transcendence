@@ -1,5 +1,6 @@
 import {
-  setInitialWelcomePage,
+  setInitHash,
+  initWelcomePage,
   addHashForChooseModePage
 } from './welcome-page.js';
 import {
@@ -34,7 +35,7 @@ export const tSettings : TournamentSettings = {
 };
 
 // for the welcome page:
-setInitialWelcomePage();
+setInitHash();
 addHashForChooseModePage();
 
 // for the choose mode page:
@@ -48,7 +49,9 @@ initWalletConnect();
 function handleHashChange() {
   const hash = location.hash;
 
-  if (hash === '#game-ready-page') {
+  if (hash === '#welcome-page') {
+    initWelcomePage();
+  } else if (hash === '#game-ready-page') {
 	  initGameReadyPage(tSettings);
   } else if (hash === '#tournament-page') {
     tournament(tSettings);

@@ -85,7 +85,7 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 
-.init-buttons {
+.signup-login-btns {
   display: flex;
   justify-content: right;
   margin-top: 10px;
@@ -103,7 +103,7 @@
   margin-right: 10px;
 }
 
-.main-buttons-hidden,
-.init-buttons-hidden {
+.play-connect-wallet-btns-hidden,
+.signup-login-btns-hidden {
   display: none;
 }
