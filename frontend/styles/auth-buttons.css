@@ -45,11 +45,10 @@
   gap: 20px;
   
   /* Styling της φόρμας ως "κάρτα" */
-  background: #ffffff; 
+  background: rgba(255, 255, 255, 0.7);
   padding: 30px;
   border-radius: 15px; /* Πολύ στρογγυλεμένες γωνίες */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Διακριτική σκιά */
-  border-top: 5px solid var(--main-color); /* Έμφαση με γραμμή στο κύριο χρώμα */
 }
 
 .auth-form input {
@@ -58,6 +57,7 @@
   border: 1px solid #ddd;
   border-radius: 10px; /* Στρογγυλεμένες γωνίες στα inputs */
   transition: border-color 0.3s, box-shadow 0.3s;
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .auth-form input:focus {
@@ -80,8 +80,8 @@
 }
 
 .auth-submit-button:hover {
-  background: #0056b3; /* Πιο σκούρο χρώμα στο hover */
-  transform: translateY(-2px); /* Εφέ "ανύψωσης" */
+  background: #3a3230;
+  transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 

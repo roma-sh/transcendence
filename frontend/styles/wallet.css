@@ -31,7 +31,7 @@
 
 .wallet-details p {
     margin: 0.5rem 0;
-    font-family: 'Courier New', monospace;
+    /* font-family: 'Courier New', monospace; */
 }
 
 /* Connected state for wallet button */
