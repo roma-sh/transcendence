@@ -1,13 +1,12 @@
 import {
   setInitHash,
-  initWelcomePage,
-  addHashForChooseModePage
+  addHashForChooseModePage,
+  initWelcomePage
 } from './welcome-page.js';
 import {
   initGameOptionHighlight,
   useGameOption
 } from './choose-mode.js';
-import { game } from './game.js';
 import {
   tournament,
   addAliasesSection
@@ -72,4 +71,4 @@ function handleHashChange() {
 handleHashChange();
 
 // Listen for hash changes
-window.addEventListener('hashchange', handleHashChange);
+// window.addEventListener('hashchange', handleHashChange);

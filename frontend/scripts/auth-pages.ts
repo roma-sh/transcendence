@@ -1,5 +1,5 @@
 import { setupBackButton } from "./welcome-page.js";
-import { initWelcomePage } from "./welcome-page.js";
+import { updateWelcomePageUI } from "./welcome-page.js";
 
 export function initSignUpPage(): void {
 
@@ -91,7 +91,8 @@ export function initLogInPage(): void {
 
     if (response.ok) {
       localStorage.setItem('userName', result.user.username);
-      initWelcomePage();
+      await updateWelcomePageUI();
+      location.hash = '#welcome-page';
     } else {
       alert(result.error || 'Invalid username/email or password');
     }

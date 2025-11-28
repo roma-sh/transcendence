@@ -5,24 +5,25 @@ import {
   setupDropdown
 } from "./user-menu.js";
 
-export function setInitHash() {
-  if (!location.hash)
-    location.hash = 'welcome-page';
+export async function setInitHash() {
+  if (!location.hash) {
+    await initWelcomePage();
+    location.hash = '#welcome-page';
+  }
 }
 
 export async function initWelcomePage() {
   await updateWelcomePageUI();
-  location.hash = '#welcome-page';
+  setupDropdown();
 }
 
-async function updateWelcomePageUI() {
+export async function updateWelcomePageUI() {
 
 	const isLoggedIn = await isUserOnline();
 
 	updateUIForAuthState(isLoggedIn);
 	updateUIforUserMenu(isLoggedIn);
 	setUserMenuName();
-	setupDropdown();
 }
 
 export function addHashForChooseModePage() {
@@ -55,6 +56,7 @@ export function setupBackButton(btn_name: string, targetHash: string) {
 }
 
 async function isUserOnline(): Promise<true | false> {
+  // return true; // temp
   try {
     const res = await fetch('http://localhost:3000/api/useronline');
 

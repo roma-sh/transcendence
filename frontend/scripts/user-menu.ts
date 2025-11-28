@@ -28,7 +28,10 @@ export function setUserMenuName() {
 export function setupDropdown() {
 	const btn = document.querySelector('.js-user-menu-button') as HTMLButtonElement | null;
 	const menu = document.querySelector('.js-user-dropdown') as HTMLElement | null;
-	if (!btn || !menu) return;
+	if (!btn || !menu) {
+		console.log("in setupDropdownMenu btn or menu are null!!!");
+		return;
+	}
 
 	btn.addEventListener('click', () => {
 		menu.style.display = menu.style.display === 'block' ? 'none' : 'block';

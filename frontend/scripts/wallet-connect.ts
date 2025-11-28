@@ -191,7 +191,8 @@ class WalletConnect {
             // Update connect button text
             if (connectButton) {
                 connectButton.textContent = 'CONNECTED';
-                connectButton.style.backgroundColor = '#4CAF50';
+                connectButton.classList.remove('disconnected');
+                connectButton.classList.add('connected');
             }
 
             // Update wallet info page
@@ -202,7 +203,8 @@ class WalletConnect {
             // Reset connect button
             if (connectButton) {
                 connectButton.textContent = 'CONNECT WALLET';
-                connectButton.style.backgroundColor = '';
+                connectButton.classList.remove('connected');
+                connectButton.classList.add('disconnected');
             }
         }
     }
@@ -240,6 +242,9 @@ export const wallet = new WalletConnect();
 
 // Initialize wallet connection
 export function initWalletConnect(): void {
+
+    updateWalletConnectBtn();
+
     const connectButton = document.querySelector('.js-connect-wallet-button');
     const disconnectButton = document.querySelector('.js-disconnect-wallet');
     const backButton = document.querySelector('.js-back-to-welcome');
@@ -268,4 +273,22 @@ export function initWalletConnect(): void {
 
     // Setup event listeners for account/network changes
     wallet.setupEventListeners();
+}
+
+/** this function  */
+function updateWalletConnectBtn() {
+    const btn = document.querySelector(
+        '.js-connect-wallet-button'
+    ) as HTMLButtonElement | null;
+
+    if (!btn) return;
+
+    const text = btn.textContent?.trim().toUpperCase() || '';
+    if (text === 'CONNECT WALLET') {
+        btn.classList.add('disconnected');
+        btn.classList.remove('connected');
+    } else {
+        btn.classList.add('connected');
+        btn.classList.remove('disconnected');
+    }
 }

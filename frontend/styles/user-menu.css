@@ -10,7 +10,7 @@
 }
 
 .user-menu-button {
-	background: white;
+	background: var(--bg-color-white-seven);
 	padding: 15px 60px;
 	border: 2px solid var(--main-color);
 	border-radius: 45px;
@@ -30,7 +30,7 @@
   position: absolute;
   top: 73px;
   right: 10px;
-  background: white;
+  background: var(--bg-color-white-seven);
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -38,6 +38,7 @@
   flex-direction: column;
   min-width: 160px;
   padding: 8px;
+	justify-content: center;
 }
 
 .user-dropdown div,

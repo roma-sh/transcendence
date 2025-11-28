@@ -19,6 +19,7 @@
   font-size: 50px;
   font-family: Arial;
   color: var(--main-color);
+  background-color: var(--bg-color-white-seven);
 
   transition: background-color 0.15s;
 }
@@ -42,12 +43,12 @@
   justify-content: center;
 }
 
-.start-button-container button {
+.start-button {
   background: var(--main-color);
   padding: 20px 100px;
   border: none;
   border-radius: 45px;
-  color: white;
+  color: var(--bg-color-white-nine);
   cursor: pointer;
   font-size: 30px;
   font-weight: bold;
@@ -55,6 +56,6 @@
   transition: opacity 0.15s;
 }
 
-.start-button-container button:hover {
+.start-button:hover {
   opacity: 0.7;
 }

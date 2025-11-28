@@ -11,7 +11,7 @@
 	padding: 15px 60px;
 	border: none;
 	border-radius: 45px;
-	color: var(--bg-color);
+	color: var(--bg-color-white-nine);
 	cursor: pointer;
 	font-size: 24px;
 	font-weight: bold;
@@ -45,7 +45,7 @@
   gap: 20px;
   
   /* Styling της φόρμας ως "κάρτα" */
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--bg-color-white-seven);
   padding: 30px;
   border-radius: 15px; /* Πολύ στρογγυλεμένες γωνίες */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Διακριτική σκιά */
@@ -57,7 +57,7 @@
   border: 1px solid #ddd;
   border-radius: 10px; /* Στρογγυλεμένες γωνίες στα inputs */
   transition: border-color 0.3s, box-shadow 0.3s;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--bg-color-white-seven)
 }
 
 .auth-form input:focus {
@@ -94,7 +94,7 @@
 
 .sign-up-button {
   margin-right: 10px;
-  background-color: var(--bg-color);
+  background-color: var(--bg-color-white-seven);
   color: var(--main-color);
   border: 2px solid var(--main-color);
 }
@@ -106,4 +106,22 @@
 .play-connect-wallet-btns-hidden,
 .signup-login-btns-hidden {
   display: none;
+}
+
+.connect-wallet-btn::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.connect-wallet-btn.disconnected::before {
+  background-color: #d9534f;
+}
+
+.connect-wallet-btn.connected::before {
+  background-color: #4CAF50;
 }
