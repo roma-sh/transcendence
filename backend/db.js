@@ -16,7 +16,22 @@ user_db.run(`CREATE TABLE IF NOT EXISTS users (
   email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
   total_games INTEGER,
-  wins INTEGER
+  wins INTEGER,
+  two_factor_secret TEXT,
+  two_factor_enabled INTEGER DEFAULT 0
 )`);
+
+// Add 2FA columns to existing tables (safe to run multiple times)
+user_db.run(`ALTER TABLE users ADD COLUMN two_factor_secret TEXT`, (err) => {
+  if (err && !err.message.includes('duplicate column')) {
+    console.error('Error adding two_factor_secret column:', err.message);
+  }
+});
+
+user_db.run(`ALTER TABLE users ADD COLUMN two_factor_enabled INTEGER DEFAULT 0`, (err) => {
+  if (err && !err.message.includes('duplicate column')) {
+    console.error('Error adding two_factor_enabled column:', err.message);
+  }
+});
 
 module.exports = user_db;

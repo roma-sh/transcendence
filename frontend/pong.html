@@ -157,14 +157,18 @@
     </section>
 
 
-    <section id="log-in-page">
-      <div class="auth-form">
-        <h2>Log In</h2>
-        <input type="text" id="login-username-email" placeholder="Username or Email" />
-        <input type="password" id="login-password" placeholder="Password" />
-        <button id="login-button" class="auth-submit-button">Login</button>
+  <section id="log-in-page">
+    <div class="auth-form">
+      <h2>Log In</h2>
+      <input type="text" id="login-username-email" placeholder="Username or Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <div id="2fa-input-container" style="display: none;">
+        <input type="text" id="login-2fa-code" placeholder="Enter 6-digit 2FA code" maxlength="6" />
+        <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Enter the code from your authenticator app</p>
       </div>
-    </section>
+      <button id="login-button" class="auth-submit-button">Login</button>
+    </div>
+  </section>
 
     <section id="profile-page" class="profile">
       <header class="profile__header">
@@ -309,6 +313,46 @@
                 class="js-bg-color"
               />
               <span class="settings-color-text js-bg-color-text"></span>
+            </div>
+          </div>
+
+          <!-- 2FA Section -->
+          <div class="field" style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
+            <label>Two-Factor Authentication (2FA)</label>
+            <div id="2fa-status-container">
+              <p id="2fa-status-text" style="margin: 10px 0;">Status: <span id="2fa-status">Checking...</span></p>
+              <div id="2fa-setup-container" style="display: none;">
+                <div style="text-align: center; margin: 20px 0;">
+                  <p style="margin-bottom: 15px;">Scan this QR code with Google Authenticator:</p>
+                  <img id="2fa-qr-code" src="" alt="2FA QR Code" style="max-width: 200px; border: 1px solid #ddd; padding: 10px; background: white;" />
+                  <p style="font-size: 0.9em; color: #666; margin-top: 10px;">Or enter this secret manually: <code id="2fa-secret-text" style="font-family: monospace; background: #f5f5f5; padding: 2px 6px; border-radius: 3px;"></code></p>
+                </div>
+                <div style="margin: 20px 0;">
+                  <label for="2fa-verify-code">Enter 6-digit code to verify:</label>
+                  <input
+                    type="text"
+                    id="2fa-verify-code"
+                    placeholder="000000"
+                    maxlength="6"
+                    style="width: 100%; padding: 8px; margin-top: 5px; font-size: 1.2em; letter-spacing: 5px; text-align: center;"
+                  />
+                  <button type="button" id="2fa-verify-button" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    Verify & Enable 2FA
+                  </button>
+                  <button type="button" id="2fa-cancel-button" class="btn btn-ghost" style="width: 100%; margin-top: 5px;">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+              <div id="2fa-enabled-container" style="display: none;">
+                <p style="color: #4CAF50; margin: 10px 0;">✓ 2FA is enabled on your account</p>
+                <button type="button" id="2fa-disable-button" class="btn btn-ghost" style="margin-top: 10px;">
+                  Disable 2FA
+                </button>
+              </div>
+              <button type="button" id="2fa-enable-button" class="btn btn-primary" style="display: none; margin-top: 10px;">
+                Enable 2FA
+              </button>
             </div>
           </div>
 

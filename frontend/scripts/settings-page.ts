@@ -1,4 +1,5 @@
 import { GameSettings } from "./types.js";
+import { init2FASetup } from "./2fa-setup.js";
 
 const DEFAULT_SETTINGS: GameSettings = {
 	ballSpeed: 9,
@@ -129,6 +130,9 @@ export function initSettingsPage() {
 	saveBtn.addEventListener("click", async () => {
 		showMessage(messageEl, "Settings saved");
 	});
+
+	// Initialize 2FA setup
+	init2FASetup();
 }
 
 /* -------- helpers -------- */

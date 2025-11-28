@@ -16,6 +16,7 @@ import { TournamentSettings } from './types.js';
 import { initSignUpPage, initLogInPage } from './auth-pages.js';
 
 import { initUserProfilePage } from './user-profile.js';
+import { initSettingsPage } from './settings-page.js';
 
 import { initGameReadyPage } from './game-ready-page.js';
 
@@ -60,6 +61,8 @@ function handleHashChange() {
     initLogInPage();
   } else if (hash === '#user-profile') {
     initUserProfilePage();
+  } else if (hash === '#settings-page') {
+    initSettingsPage();
   } else if (hash.startsWith('#winner-page')) {
     initWinnerAnnouncementPage(tSettings);
   }
