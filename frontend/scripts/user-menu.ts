@@ -25,38 +25,21 @@ export function setUserMenuName() {
 	userMenuBtn.textContent = userName;
 }
 
-export function setupDropdown() {
-	const btn = document.querySelector('.js-user-menu-button') as HTMLButtonElement | null;
+export function handleToggleUserMenu(e: MouseEvent) {
 	const menu = document.querySelector('.js-user-dropdown') as HTMLElement | null;
-	if (!btn || !menu) {
-		console.log("in setupDropdownMenu btn or menu are null!!!");
-		return;
-	}
+	if (!menu) return;
 
-	btn.addEventListener('click', () => {
-		menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-	});
+	menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
 
-	document.addEventListener('click', (e) => {
-		const target = e.target as Node;
-		if (!btn.contains(target) && !menu.contains(target)) {
-			menu.style.display = 'none';
-		}
-	});
+export function handleOpenProfile() {
+	initProfilePage();
+	location.hash = '#profile-page';
+}
 
-	const profileLink = document.querySelector('.js-profile-link') as HTMLElement | null;
-
-	profileLink?.addEventListener('click', () => {
-		location.hash = '#profile-page';
-		initProfilePage();
-	});
-
-	const settingsLink = document.querySelector('.js-settings-link') as HTMLElement | null;
-
-	settingsLink?.addEventListener('click', () => {
-		location.hash = '#settings-page';
-		initSettingsPage();
-	});
+export function handleOpenSettings() {
+	initSettingsPage();
+	location.hash = '#settings-page';
 }
 
 /** Toggles auth buttons and game buttons (play and connect wallet)

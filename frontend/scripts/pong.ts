@@ -1,27 +1,17 @@
 import {
   setInitHash,
-  addHashForChooseModePage,
   initWelcomePage
 } from './welcome-page.js';
 import {
-  initGameOptionHighlight,
   useGameOption
 } from './choose-mode.js';
-import {
-  tournament,
-  addAliasesSection
-} from "./tournament.js";
+import { addAliasesSection } from './tournament-player-aliases.js';
 import { TournamentSettings } from './types.js';
-
-import { initSignUpPage, initLogInPage } from './auth-pages.js';
-
 import { initUserProfilePage } from './user-profile.js';
-
 import { initGameReadyPage } from './game-ready-page.js';
-
 import { initWalletConnect } from './wallet-connect.js';
-
 import { initWinnerAnnouncementPage } from './winner-page.js';
+import { setupGlobalClicksDelegation } from './clicks-delegation.js';
 
 export const tSettings : TournamentSettings = {
   numberOfPlayers: 1,
@@ -33,13 +23,13 @@ export const tSettings : TournamentSettings = {
   firstPlaceAlias: ""
 };
 
+setupGlobalClicksDelegation();
+
 // for the welcome page:
 setInitHash();
-addHashForChooseModePage();
 
 // for the choose mode page:
-initGameOptionHighlight();
-useGameOption(tSettings);
+useGameOption();
 
 // Initialize wallet connection - add this after the other initializations
 initWalletConnect();
@@ -52,14 +42,8 @@ function handleHashChange() {
     initWelcomePage();
   } else if (hash === '#game-ready-page') {
 	  initGameReadyPage(tSettings);
-  } else if (hash === '#tournament-page') {
-    tournament(tSettings);
   } else if (hash === '#tournament-page-player-aliases') {
-    addAliasesSection(tSettings);
-  } else if (hash === '#sign-up-page') {
-    initSignUpPage();
-  } else if (hash === '#log-in-page') {
-    initLogInPage();
+    addAliasesSection();
   } else if (hash === '#user-profile') {
     initUserProfilePage();
   } else if (hash.startsWith('#winner-page')) {
@@ -71,4 +55,4 @@ function handleHashChange() {
 handleHashChange();
 
 // Listen for hash changes
-// window.addEventListener('hashchange', handleHashChange);
+window.addEventListener('hashchange', handleHashChange);

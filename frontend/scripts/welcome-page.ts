@@ -2,22 +2,15 @@ import {
   updateUIForAuthState,
   updateUIforUserMenu,
   setUserMenuName,
-  setupDropdown
 } from "./user-menu.js";
 
 export async function setInitHash() {
   if (!location.hash) {
-    await initWelcomePage();
     location.hash = '#welcome-page';
   }
 }
 
 export async function initWelcomePage() {
-  await updateWelcomePageUI();
-  setupDropdown();
-}
-
-export async function updateWelcomePageUI() {
 
 	const isLoggedIn = await isUserOnline();
 
@@ -26,37 +19,24 @@ export async function updateWelcomePageUI() {
 	setUserMenuName();
 }
 
-export function addHashForChooseModePage() {
-  const playButtonEl = document.querySelector('.js-play-button');
-  const signUpButtonEl = document.querySelector('.js-sign-up-button');
-  const logInButtonEl = document.querySelector('.js-log-in-button');
-
-  playButtonEl?.addEventListener('click', () => {
-    setupBackButton('js-choose-mode-back-btn', 'welcome-page');
-    location.hash = 'choose-mode-page';
-  });
-
-  signUpButtonEl?.addEventListener('click', () => {
-    location.hash = 'sign-up-page';
-  });
-
-  logInButtonEl?.addEventListener('click', () => {
-    location.hash = 'log-in-page';
-  });
+export function handleGoBackChooseMode() {
+  location.hash = '#welcome-page';
 }
 
-export function setupBackButton(btn_name: string, targetHash: string) {
-  const btn = document.querySelector(`.${btn_name}`) as HTMLButtonElement | null;
+export function handleOpenChooseMode() {
+  location.hash = '#choose-mode-page';
+}
 
-  if (btn) {
-    btn.onclick = () => {
-      location.hash = targetHash;
-    };
-  }
+export function handleOpenSignUp() {
+  location.hash = '#sign-up-page';
+}
+
+export function handleOpenLogIn() {
+  location.hash = '#log-in-page';
 }
 
 async function isUserOnline(): Promise<true | false> {
-  // return true; // temp
+  return true; // temp
   try {
     const res = await fetch('http://localhost:3000/api/useronline');
 
