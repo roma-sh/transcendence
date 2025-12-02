@@ -3,6 +3,9 @@ export interface GameState {
   isWin: boolean;
   leftScore: number;
   rightScore: number;
+  statsSent: boolean;
+  winHandled: boolean;
+  winnerSide: 'left' | 'right';
 }
 
 export interface GameConfig {

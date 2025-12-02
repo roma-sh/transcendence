@@ -102,6 +102,7 @@ export function drawWinText(
   winner : 'left' | 'right') {
 
     const text = 'WIN';
+    ctx.fillStyle = '#463D3D';
     ctx.font = "48px Arial";
     ctx.textAlign = 'center';
     // ctx.textBaseline = 'middle';

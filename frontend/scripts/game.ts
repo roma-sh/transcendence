@@ -1,6 +1,6 @@
 import {
   GameState, Paddle, KeyMap,
-  Ball, GameConfig, ButtonRect
+  Ball, GameConfig
 } from "./types.js";
 import {
   updatePaddleDirection, update, resetBall
@@ -20,11 +20,11 @@ function drawPlayerName(
   side: 'left' | 'right',     
   name: string                 
 ) {
-  ctx.fillStyle = '#';
+  ctx.fillStyle = '#463D3D';
   ctx.font = 'bold 18px Arial';
   ctx.textAlign = side === 'left' ? 'left' : 'right';
   
-  const x = side === 'left' ? 30 : canvas.width - 30;
+  const x = side === 'left' ? 45 : canvas.width - 45;
   const y = 20; 
 
   ctx.fillText(name, x, y);
@@ -63,12 +63,14 @@ export function game(player1Name?: string, player2Name?: string): void {
   const isP1Bot = p1Name.startsWith("Bot ");
   const isP2Bot = p2Name.startsWith("Bot ");
     
-  const gameState: GameState & { statsSent: boolean } = { 
+  const gameState: GameState = {
     isPaused: false,
     isWin: false,
     leftScore: 0,
     rightScore: 0,
-    statsSent: false
+    statsSent: false,
+    winHandled: false,
+    winnerSide: 'left'
   };
   const gameConfig: GameConfig = { 
     paddleWidth: 30,
@@ -115,7 +117,12 @@ export function game(player1Name?: string, player2Name?: string): void {
   const keys: KeyMap = {}; 
 
   function gameLoop() {
-    if (ctx) {
+    if (!ctx) return;
+
+    function drawBaseFrame() {
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = settings.bgColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -130,65 +137,30 @@ export function game(player1Name?: string, player2Name?: string): void {
       drawPaddle(rightPaddle, ctx, gameConfig, settings);
       drawBall(ctx, gameState.isPaused, ball, settings);
       drawDividingLine(ctx, canvas);
+    }
 
-      if (gameState.isWin) {
-        const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
-        const winnerName = winner === 'left' ? p1Name : p2Name;
-        const loserName = winner === 'left' ? p2Name : p1Name;
+    drawBaseFrame();
 
-        tSettings.winnersAliases.push(winnerName);
+    if (gameState.isWin) {
+      drawBaseFrame();
+      handleWinOnce(gameState, p1Name, p2Name, isP1Bot, isP2Bot, canvas, ctx);
+      drawWinText(ctx, canvas, gameState.winnerSide);
+      return;
+    }
 
-        console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
-        if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
-        {
-          tSettings.secondPlaceAliases.push(loserName);
-          console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
-        }
-        console.log(`Winner of this match: ${winnerName}`);
-
-        const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
-
-        if (!gameState.statsSent && isPvP) {
-            updatePlayerStats(winnerName, loserName);
-            gameState.statsSent = true; 
-        }
-
-        drawWinText(ctx, canvas, winner);
-
-        if (p1Name == "Player 1" && p2Name == "Player 2")
-        {
-          const mainMenuRect = drawButton(ctx, canvas, winner, 'BACK TO MAIN', 130);
-          bindButtonEvent(canvas, mainMenuRect, () => {
-            location.hash = 'welcome-page';
-        });
-        }
-        else
-        {
-          console.log("Hello from the next game button");
-          const mainMenuRect = drawButton(ctx, canvas, winner, 'NEXT GAME', 130);
-          bindButtonEvent(canvas, mainMenuRect, () => {
-            location.hash = 'game-ready-page';
-          });
-        }
-        return;
+    if (!gameState.isPaused) {
+      if (isP1Bot) {
+        updateBotPaddle(leftPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
       }
-
-      if (!gameState.isPaused) {
-          if (isP1Bot) 
-          {
-              updateBotPaddle(leftPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
-          }
-          if (isP2Bot)
-          {
-              updateBotPaddle(rightPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
-          }
-      } 
+      if (isP2Bot) {
+        updateBotPaddle(rightPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
+      }
     }
 
     update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
 
     requestAnimationFrame(gameLoop);
-    return null;
+    return;
   }
 
   window.addEventListener('keydown', (e: KeyboardEvent) => { 
@@ -202,4 +174,49 @@ export function game(player1Name?: string, player2Name?: string): void {
   });
 
   gameLoop();
+}
+
+function handleWinOnce(
+  gameState: GameState,
+  p1Name: string,
+  p2Name: string,
+  isP1Bot: boolean,
+  isP2Bot: boolean,
+  canvas: HTMLCanvasElement,
+  ctx: CanvasRenderingContext2D
+) {
+  if (gameState.winHandled) return;
+  gameState.winHandled = true;
+
+  const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
+  const winnerName = winner === 'left' ? p1Name : p2Name;
+  const loserName = winner === 'left' ? p2Name : p1Name;
+
+  gameState.winnerSide = winner;
+
+  tSettings.winnersAliases.push(winnerName);
+
+  console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
+  if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
+  {
+    tSettings.secondPlaceAliases.push(loserName);
+    console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
+  }
+  console.log(`Winner of this match: ${winnerName}`);
+
+  const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
+
+  if (!gameState.statsSent && isPvP) {
+      updatePlayerStats(winnerName, loserName);
+      gameState.statsSent = true; 
+  }
+
+  const isTraining = (p1Name === "Player 1" && p2Name === "Player 2");
+  const btnText    = isTraining ? 'BACK TO MAIN' : 'NEXT GAME';
+  const targetHash = isTraining ? 'welcome-page' : 'game-ready-page';
+
+  const btnRect = drawButton(ctx, canvas, gameState.winnerSide, btnText, 130);
+  bindButtonEvent(canvas, btnRect, () => {
+    location.hash = targetHash;
+  });
 }

@@ -5,7 +5,7 @@ const DEFAULT_SETTINGS: GameSettings = {
 	paddleSpeed: 7,
 	ballColor: "#FFA500",
 	paddleColor: "#463D3D",
-	bgColor: "#FFFFFFB3",
+	bgColor: "#FFFFFF",
 	scoreToWin: 2,
 };
 
