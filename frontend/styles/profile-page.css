@@ -19,17 +19,6 @@
 	font-size: 22px;
 	font-weight: 700;
 }
-/* .back_btn {
-	color: var(--main-color);
-	background-color: white;
-	border: 1px solid var(--main-color);
-	border-radius: 3px;
-	margin-left: 5px;
-	transition: opacity 0.15s;
-}
-.back_btn:hover {
-	opacity: 0.7;
-} */
 
 .back_btn {
 	display: inline-flex;

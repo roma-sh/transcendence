@@ -34,7 +34,6 @@ export function game(): void {
 
   let settings = loadGameSettings();
 
-
   let p1Name = "Player 1";
   let p2Name = "Player 2";
 

@@ -2,6 +2,10 @@ import { TournamentSettings } from "./types.js";
 import { game } from "./game.js";
 import { tSettings } from "./pong.js";
 
+export function handleGoBackGameReadyPage() {
+  location.hash = '#tournament-page-player-aliases';
+}
+
 export function initGameReadyPage(tSettings: TournamentSettings) {
 
   if (tSettings.playerAliases.length == 0) {

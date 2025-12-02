@@ -23,7 +23,10 @@ import {
 	handleNextAfterAliases,
 	handleGoBackPlayerAliases
 } from "./tournament-player-aliases.js";
-import { handleStartTournament } from "./game-ready-page.js";
+import {
+	handleStartTournament,
+	handleGoBackGameReadyPage
+} from "./game-ready-page.js";
 import { handleNextAfterCount } from "./tournament-player-count.js";
 
 export function setupGlobalClicksDelegation() {
@@ -44,7 +47,8 @@ export function setupGlobalClicksDelegation() {
 			"next-after-aliases": handleNextAfterAliases,
 			"go-back-player-aliases": handleGoBackPlayerAliases,
 			"go-back-choose-mode": handleGoBackChooseMode,
-			"go-back-tournament": handleGoBackTournament
+			"go-back-tournament": handleGoBackTournament,
+			"go-back-game-ready-page": handleGoBackGameReadyPage,
 	};
 
 	document.addEventListener('click', (e) => {
