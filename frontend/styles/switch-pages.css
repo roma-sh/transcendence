@@ -24,7 +24,7 @@
 #wallet-info-page:target,
 #profile-page:target,
 #settings-page:target,
-#winner-page {
+#winner-page:target {
   display: initial;
 }
 #game-ready-page:target

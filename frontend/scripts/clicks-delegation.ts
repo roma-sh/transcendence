@@ -28,6 +28,7 @@ import {
 	handleGoBackGameReadyPage
 } from "./game-ready-page.js";
 import { handleNextAfterCount } from "./tournament-player-count.js";
+import { handleGoToWelcomePage } from "./winner-page.js";
 
 export function setupGlobalClicksDelegation() {
 	const actions: Record<string, (event?: MouseEvent) => void> = {
@@ -49,6 +50,7 @@ export function setupGlobalClicksDelegation() {
 			"go-back-choose-mode": handleGoBackChooseMode,
 			"go-back-tournament": handleGoBackTournament,
 			"go-back-game-ready-page": handleGoBackGameReadyPage,
+			"go-to-welcome-page": handleGoToWelcomePage,
 	};
 
 	document.addEventListener('click', (e) => {

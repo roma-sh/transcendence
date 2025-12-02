@@ -17,9 +17,7 @@ export function initGameReadyPage(tSettings: TournamentSettings) {
       tSettings.firstPlaceAlias = tSettings.winnersAliases.pop()!;
       tSettings.winnersAliases = [];
       tSettings.secondPlaceAliases = [];
-      const firstEncoded = encodeURIComponent(tSettings.firstPlaceAlias);
-      const secondEncoded = encodeURIComponent(tSettings.secondPlaceAlias);
-      location.hash = `#winner-page?first=${firstEncoded}&second=${secondEncoded}`;
+      location.hash = `#winner-page`;
       return;
     }
     console.log('Winners: ' + tSettings.winnersAliases);

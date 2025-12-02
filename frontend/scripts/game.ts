@@ -19,8 +19,7 @@ let animationId: number | null = null;
 let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
 let keyupHandler: ((e: KeyboardEvent) => void) | null = null;
 
-export function game(): void {
-
+function cleanupGame() {
   if (animationId !== null) {
     cancelAnimationFrame(animationId);
     animationId = null;
@@ -31,6 +30,11 @@ export function game(): void {
   if (keyupHandler) {
     window.removeEventListener('keyup', keyupHandler);
   }
+}
+
+export function game(): void {
+
+  cleanupGame();
 
   let settings = loadGameSettings();
 
@@ -145,12 +149,12 @@ export function game(): void {
     return;
   }
 
-  keydownHandler = (e: KeyboardEvent) => { 
-    keys[e.key] = true;
+  keydownHandler = (e: KeyboardEvent) => {
+    keys[e.code] = true;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
   };
   keyupHandler = (e: KeyboardEvent) => { 
-    keys[e.key] = false;
+    keys[e.code] = false;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
   };
 
