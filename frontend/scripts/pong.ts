@@ -12,6 +12,7 @@ import { initGameReadyPage } from './game-ready-page.js';
 import { initWalletConnect } from './wallet-connect.js';
 import { initWinnerAnnouncementPage } from './winner-page.js';
 import { setupGlobalClicksDelegation } from './clicks-delegation.js';
+import { game } from './game.js';
 
 export const tSettings : TournamentSettings = {
   numberOfPlayers: 1,
@@ -20,7 +21,8 @@ export const tSettings : TournamentSettings = {
   winnersAliases: [],
   secondPlaceAliases: [],
   secondPlaceAlias: "",
-  firstPlaceAlias: ""
+  firstPlaceAlias: "",
+  currentMatch: null as null | { p1Name: string; p2Name: string },
 };
 
 setupGlobalClicksDelegation();
@@ -40,6 +42,8 @@ function handleHashChange() {
 
   if (hash === '#welcome-page') {
     initWelcomePage();
+  } else if (hash === '#game-page') {
+    game();
   } else if (hash === '#game-ready-page') {
 	  initGameReadyPage(tSettings);
   } else if (hash === '#tournament-page-player-aliases') {

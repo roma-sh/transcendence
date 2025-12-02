@@ -8,56 +8,40 @@ import {
 import { bindButtonEvent } from "./interact-game-elems.js";
 import {
   drawPaddle, drawBall, drawDividingLine,
-  drawWinText, drawButton, drawScore
+  drawWinText, drawButton, drawScore, drawPlayerName
 } from "./draw-game-elems.js";
 import { updateBotPaddle } from "./bot-ai.js";
 import { tSettings } from "./pong.js";
 import { loadGameSettings } from "./settings-page.js";
 
-function drawPlayerName(
-  ctx: CanvasRenderingContext2D,
-  canvas: HTMLCanvasElement,   
-  side: 'left' | 'right',     
-  name: string                 
-) {
-  ctx.fillStyle = '#463D3D';
-  ctx.font = 'bold 18px Arial';
-  ctx.textAlign = side === 'left' ? 'left' : 'right';
-  
-  const x = side === 'left' ? 45 : canvas.width - 45;
-  const y = 20; 
+let animationId: number | null = null;
 
-  ctx.fillText(name, x, y);
-}
-  
-/**
- * @param winnerAlias 
- * @param loserAlias 
- */
-async function updatePlayerStats(winnerAlias: string, loserAlias: string) {
-    try {
-        const response = await fetch('http://localhost:3000/api/updateStats', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ winner: winnerAlias, loser: loserAlias })
-        });
+let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
+let keyupHandler: ((e: KeyboardEvent) => void) | null = null;
 
-        if (response.ok) {
-            console.log(`Stats updated successfully for ${winnerAlias} and ${loserAlias}.`);
-        } else {
-            console.error('Failed to update stats:', await response.text());
-        }
-    } catch (error) {
-        console.error('Network error while updating stats:', error);
-    }
-}
+export function game(): void {
 
-export function game(player1Name?: string, player2Name?: string): void {
+  if (animationId !== null) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
+  if (keydownHandler) {
+    window.removeEventListener('keydown', keydownHandler);
+  }
+  if (keyupHandler) {
+    window.removeEventListener('keyup', keyupHandler);
+  }
 
   let settings = loadGameSettings();
 
-  const p1Name = player1Name || "Player 1";
-  const p2Name = player2Name || "Player 2";
+
+  let p1Name = "Player 1";
+  let p2Name = "Player 2";
+
+  if (tSettings.currentMatch) {
+    p1Name = tSettings.currentMatch.p1Name;
+    p2Name = tSettings.currentMatch.p2Name;
+  }
 
   const BOT_SKILL_LEVEL = 0.6;
   const isP1Bot = p1Name.startsWith("Bot ");
@@ -142,7 +126,6 @@ export function game(player1Name?: string, player2Name?: string): void {
     drawBaseFrame();
 
     if (gameState.isWin) {
-      drawBaseFrame();
       handleWinOnce(gameState, p1Name, p2Name, isP1Bot, isP2Bot, canvas, ctx);
       drawWinText(ctx, canvas, gameState.winnerSide);
       return;
@@ -159,19 +142,21 @@ export function game(player1Name?: string, player2Name?: string): void {
 
     update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
 
-    requestAnimationFrame(gameLoop);
+    animationId = requestAnimationFrame(gameLoop);
     return;
   }
 
-  window.addEventListener('keydown', (e: KeyboardEvent) => { 
+  keydownHandler = (e: KeyboardEvent) => { 
     keys[e.key] = true;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
-  });
-
-  window.addEventListener('keyup', (e: KeyboardEvent) => { 
+  };
+  keyupHandler = (e: KeyboardEvent) => { 
     keys[e.key] = false;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
-  });
+  };
+
+  window.addEventListener('keydown', keydownHandler);
+  window.addEventListener('keyup', keyupHandler);
 
   gameLoop();
 }
@@ -211,12 +196,35 @@ function handleWinOnce(
       gameState.statsSent = true; 
   }
 
-  const isTraining = (p1Name === "Player 1" && p2Name === "Player 2");
-  const btnText    = isTraining ? 'BACK TO MAIN' : 'NEXT GAME';
-  const targetHash = isTraining ? 'welcome-page' : 'game-ready-page';
+  const hasNamedPlayers = (p1Name !== "Player 1" && p2Name !== "Player 2");
+  const nextGameHash    = hasNamedPlayers ? '#game-ready-page' : '#game-page';
 
-  const btnRect = drawButton(ctx, canvas, gameState.winnerSide, btnText, 130);
-  bindButtonEvent(canvas, btnRect, () => {
-    location.hash = targetHash;
+  const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
+  bindButtonEvent(canvas, backBtnRect, () => {
+    location.hash = '#welcome-page';
   });
+
+  const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
+  bindButtonEvent(canvas, nextBtnRect, () => {
+    location.hash = '';
+    location.hash = nextGameHash;
+  });
+}
+
+async function updatePlayerStats(winnerAlias: string, loserAlias: string) {
+    try {
+        const response = await fetch('http://localhost:3000/api/updateStats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ winner: winnerAlias, loser: loserAlias })
+        });
+
+        if (response.ok) {
+            console.log(`Stats updated successfully for ${winnerAlias} and ${loserAlias}.`);
+        } else {
+            console.error('Failed to update stats:', await response.text());
+        }
+    } catch (error) {
+        console.error('Network error while updating stats:', error);
+    }
 }

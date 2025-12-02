@@ -23,8 +23,7 @@ export function useGameOption() {
       option = optionEl?.dataset.option;
 
     if (option === 'quick-play') {
-      location.hash = 'game-page';
-      game();
+      location.hash = '#game-page';
     } else if (option === 'tournament') {
       location.hash = '#tournament-page';
     }

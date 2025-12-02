@@ -48,7 +48,11 @@ export interface TournamentSettings {
   winnersAliases: string[],
   secondPlaceAliases: string[],
   secondPlaceAlias: string,
-  firstPlaceAlias: string
+  firstPlaceAlias: string,
+  currentMatch: null | {
+    p1Name: string;
+    p2Name: string;
+  },
 }
 
 export interface GameSettings {

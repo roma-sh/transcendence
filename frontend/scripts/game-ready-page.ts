@@ -1,5 +1,6 @@
 import { TournamentSettings } from "./types.js";
 import { game } from "./game.js";
+import { tSettings } from "./pong.js";
 
 export function initGameReadyPage(tSettings: TournamentSettings) {
 
@@ -53,6 +54,7 @@ export function initGameReadyPage(tSettings: TournamentSettings) {
 }
 
 export function handleStartTournament() {
+  console.log('handle start tournament called!!!')
 
   const p1El = document.querySelector('.js-p1-name') as HTMLElement | null;
   const p2El = document.querySelector('.js-p2-name') as HTMLElement | null;
@@ -67,6 +69,6 @@ export function handleStartTournament() {
 
   console.log(`Starting match: ${p1Name} vs ${p2Name}`);
 
+  tSettings.currentMatch = { p1Name, p2Name };
   location.hash = '#game-page';
-  game(p1Name, p2Name);
 }
