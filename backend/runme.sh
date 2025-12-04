@@ -6,7 +6,7 @@ echo "Initializing the project..."
 if [ ! -f package.json ]; then
     npm init -y
 fi
-npm install fastify @fastify/static @fastify/cors @fastify/session @fastify/cookie sqlite3
+npm install fastify @fastify/static @fastify/cors @fastify/session @fastify/cookie sqlite3 dotenv
 
 echo "npm initialized and packages installed"
 

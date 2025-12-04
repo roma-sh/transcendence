@@ -56,7 +56,6 @@ function setUserOffline(userId) {
       function (err) {
         if (err) return reject(err);
 
-        // this.changes tells you how many rows were updated
         resolve(this.changes);
       }
     );

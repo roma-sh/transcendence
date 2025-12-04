@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Fastify = require('fastify');
 const fastifyStatic = require('@fastify/static');
 const fastifyCors = require('@fastify/cors');
@@ -5,10 +6,13 @@ const path = require('path');
 const fastifyCookie = require('@fastify/cookie');
 const fastifySession = require('@fastify/session');
 
-const app = Fastify({ logger: true });
+const app = Fastify({ logger: {
+                        level: process.env.NODE_ENV === 'production' ? 'error' : 'warn'
+                      }
+                    });
 
 app.register(fastifyCors, {
-    origin: true, // reflect the request origin (required when credentials: true)
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
     credentials: true // important for cookies
@@ -16,9 +20,9 @@ app.register(fastifyCors, {
 
 app.register(fastifyCookie);
 app.register(fastifySession, {
-    secret: 'NoOneKnowThisSecretKeyNoOneKnowThisSecretKeyNoOneKnowThisSecretKeyNoOneKnowThisSecretKey',
+    secret: process.env.SESSION_SECRET,
     cookie: {
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
       sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000
@@ -36,8 +40,10 @@ app.register(require('./src/routes/alias.routes'), { prefix: '/api/alias' });
 app.register(require('./src/routes/stats.routes'), { prefix: '/api/stats' });
 app.register(require('./src/routes/profile.route'), { prefix: '/api' });
 
+const PORT = parseInt(process.env.PORT || '3000', 10);
+const HOST = process.env.HOST || '0.0.0.0';
 
-app.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {
+app.listen({ port: PORT, host: HOST }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
