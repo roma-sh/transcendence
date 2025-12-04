@@ -17,6 +17,14 @@ blockchain/.env
 .DS_Store
 *.log
 
+<<<<<<< HEAD
 database/user_db.db
 backend/node_modules/
 public/
+=======
+# /database/user_db.db
+/backend/node_modules/
+# /public/scripts/js/
+# /public/styles/
+# /public/index.html
+>>>>>>> user_profile

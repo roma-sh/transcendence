@@ -20,9 +20,10 @@ export function initSignUpPage(): void {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:3000/api/auth/signup', {
+      const response = await fetch('http://localhost:3000/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+        credentials: 'include',
         body: JSON.stringify({ username, email, password }),
       });
 
@@ -62,12 +63,13 @@ export function initLogInPage(): void {
   }
 
   try {
-    const response = await fetch('http://127.0.0.1:3000/api/auth/login', {
+    const response = await fetch('http://localhost:3000/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache',
       },
+      credentials: 'include',
       body: JSON.stringify({ username: identifier, password }),
     });
 
