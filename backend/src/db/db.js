@@ -1,7 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-// Database is outside backend folder
 const dbPath = path.join(__dirname, '../../../database/user_db.db');
 
 const user_db = new sqlite3.Database(dbPath, (err) => {
