@@ -48,6 +48,19 @@ function isUserOnline(userId) {
   });
 }
 
+function setUserOffline(userId) {
+  return new Promise((resolve, reject) => {
+    user_db.run(
+      `UPDATE users SET is_online = 0 WHERE id = ?`,
+      [userId],
+      function (err) {
+        if (err) return reject(err);
 
+        // this.changes tells you how many rows were updated
+        resolve(this.changes);
+      }
+    );
+  });
+}
 
-module.exports = { getUserById , setUserOnline , isUserOnline};
+module.exports = { getUserById , setUserOnline , isUserOnline, setUserOffline};

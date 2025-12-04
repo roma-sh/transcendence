@@ -17,7 +17,12 @@ app.register(fastifyCors, {
 app.register(fastifyCookie);
 app.register(fastifySession, {
     secret: 'NoOneKnowThisSecretKeyNoOneKnowThisSecretKeyNoOneKnowThisSecretKeyNoOneKnowThisSecretKey',
-    cookie: { secure: false },   // true if HTTPS
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000
+    },
     saveUninitialized: false
 });
 
@@ -39,3 +44,6 @@ app.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {
   }
   console.log(`Server running at ${address}`);
 });
+
+// To-do:
+// sign out all the users when the server is down.

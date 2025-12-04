@@ -1,7 +1,7 @@
 // import the file "auth.service.js" from services folder
 // to use its functions here
 const { insertUser, getUser } = require('../services/auth.service');
-const { setUserOnline } = require('../services/profile.service');
+const { setUserOnline, setUserOffline } = require('../services/profile.service');
 const { isValidEmail, isStrongPassword, isValidUsername } = require('../utils/validators');
 
 // when the browser sends a signup request, this controller handles it
@@ -156,6 +156,7 @@ async function loginController(request, reply) {
     // set session user id
     request.session.userId = user.id; // users table expected to have `id` column
     console.log('hiii Session after login:', request.session);
+    console.log('Session ID:', request.session.sessionId);
     console.log('hiiii User logged in:', { id: user.id, username: user.username, email: user.email });
     // ensure session persisted before replying
     await new Promise((resolve, reject) => {
@@ -175,6 +176,14 @@ async function loginController(request, reply) {
 }
 
 async function logoutController(request, reply) {
+  const userId = request.session.userId;
+  if (userId) {
+    try {
+      await setUserOffline(userId);
+    } catch (err) {
+      request.log.error('Error setting user offline:', err);
+    }
+  }
   await request.session.destroy();
   return reply.send({ message: 'Logged out successfully' });
 }
