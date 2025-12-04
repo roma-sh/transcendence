@@ -18,6 +18,7 @@ export function initSignUpPage() {
             const response = await fetch('http://localhost:3000/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+                credentials: 'include',
                 body: JSON.stringify({ username, email, password }),
             });
             const result = await response.json();
