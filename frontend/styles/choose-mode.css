@@ -2,21 +2,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 50px;
-  padding: 80px;
+  margin-bottom: 24px;
+  padding: 5vh 5vw;
 }
 
 .game-option-1,
 .game-option-2 {
-  width: 300px;
-  height: 300px;
+  width: min(300px, 40vw);
+  height: min(300px, 40vh);
   border: 2px solid var(--border-color);
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 50px;
+  font-size: clamp(24px, 4vw, 50px);
   font-family: Arial;
   color: var(--main-color);
   background-color: var(--bg-color-white-seven);

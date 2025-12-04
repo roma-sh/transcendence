@@ -23,15 +23,16 @@
 	opacity: 0.7;
 }
 
-.sign-up-page,
-.log-in-page {
-  display: none;
+#sign-up-page,
+#log-in-page {
   padding: 50px;
   text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .auth-form h2 {
-    color: var(--main-color); /* Χρησιμοποιούμε το κύριο χρώμα για τον τίτλο */
+    color: var(--main-color);
     margin-bottom: 20px;
     font-size: 32px;
     font-weight: 700;
@@ -39,36 +40,35 @@
 
 .auth-form {
   max-width: 400px;
-  margin: 40px auto; /* Περισσότερο κενό πάνω/κάτω */
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
   
-  /* Styling της φόρμας ως "κάρτα" */
   background: var(--bg-color-white-seven);
   padding: 30px;
-  border-radius: 15px; /* Πολύ στρογγυλεμένες γωνίες */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Διακριτική σκιά */
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .auth-form input {
-  padding: 15px; /* Λίγο ψηλότερα πεδία */
+  padding: 15px;
   font-size: 18px; 
   border: 1px solid #ddd;
-  border-radius: 10px; /* Στρογγυλεμένες γωνίες στα inputs */
+  border-radius: 10px;
   transition: border-color 0.3s, box-shadow 0.3s;
   background: var(--bg-color-white-seven)
 }
 
 .auth-form input:focus {
-    border-color: var(--main-color); /* Έμφαση στο focus */
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); /* Απαλή σκιά στο focus */
+    border-color: var(--main-color);
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     outline: none;
 }
 
 .auth-submit-button {
   padding: 15px;
-  font-size: 20px; /* Πιο έντονο μέγεθος */
+  font-size: 20px;
   font-weight: bold;
   background: var(--main-color);
   color: white;
@@ -76,7 +76,7 @@
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.1s, background-color 0.3s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Σκιά για 3D αίσθηση */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .auth-submit-button:hover {

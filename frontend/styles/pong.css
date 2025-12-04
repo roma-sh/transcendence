@@ -2,12 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px;
+  padding: 5vh 5vw;
 }
 
 .paddle {
   width: 80px;
-  height: 400px;
+  height: clamp(200px, 45vh, 400px);
   background: var(--main-color);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   border-radius: 40px;
@@ -58,7 +58,7 @@
 }
 
 #game-name {
-  font-size: 150px;
+  font-size: clamp(64px, 12vw, 150px);
   font-family: Arial;
   color: var(--main-color);
   margin: 0;

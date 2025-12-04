@@ -1,3 +1,8 @@
+#profile-page,
+#settings-page {
+  align-items: stretch;
+}
+
 /* main layout */
 .profile {
 	margin: 0 auto;

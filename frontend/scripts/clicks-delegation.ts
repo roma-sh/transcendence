@@ -59,6 +59,7 @@ export function setupGlobalClicksDelegation() {
 
 		// Find nearest element that has data-action attribute
 		const actionEl = target.closest("[data-action]") as HTMLElement | null;
+		const menu = document.querySelector('.js-user-dropdown') as HTMLElement | null;
 
 		if (actionEl) {
 			const action = actionEl.dataset.action;
@@ -68,11 +69,15 @@ export function setupGlobalClicksDelegation() {
 			if (!handler) return;
 
 			handler(e);
+
+      if (menu && actionEl.closest('.js-user-dropdown')) {
+        menu.style.display = 'none';
+      }
+
 			return;
 		}
 
 		// Close dropdown if clicked outside
-		const menu = document.querySelector('.js-user-dropdown') as HTMLElement | null;
 		const btn = document.querySelector('.js-user-menu-button') as HTMLElement | null;
 		if (menu && btn && !btn.contains(target) && !menu.contains(target)) {
 				menu.style.display = 'none';
