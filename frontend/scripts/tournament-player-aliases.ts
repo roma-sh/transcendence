@@ -92,7 +92,7 @@ function generateInputsForAliases( tSettings: TournamentSettings) {
 
 // --- 2. Helper Function: Alias Check ---
 async function checkAliasExists(alias: string): Promise<boolean> {
-  const response = await fetch(`http://127.0.0.1:3000/api/checkAlias/${alias}`);
+  const response = await fetch(`http://localhost:3000/api/checkAlias/${alias}`);
   const data = await response.json();
   return data.exists;
 }

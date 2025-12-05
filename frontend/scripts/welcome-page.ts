@@ -36,32 +36,23 @@ export function handleOpenLogIn() {
 }
 
 async function isUserOnline(): Promise<true | false> {
-  return true; // temp
   try {
-    const res = await fetch('http://localhost:3000/api/useronline');
+    const res = await fetch('http://localhost:3000/api/useronline', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-    if (!res.ok) {
-      console.log("in userOnline function response is not ok");
+    if (!res.ok)
       return false;
-    }
 
     const data = await res.json();
-    console.log('data: ', data);
 
-
-    if (data.online === 1) {
-      console.log("in userOnline function data.online === 1");
-      return true;
-    }
-    if (data.online === 0) {
-      console.log("in userOnline function data.online === 0");
-      return false;
-    }
-
-    console.log("in userOnline function fallback");
-    return false; // fallback
+    return data.online;
   } catch (err) {
-    console.error('Connection error:', err);
+    console.error('Connection error(isUserOnline function):', err);
     return false;
   }
 }
