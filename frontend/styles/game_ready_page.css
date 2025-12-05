@@ -1,15 +1,9 @@
-#game-ready-page .back_btn {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-}
-
 .game-ready-page-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 40px 20px;
+    min-height: calc(100vh - 80px);
+    padding: 80px 20px 40px;
     background-color: var(--bg-color);
     position: relative;
 }

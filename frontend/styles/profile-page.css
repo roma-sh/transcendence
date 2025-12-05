@@ -1,6 +1,8 @@
 #profile-page,
 #settings-page {
   align-items: stretch;
+	justify-content: flex-start;
+	padding-top: 34px;
 }
 
 /* main layout */
@@ -10,19 +12,28 @@
 	color: #222;
 	width: 100%;
 	max-width: none;
-	padding: 32px 24px;
+	padding: 16px 24px 32px;
 }
 
 /* header */
 .profile__header {
+	position: relative;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: center;
+	margin-bottom: 12px;
 }
 .profile__header h1 {
 	margin: 0;
 	font-size: 22px;
 	font-weight: 700;
+}
+
+.profile__header .back_btn {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 .back_btn {
