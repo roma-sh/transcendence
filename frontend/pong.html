@@ -19,21 +19,29 @@
     <link rel="stylesheet" href="./styles/settings-page.css">
   </head>
   <body>
+    <div class=
+      "user-menu-button-container
+      js-user-menu-button-container
+      user-menu-button-container-hidden">
+        <button class="user-menu-button js-user-menu-button" data-action="toggle-user-menu"></button>
+        <div class="user-dropdown js-user-dropdown">
+          <div class="js-profile-link" data-action="open-profile">Profile</div>
+          <div class="js-settings-link" data-action="open-settings">Settings</div>
+          <button data-action="log-out">Log out</button>
+        </div>
+    </div>
     <section id="welcome-page">
-      <div class="init-buttons js-init-buttons">
-        <button class="auth-button sign-up-button js-sign-up-button">SIGN UP</button>
-        <button class="auth-button log-in-button js-log-in-button">LOG IN</button>
-      </div>
-      <div class=
-        "user-menu-button-container
-        js-user-menu-button-container
-        user-menu-button-container-hidden">
-          <button class="user-menu-button js-user-menu-button"></button>
-          <div class="user-dropdown js-user-dropdown">
-            <div class="js-profile-link">Profile</div>
-            <div class="js-settings-link">Settings</div>
-            <button>Log out</button>
-          </div>
+      <div class="signup-login-btns signup-login-btns-hidden js-signup-login-btns">
+        <button
+          class="auth-button sign-up-button js-sign-up-button"
+          data-action="open-sign-up">
+            SIGN UP
+        </button>
+        <button
+          class="auth-button log-in-button js-log-in-button"
+          data-action="open-log-in">
+            LOG IN
+        </button>
       </div>
       <div class="banner">
         <div class="paddle paddle-left"></div>
@@ -43,17 +51,23 @@
         </div>
         <div class="paddle paddle-right"></div>
       </div>
-      <div class="js-main-buttons main-buttons-hidden">
+      <div class="js-play-connect-wallet-btns play-connect-wallet-btns-hidden">
         <div class="play-button-container">
-          <button class="play-button js-play-button">PLAY</button>
+          <button
+            class="play-button js-play-button"
+            data-action="open-choose-mode">
+              PLAY
+          </button>
         </div>
         <div class="auth-button-container">
-          <button class="auth-button js-connect-wallet-button">CONNECT WALLET</button>
+          <button class="auth-button connect-wallet-btn js-connect-wallet-button">
+            CONNECT WALLET
+          </button>
         </div>
       </div>
     </section>
 
-    <section id="winner-page" style="display: none;">
+    <section id="winner-page">
         <div class="banner">
             <div class="middle-section">
                 <h2>🏆 TOURNAMENT WINNERS 🏆</h2>
@@ -62,7 +76,11 @@
             </div>
         </div>
         <div class="play-button-container">
-            <button class="play-button js-go-to-welcome-button">Back To Main Menu</button>
+            <button
+              class="play-button"
+              data-action="go-to-welcome-page">
+                Back To Main Menu
+            </button>
         </div>
     </section>
 
@@ -80,12 +98,23 @@
     </section>
 
     <section id="choose-mode-page">
+      <button
+        class="back_btn js-choose-mode-back-btn"
+        data-action="go-back-choose-mode">
+          ← Back
+      </button>
       <div class="game-options">
-        <div class="game-option-1 js-game-option" data-option="quick-play">
-          <p>Quick Play</p>
+        <div
+          class="game-option-1 js-game-option"
+          data-option="quick-play"
+          data-action="select-game-option">
+            <p>Quick Play</p>
         </div>
-        <div class="game-option-2 js-game-option" data-option="tournament">
-          <p>Tournament</p>
+        <div
+          class="game-option-2 js-game-option"
+          data-option="tournament"
+          data-action="select-game-option">
+            <p>Tournament</p>
         </div>
       </div>
       <div class="start-button-container">
@@ -94,6 +123,11 @@
     </section>
 
 	<section id="game-ready-page" class="game-ready-page-container">
+    <button
+      class="back_btn"
+      data-action="go-back-game-ready-page">
+        ← Back
+    </button>
 		<div class="game-ready-content">
 		  <h2>Game Ready!</h2>
 		  <div class="player-info">
@@ -115,9 +149,9 @@
       </div>
 			</div>
 		  </div>
-		  <button class="go-button js-start-game-btn">GO!</button>
+		  <button class="go-button js-start-game-btn" data-action="start-tournament">GO!</button>
 		</div>
-	  </section>
+	</section>
 
     <section id="game-page">
       <div class="game-window">
@@ -126,51 +160,78 @@
     </section>
 
     <section id="tournament-page">
+      <button
+        class="back_btn js-tournament-page-back-btn"
+        data-action="go-back-tournament">
+          ← Back
+      </button>
       <div class="player-count">
         <p>Enter number of players</p>
         <input type="number"
           id="player-count-input"
           name="playerCount"
           value="2" max="100" min="2">
-        <button class="next-btn-after-count
-          js-next-btn-after-count">NEXT</button>
+        <button
+          class="next-btn-after-count js-next-btn-after-count"
+          data-action="next-after-count">
+            NEXT
+        </button>
       </div>
     </section>
 
     <section id="tournament-page-player-aliases">
+      <button
+        class="back_btn js-tournament-player-aliases-back-btn"
+        data-action="go-back-player-aliases">
+          ← Back
+      </button>
       <div class="player-aliases js-player-aliases">
         <p id="enter-aliases-hint">Enter aliases</p>
         <div class="aliase-inputs"></div>
-        <button class="next-btn-after-aliases
-          js-next-btn-after-aliases">NEXT</button>
+        <button
+          class="next-btn-after-aliases js-next-btn-after-aliases"
+          data-action="next-after-aliases">
+            NEXT
+        </button>
       </div>
     </section>
 
     <section id="sign-up-page">
+      <button class="back_btn js-sign-up-back-btn" data-action="go-back-signup">← Back</button>
       <div class="auth-form">
         <h2>Sign Up</h2>
         <input type="text" id="username" placeholder="Username" />
         <input type="email" id="email" placeholder="Email" />
         <input type="password" id="password" placeholder="Password" />
-        <button class="auth-submit-button" id="registerBtn">Register</button>
+        <button
+          class="auth-submit-button"
+          id="registerBtn"
+          data-action="submit-sign-up">
+            Register
+        </button>
       </div>
     </section>
 
 
     <section id="log-in-page">
+      <button class="back_btn js-log-in-back-btn" data-action="go-back-login">← Back</button>
       <div class="auth-form">
         <h2>Log In</h2>
         <input type="text" id="login-username-email" placeholder="Username or Email" />
         <input type="password" id="login-password" placeholder="Password" />
-        <button id="login-button" class="auth-submit-button">Login</button>
+        <button
+          id="login-button"
+          class="auth-submit-button"
+          data-action="submit-log-in">
+            Login
+        </button>
       </div>
     </section>
 
     <section id="profile-page" class="profile">
       <header class="profile__header">
-        <button class="profile__back js-profile__back">← Back</button>
+        <button class="back_btn js-profile__back_btn">← Back</button>
         <h1>Profile</h1>
-        <div></div>
       </header>
 
       <div class="card">
@@ -216,9 +277,8 @@
 
     <section id="settings-page" class="profile">
       <header class="profile__header">
-        <button class="settings__back js-settings__back">← Back</button>
+        <button class="back_btn js-settings__back_btn">← Back</button>
         <h1>Settings</h1>
-        <div></div>
       </header>
 
       <div class="card-settings-page">

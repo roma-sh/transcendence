@@ -6,9 +6,9 @@ export function updatePaddleDirection (
   rightPaddle : Paddle,
   settings : GameSettings) {
 
-  if (keys['w'] || keys['W']) {
+  if (keys['KeyW']) {
     leftPaddle.dy = -settings.paddleSpeed;
-  } else if (keys['s'] || keys['S']) {
+  } else if (keys['KeyS']) {
     leftPaddle.dy = settings.paddleSpeed;
   } else {
     leftPaddle.dy = 0;

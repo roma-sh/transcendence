@@ -3,6 +3,9 @@ export interface GameState {
   isWin: boolean;
   leftScore: number;
   rightScore: number;
+  statsSent: boolean;
+  winHandled: boolean;
+  winnerSide: 'left' | 'right';
 }
 
 export interface GameConfig {
@@ -45,7 +48,11 @@ export interface TournamentSettings {
   winnersAliases: string[],
   secondPlaceAliases: string[],
   secondPlaceAlias: string,
-  firstPlaceAlias: string
+  firstPlaceAlias: string,
+  currentMatch: null | {
+    p1Name: string;
+    p2Name: string;
+  },
 }
 
 export interface GameSettings {

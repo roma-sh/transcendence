@@ -1,5 +1,21 @@
 import { Paddle, Ball, GameConfig, ButtonRect, GameSettings } from "./types.js";
 
+export function drawPlayerName(
+  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement,   
+  side: 'left' | 'right',     
+  name: string                 
+) {
+  ctx.fillStyle = '#463D3D';
+  ctx.font = 'bold 18px Arial';
+  ctx.textAlign = side === 'left' ? 'left' : 'right';
+  
+  const x = side === 'left' ? 45 : canvas.width - 45;
+  const y = 20; 
+
+  ctx.fillText(name, x, y);
+}
+
 export function drawScore (
   ctx: CanvasRenderingContext2D | null,
   canvas : HTMLCanvasElement,
@@ -102,6 +118,7 @@ export function drawWinText(
   winner : 'left' | 'right') {
 
     const text = 'WIN';
+    ctx.fillStyle = '#463D3D';
     ctx.font = "48px Arial";
     ctx.textAlign = 'center';
     // ctx.textBaseline = 'middle';

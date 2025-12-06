@@ -1,27 +1,18 @@
 import {
-  setInitialWelcomePage,
-  addHashForChooseModePage
+  setInitHash,
+  initWelcomePage
 } from './welcome-page.js';
 import {
-  initGameOptionHighlight,
   useGameOption
 } from './choose-mode.js';
-import { game } from './game.js';
-import {
-  tournament,
-  addAliasesSection
-} from "./tournament.js";
+import { addAliasesSection } from './tournament-player-aliases.js';
 import { TournamentSettings } from './types.js';
-
-import { initSignUpPage, initLogInPage } from './auth-pages.js';
-
 import { initUserProfilePage } from './user-profile.js';
-
 import { initGameReadyPage } from './game-ready-page.js';
-
 import { initWalletConnect } from './wallet-connect.js';
-
 import { initWinnerAnnouncementPage } from './winner-page.js';
+import { setupGlobalClicksDelegation } from './clicks-delegation.js';
+import { game } from './game.js';
 
 export const tSettings : TournamentSettings = {
   numberOfPlayers: 1,
@@ -30,16 +21,17 @@ export const tSettings : TournamentSettings = {
   winnersAliases: [],
   secondPlaceAliases: [],
   secondPlaceAlias: "",
-  firstPlaceAlias: ""
+  firstPlaceAlias: "",
+  currentMatch: null as null | { p1Name: string; p2Name: string },
 };
 
+setupGlobalClicksDelegation();
+
 // for the welcome page:
-setInitialWelcomePage();
-addHashForChooseModePage();
+setInitHash();
 
 // for the choose mode page:
-initGameOptionHighlight();
-useGameOption(tSettings);
+useGameOption();
 
 // Initialize wallet connection - add this after the other initializations
 initWalletConnect();
@@ -48,19 +40,17 @@ initWalletConnect();
 function handleHashChange() {
   const hash = location.hash;
 
-  if (hash === '#game-ready-page') {
+  if (hash === '#welcome-page') {
+    initWelcomePage();
+  } else if (hash === '#game-page') {
+    game();
+  } else if (hash === '#game-ready-page') {
 	  initGameReadyPage(tSettings);
-  } else if (hash === '#tournament-page') {
-    tournament(tSettings);
   } else if (hash === '#tournament-page-player-aliases') {
-    addAliasesSection(tSettings);
-  } else if (hash === '#sign-up-page') {
-    initSignUpPage();
-  } else if (hash === '#log-in-page') {
-    initLogInPage();
+    addAliasesSection();
   } else if (hash === '#user-profile') {
     initUserProfilePage();
-  } else if (hash.startsWith('#winner-page')) {
+  } else if (hash === '#winner-page') {
     initWinnerAnnouncementPage(tSettings);
   }
 }

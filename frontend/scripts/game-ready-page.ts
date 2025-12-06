@@ -1,7 +1,12 @@
 import { TournamentSettings } from "./types.js";
 import { game } from "./game.js";
+import { tSettings } from "./pong.js";
 
-export async function initGameReadyPage(tSettings: TournamentSettings) {
+export function handleGoBackGameReadyPage() {
+  location.hash = '#tournament-page-player-aliases';
+}
+
+export function initGameReadyPage(tSettings: TournamentSettings) {
 
   if (tSettings.playerAliases.length == 0) {
     if (tSettings.winnersAliases.length == 1) {
@@ -12,9 +17,7 @@ export async function initGameReadyPage(tSettings: TournamentSettings) {
       tSettings.firstPlaceAlias = tSettings.winnersAliases.pop()!;
       tSettings.winnersAliases = [];
       tSettings.secondPlaceAliases = [];
-      const firstEncoded = encodeURIComponent(tSettings.firstPlaceAlias);
-      const secondEncoded = encodeURIComponent(tSettings.secondPlaceAlias);
-      location.hash = `#winner-page?first=${firstEncoded}&second=${secondEncoded}`;
+      location.hash = `#winner-page`;
       return;
     }
     console.log('Winners: ' + tSettings.winnersAliases);
@@ -50,24 +53,24 @@ export async function initGameReadyPage(tSettings: TournamentSettings) {
   if (p2NameEl) {
     p2NameEl.textContent = p2Name || '';
   }
-  
-  // 4. Register the event listener for the 'GO!' button
-  const goBtn = document.querySelector('.js-start-game-btn');
-  if (goBtn) {
-    // Use a named function for the handler
-    const startGameHandler = async () => {
-        // Call the game function with the correct names
+}
 
-        // FIX: Add a clear message showing who is playing
-        console.log(`Starting match: ${p1Name} vs ${p2Name}`);
-        
-        location.hash = '#game-page';
-        game(p1Name, p2Name);
-        // FIX: Update the remaining players message to show the NEXT players
+export function handleStartTournament() {
+  console.log('handle start tournament called!!!')
 
-    };
-    
-    // Add the listener, using { once: true } to ensure it only runs once.
-    goBtn.addEventListener('click', startGameHandler, { once: true });
+  const p1El = document.querySelector('.js-p1-name') as HTMLElement | null;
+  const p2El = document.querySelector('.js-p2-name') as HTMLElement | null;
+
+  const p1Name = p1El?.textContent?.trim() || '';
+  const p2Name = p2El?.textContent?.trim() || '';
+
+  if (!p1Name || !p2Name) {
+    console.error('Missing player names for game start');
+    return;
   }
+
+  console.log(`Starting match: ${p1Name} vs ${p2Name}`);
+
+  tSettings.currentMatch = { p1Name, p2Name };
+  location.hash = '#game-page';
 }

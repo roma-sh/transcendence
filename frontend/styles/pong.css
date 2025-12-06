@@ -2,13 +2,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px;
+  padding: 5vh 5vw;
 }
 
 .paddle {
   width: 80px;
-  height: 400px;
+  height: clamp(200px, 45vh, 400px);
   background: var(--main-color);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   border-radius: 40px;
 }
 
@@ -26,16 +27,38 @@
   align-items: center;
 }
 
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
 #ball {
   margin-top: 30px;
   width: 75px;
   height: 75px;
   border-radius: 50%;
   background: var(--main-color);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.35);
+  animation: bob 1.6s ease-in-out infinite;
+}
+
+#ball::after {
+  content: "";
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  top: -40%;
+  left: -10%;
+  background: radial-gradient(
+    circle at 25% 25%,
+    rgba(255, 255, 255, 0.45),
+    transparent 45%
+  );
+  opacity: 0.9;
 }
 
 #game-name {
-  font-size: 150px;
+  font-size: clamp(64px, 12vw, 150px);
   font-family: Arial;
   color: var(--main-color);
   margin: 0;
@@ -52,7 +75,7 @@
   padding: 15px 60px;
   border: none;
   border-radius: 45px;
-  color: white;
+  color: var(--bg-color-white-nine);
   cursor: pointer;
   font-size: 24px;
   font-weight: bold;

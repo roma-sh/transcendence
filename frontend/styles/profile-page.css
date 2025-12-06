@@ -1,3 +1,10 @@
+#profile-page,
+#settings-page {
+  align-items: stretch;
+	justify-content: flex-start;
+	padding-top: 34px;
+}
+
 /* main layout */
 .profile {
 	margin: 0 auto;
@@ -5,30 +12,50 @@
 	color: #222;
 	width: 100%;
 	max-width: none;
-	padding: 32px 24px;
+	padding: 16px 24px 32px;
 }
 
 /* header */
 .profile__header {
+	position: relative;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: center;
+	margin-bottom: 12px;
 }
 .profile__header h1 {
 	margin: 0;
 	font-size: 22px;
 	font-weight: 700;
 }
-.profile__back {
-	color: var(--main-color);
-	background-color: white;
-	border: 1px solid var(--main-color);
-	border-radius: 3px;
-	margin-left: 5px;
-	transition: opacity 0.15s;
+
+.profile__header .back_btn {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
 }
-.profile__back:hover {
-	opacity: 0.7;
+
+.back_btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+
+	color: var(--main-color);
+	background: transparent;
+	border: none;
+
+	font-size: 16px;
+	font-weight: 600;
+	padding: 8px 12px;
+	border-radius: 10px;
+
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.back_btn:hover {
+	background: rgba(0,0,0,0.06);
 }
 
 .card {

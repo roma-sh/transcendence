@@ -13,7 +13,7 @@ const SETTINGS_KEY = "pongSettings";
 
 export function initSettingsPage() {
 
-	const settingsBackLink = document.querySelector('.js-settings__back');
+	const settingsBackLink = document.querySelector('.js-settings__back_btn');
 	settingsBackLink?.addEventListener("click", () => {
 		location.hash = '#welcome-page';
 	});

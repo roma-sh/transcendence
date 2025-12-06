@@ -1,8 +1,10 @@
 .user-menu-button-container {
 	display: flex;
-  justify-content: right;
-	margin-top: 10px;
-  margin-right: 10px;
+  justify-content: flex-end;
+	position: fixed;
+	top: 16px;
+	right: 16px;
+	z-index: 1000;
 }
 
 .user-menu-button-container-hidden {
@@ -10,7 +12,7 @@
 }
 
 .user-menu-button {
-	background: white;
+	background: var(--bg-color-white-seven);
 	padding: 15px 60px;
 	border: 2px solid var(--main-color);
 	border-radius: 45px;
@@ -28,9 +30,9 @@
 
 .user-dropdown {
   position: absolute;
-  top: 73px;
-  right: 10px;
-  background: white;
+  top: calc(100% + 8px);
+  right: 0px;
+  background: var(--bg-color-white-seven);
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -38,6 +40,7 @@
   flex-direction: column;
   min-width: 160px;
   padding: 8px;
+	justify-content: center;
 }
 
 .user-dropdown div,

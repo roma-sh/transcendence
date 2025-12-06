@@ -1,52 +1,22 @@
-interface TSettings {
+import { TournamentSettings } from "./types.js";
+
+export function handleGoToWelcomePage() {
+    location.hash = '#welcome-page';
 }
 
+export function initWinnerAnnouncementPage(tSettings: TournamentSettings): void {
 
-export function initWinnerAnnouncementPage(tSettings: TSettings): void {
+    console.log('initWinnerAnnouncementPage called');
 
-    const winnerSection = document.getElementById('winner-page');
+    const firstPlaceEl = document.getElementById('first-place-winner') as HTMLElement | null;
+    const secondPlaceEl = document.getElementById('second-place-winner') as HTMLElement | null;
 
-    document.querySelectorAll('section').forEach(section => {
-        section.style.display = 'none';
-    });
+    const { firstPlaceAlias, secondPlaceAlias } = tSettings;
 
-    if (winnerSection) {
-        winnerSection.style.display = 'block'; 
+    if (firstPlaceEl) {
+        firstPlaceEl.textContent = `1st Place: ${firstPlaceAlias || ''}`;
     }
-
-    const firstPlaceElement = document.getElementById('first-place-winner');
-    const secondPlaceElement = document.getElementById('second-place-winner');
-
-    const welcomeButton = document.querySelector('.js-go-to-welcome-button') as HTMLButtonElement | null;
-
-    displayWinners(firstPlaceElement, secondPlaceElement); 
-
-    if (welcomeButton) {
-        welcomeButton.onclick = function(): void {
-            location.hash = '#welcome-page';
-        };
-    }
-}
-
-function displayWinners(firstPlaceElement: HTMLElement | null, secondPlaceElement: HTMLElement | null): void {
-
-    const hash = location.hash;
-
-    const queryString = hash.includes('?') ? hash.substring(hash.indexOf('?') + 1) : '';
-    const urlParams = new URLSearchParams(queryString);
-
-    const firstPlace = urlParams.get('first'); 
-    const secondPlace = urlParams.get('second'); 
-
-    if (firstPlace && firstPlaceElement) {
-        firstPlaceElement.textContent = `1st Place: ${decodeURIComponent(firstPlace)}`;
-    } else if (firstPlaceElement) {
-        firstPlaceElement.textContent = `1st Place: `;
-    }
-
-    if (secondPlace && secondPlaceElement) {
-        secondPlaceElement.textContent = `2nd Place: ${decodeURIComponent(secondPlace)}`;
-    } else if (secondPlaceElement) {
-        secondPlaceElement.textContent = `2nd Place: `;
+    if (secondPlaceEl) {
+        secondPlaceEl.textContent = `2nd Place: ${secondPlaceAlias || ''}`;
     }
 }
