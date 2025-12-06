@@ -39,14 +39,14 @@
 }
 
 .auth-form {
-  max-width: 400px;
+  width: min(440px, 92vw);
   margin: 20px auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
   
   background: var(--bg-color-white-seven);
-  padding: 30px;
+  padding: 36px 40px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
@@ -86,21 +86,17 @@
 }
 
 .signup-login-btns {
+  position: absolute;
+  top: 16px;
+  right: 16px;
   display: flex;
-  justify-content: right;
-  margin-top: 10px;
-  margin-left: 10px;
+  gap: 12px;
 }
 
 .sign-up-button {
-  margin-right: 10px;
   background-color: var(--bg-color-white-seven);
   color: var(--main-color);
   border: 2px solid var(--main-color);
-}
-
-.log-in-button {
-  margin-right: 10px;
 }
 
 .play-connect-wallet-btns-hidden,

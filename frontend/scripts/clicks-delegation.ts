@@ -1,7 +1,8 @@
 import {
 	handleToggleUserMenu,
 	handleOpenProfile,
-	handleOpenSettings
+	handleOpenSettings,
+	handleLogOut
 } from "./user-menu.js";
 import {
 	handleOpenChooseMode,
@@ -51,6 +52,7 @@ export function setupGlobalClicksDelegation() {
 			"go-back-tournament": handleGoBackTournament,
 			"go-back-game-ready-page": handleGoBackGameReadyPage,
 			"go-to-welcome-page": handleGoToWelcomePage,
+			"log-out": handleLogOut,
 	};
 
 	document.addEventListener('click', (e) => {

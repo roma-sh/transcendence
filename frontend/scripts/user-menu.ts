@@ -59,3 +59,37 @@ export function updateUIForAuthState(isLoggedIn: boolean): void {
     playConnectWalletBtns.classList.add("play-connect-wallet-btns-hidden");
   }
 }
+
+export async function handleLogOut(): Promise<boolean> {
+  try {
+    const res = await fetch('http://localhost:3000/api/auth/logout', {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    console.log('Logout status:', res.status);
+
+    if (!res.ok) {
+      console.error(' failed:', res.status);
+      return false;
+    }
+
+    let data: any = null;
+    try {
+      data = await res.json();
+      console.log('Logout response:', data);
+    } catch {
+      // backend might return empty response
+    }
+
+    localStorage.removeItem('userName');
+    localStorage.removeItem('user');
+
+    location.hash = '#welcome-page';
+
+    return true;
+  } catch (error) {
+    console.error('Logout ERROR:', error);
+    return false;
+  }
+}
