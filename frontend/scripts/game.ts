@@ -209,6 +209,8 @@ function handleWinOnce(
 
   const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
   bindButtonEvent(canvas, nextBtnRect, () => {
+    /** Reset hash first so hashchange fires
+     * even when navigating to the same page */
     location.hash = '';
     location.hash = nextGameHash;
   });

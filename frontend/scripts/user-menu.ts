@@ -63,7 +63,7 @@ export function updateUIForAuthState(isLoggedIn: boolean): void {
 export async function handleLogOut(): Promise<boolean> {
   try {
     const res = await fetch('http://localhost:3000/api/auth/logout', {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include',
     });
 
@@ -83,8 +83,10 @@ export async function handleLogOut(): Promise<boolean> {
     }
 
     localStorage.removeItem('userName');
-    localStorage.removeItem('user');
 
+    /** Reset hash first so hashchange fires
+     * even when navigating to the same page */
+    location.hash = '';
     location.hash = '#welcome-page';
 
     return true;
