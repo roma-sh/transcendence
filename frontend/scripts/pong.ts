@@ -2,9 +2,6 @@ import {
   setInitHash,
   initWelcomePage
 } from './welcome-page.js';
-import {
-  useGameOption
-} from './choose-mode.js';
 import { addAliasesSection } from './tournament-player-aliases.js';
 import { TournamentSettings } from './types.js';
 import { initUserProfilePage } from './user-profile.js';
@@ -29,9 +26,6 @@ setupGlobalClicksDelegation();
 
 // for the welcome page:
 setInitHash();
-
-// for the choose mode page:
-useGameOption();
 
 // Initialize wallet connection - add this after the other initializations
 initWalletConnect();

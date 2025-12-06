@@ -18,7 +18,8 @@ import {
 } from "./auth-pages.js";
 import {
 	handleGameOptionSelect,
-	handleGoBackTournament
+	handleGoBackTournament,
+	handleStartGameOption
 } from "./choose-mode.js";
 import {
 	handleNextAfterAliases,
@@ -61,6 +62,7 @@ export function setupGlobalClicksDelegation() {
 			"connect-wallet": handleConnectWallet,
 			"disconnect-wallet": handleDisconnectWallet,
 			"wallet-back-to-menu": handleWalletBackToMenu,
+			"start-game-option": handleStartGameOption
 	};
 
 	document.addEventListener('click', (e) => {
