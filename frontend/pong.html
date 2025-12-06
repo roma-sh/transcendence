@@ -60,8 +60,10 @@
           </button>
         </div>
         <div class="auth-button-container">
-          <button class="auth-button connect-wallet-btn js-connect-wallet-button">
-            CONNECT WALLET
+          <button
+            class="auth-button connect-wallet-btn js-connect-wallet-button"
+            data-action="connect-wallet">
+              CONNECT WALLET
           </button>
         </div>
       </div>
@@ -93,8 +95,16 @@
           <p><strong>Balance:</strong> <span id="wallet-balance"></span></p>
         </div>
         <div class="disconnect-and-back-btns">
-          <button class="auth-button js-disconnect-wallet">Disconnect</button>
-          <button class="auth-button js-back-to-welcome">Back to Menu</button>
+          <button
+            class="auth-button js-disconnect-wallet"
+            data-action="disconnect-wallet">
+              Disconnect
+          </button>
+          <button
+            class="auth-button js-back-to-welcome"
+            data-action="wallet-back-to-menu">
+              Back to Menu
+          </button>
         </div>
       </div>
     </section>

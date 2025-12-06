@@ -30,6 +30,11 @@ import {
 } from "./game-ready-page.js";
 import { handleNextAfterCount } from "./tournament-player-count.js";
 import { handleGoToWelcomePage } from "./winner-page.js";
+import {
+	handleConnectWallet,
+	handleDisconnectWallet,
+	handleWalletBackToMenu
+} from "./wallet-connect.js";
 
 export function setupGlobalClicksDelegation() {
 	const actions: Record<string, (event?: MouseEvent) => void> = {
@@ -53,6 +58,9 @@ export function setupGlobalClicksDelegation() {
 			"go-back-game-ready-page": handleGoBackGameReadyPage,
 			"go-to-welcome-page": handleGoToWelcomePage,
 			"log-out": handleLogOut,
+			"connect-wallet": handleConnectWallet,
+			"disconnect-wallet": handleDisconnectWallet,
+			"wallet-back-to-menu": handleWalletBackToMenu,
 	};
 
 	document.addEventListener('click', (e) => {

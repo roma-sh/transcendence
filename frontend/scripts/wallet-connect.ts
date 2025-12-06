@@ -240,36 +240,26 @@ class WalletConnect {
 // Create and export wallet instance
 export const wallet = new WalletConnect();
 
+export async function handleConnectWallet(): Promise<void> {
+    const connected = await wallet.connectWallet();
+    if (connected) {
+        location.hash = '#wallet-info-page';
+    }
+}
+
+export function handleDisconnectWallet(): void {
+    wallet.disconnectWallet();
+    location.hash = '#welcome-page';
+}
+
+export function handleWalletBackToMenu(): void {
+    location.hash = '#welcome-page';
+}
+
 // Initialize wallet connection
 export function initWalletConnect(): void {
 
     updateWalletConnectBtn();
-
-    const connectButton = document.querySelector('.js-connect-wallet-button');
-    const disconnectButton = document.querySelector('.js-disconnect-wallet');
-    const backButton = document.querySelector('.js-back-to-welcome');
-
-    if (connectButton) {
-        connectButton.addEventListener('click', async () => {
-            const connected = await wallet.connectWallet();
-            if (connected) {
-                location.hash = '#wallet-info-page';
-            }
-        });
-    }
-
-    if (disconnectButton) {
-        disconnectButton.addEventListener('click', () => {
-            wallet.disconnectWallet();
-            location.hash = '#welcome-page';
-        });
-    }
-
-    if (backButton) {
-        backButton.addEventListener('click', () => {
-            location.hash = '#welcome-page';
-        });
-    }
 
     // Setup event listeners for account/network changes
     wallet.setupEventListeners();
