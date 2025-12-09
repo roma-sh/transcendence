@@ -4,7 +4,8 @@ import {
 } from "./user-menu.js";
 
 export async function setInitHash() {
-  if (!location.hash) {
+  const isLoggedIn = await isUserOnline();
+  if (!location.hash || !isLoggedIn) {
     location.hash = '#welcome-page';
   }
 }

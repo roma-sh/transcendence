@@ -11,13 +11,11 @@ const DEFAULT_SETTINGS: GameSettings = {
 
 const SETTINGS_KEY = "pongSettings";
 
+export function handleGoBackSettings() {
+	location.hash = '#welcome-page';
+}
+
 export function initSettingsPage() {
-
-	const settingsBackLink = document.querySelector('.js-settings__back_btn');
-	settingsBackLink?.addEventListener("click", () => {
-		location.hash = '#welcome-page';
-	});
-
 	const scoreToWinInput = document.querySelector(".js-score-to-win") as HTMLInputElement | null;
 	const ballSpeedInput = document.querySelector(".js-ball-speed") as HTMLInputElement | null;
 	const paddleSpeedInput = document.querySelector(".js-paddle-speed") as HTMLInputElement | null;

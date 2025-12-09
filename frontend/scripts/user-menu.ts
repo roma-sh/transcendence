@@ -1,5 +1,3 @@
-import { initProfilePage } from "./profile-page.js";
-import { initSettingsPage } from "./settings-page.js";
 import { isUserOnline } from "./welcome-page.js";
 
 export async function updateUIforUserMenu() {
@@ -39,12 +37,10 @@ export function handleToggleUserMenu(e: MouseEvent) {
 }
 
 export function handleOpenProfile() {
-	initProfilePage();
 	location.hash = '#profile-page';
 }
 
 export function handleOpenSettings() {
-	initSettingsPage();
 	location.hash = '#settings-page';
 }
 
