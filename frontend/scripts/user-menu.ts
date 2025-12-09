@@ -1,7 +1,11 @@
 import { initProfilePage } from "./profile-page.js";
 import { initSettingsPage } from "./settings-page.js";
+import { isUserOnline } from "./welcome-page.js";
 
-export function updateUIforUserMenu(isLoggedIn: boolean) {
+export async function updateUIforUserMenu() {
+
+  const isLoggedIn = await isUserOnline();
+
 	const buttonCont = document.querySelector(
 		'.js-user-menu-button-container'
 	);
@@ -13,9 +17,11 @@ export function updateUIforUserMenu(isLoggedIn: boolean) {
 	} else {
 		buttonCont.classList.add("user-menu-button-container-hidden");
 	}
+
+  setUserMenuName();
 }
 
-export function setUserMenuName() {
+function setUserMenuName() {
 	const userName = localStorage.getItem('userName');
 
 	const userMenuBtn = document.querySelector(
@@ -44,7 +50,9 @@ export function handleOpenSettings() {
 
 /** Toggles auth buttons and game buttons (play and connect wallet)
  * depending on whether the user is logged in. */
-export function updateUIForAuthState(isLoggedIn: boolean): void {
+export async function updateUIForAuthState() {
+
+  const isLoggedIn = await isUserOnline();
 
   const authBtns = document.querySelector(".js-signup-login-btns");
   const playConnectWalletBtns = document.querySelector(".js-play-connect-wallet-btns");
