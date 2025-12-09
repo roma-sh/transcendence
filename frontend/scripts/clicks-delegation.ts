@@ -37,7 +37,11 @@ import {
 	handleWalletBackToMenu
 } from "./wallet-connect.js";
 import { handleGoBackProfile } from "./profile-page.js";
-import { handleGoBackSettings } from "./settings-page.js";
+import {
+	handleGoBackSettings,
+	handleSettingsSave,
+	handleSettingsReset
+} from "./settings-page.js";
 
 export function setupGlobalClicksDelegation() {
 	const actions: Record<string, (event?: MouseEvent) => void> = {
@@ -67,6 +71,8 @@ export function setupGlobalClicksDelegation() {
 			"start-game-option": handleStartGameOption,
 			"go-back-profile": handleGoBackProfile,
 			"go-back-settings": handleGoBackSettings,
+			"settings-save": handleSettingsSave,
+			"settings-reset": handleSettingsReset,
 	};
 
 	document.addEventListener('click', (e) => {
