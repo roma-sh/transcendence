@@ -62,4 +62,17 @@ function setUserOffline(userId) {
   });
 }
 
-module.exports = { getUserById , setUserOnline , isUserOnline, setUserOffline};
+function updatePassword(userId, newPassword) {
+  return new Promise((resolve, reject) => {
+    user_db.run(
+      `UPDATE users SET password = ? WHERE id = ?`,
+      [newPassword, userId],
+      function (err) {
+        if (err) return reject(err);
+        resolve(this.changes);
+      }
+    );
+  });
+}
+
+module.exports = { getUserById , setUserOnline , isUserOnline, setUserOffline, updatePassword};

@@ -1,6 +1,7 @@
-const { getUserById } = require('../services/profile.service');
+const { getUserById, updatePassword } = require('../services/profile.service');
 const { isUserOnline } = require('../services/profile.service');
-
+const {isStrongPassword} = require('../utils/validators');
+const { getUser } = require('../services/auth.service');
 
 async function profileController(request, reply) {
   const userId = request.session.userId;
@@ -48,5 +49,42 @@ async function isUserOnlineController(request, reply) {
 }
 
 
+async function changePasswordController(request, reply) {
+  const userId = request.session.userId;
+  const { currentPassword, newPassword } = request.body;
 
-module.exports = { profileController , isUserOnlineController};
+  if (!userId) {
+    return reply.code(401).send({ message: 'Not logged in' });
+  }
+
+  if (!currentPassword || !newPassword) {
+    return reply.code(400).send({ message: 'Current password and new password are required' });
+  }
+
+  if (!isStrongPassword(newPassword)) {
+    return reply.code(400).send({
+      message: 'Weak password. Must be 8+ characters and include upper & lower case letters, a number, and a special character.'
+    });
+  }
+
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      return reply.code(404).send({ message: 'User not found' });
+    }
+
+    const verifiedUser = await getUser(user.username, currentPassword);
+    if (!verifiedUser) {
+      return reply.code(401).send({ message: 'Current password is incorrect' });
+    }
+
+    await updatePassword(userId, newPassword);
+    return reply.send({ message: 'Password updated successfully' });
+  } catch (err) {
+    request.log.error(err);
+    return reply.code(500).send({ message: 'Server error' });
+  }
+}
+
+
+module.exports = { profileController , isUserOnlineController, changePasswordController};
