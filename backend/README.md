@@ -76,7 +76,7 @@ Request Type: multipart/form-data
 Form Data:
 file: Image file (JPEG, PNG, WebP) - Max 5MB
 ```
-remove user profile picture: http://localhost:3000/api/profile/picture
+ Still need fixing : remove user profile picture: http://localhost:3000/api/profile/picture
 ```
 Request: Send empty body or no file
 ```
