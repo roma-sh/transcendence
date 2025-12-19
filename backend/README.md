@@ -70,5 +70,14 @@ change user email: http://localhost:3000/api/profile/email
   "newEmail": "newemail@example.com",
 }
 ```
-
+change user profile picture: http://localhost:3000/api/profile/picture
+```
+Request Type: multipart/form-data
+Form Data:
+file: Image file (JPEG, PNG, WebP) - Max 5MB
+```
+remove user profile picture: http://localhost:3000/api/profile/picture
+```
+Request: Send empty body or no file
+```
 more API routes will be added

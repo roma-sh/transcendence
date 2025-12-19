@@ -5,6 +5,7 @@ const fastifyCors = require('@fastify/cors');
 const path = require('path');
 const fastifyCookie = require('@fastify/cookie');
 const fastifySession = require('@fastify/session');
+const fastifyMultipart = require('@fastify/multipart');
 
 const app = Fastify({ logger: {
                         level: process.env.NODE_ENV === 'production' ? 'error' : 'warn'
@@ -28,6 +29,12 @@ app.register(fastifySession, {
       maxAge: 24 * 60 * 60 * 1000
     },
     saveUninitialized: false
+});
+
+app.register(fastifyMultipart, {
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB max file size
+  }
 });
 
 app.register(fastifyStatic, {

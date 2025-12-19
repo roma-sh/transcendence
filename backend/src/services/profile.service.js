@@ -8,7 +8,7 @@ function getUserById(userId) {
       [userId],
       (err, row) => {
         if (err) return reject(err);
-        resolve(row); // row will be undefined if not found
+        resolve(row);
       }
     );
   });
@@ -98,6 +98,19 @@ function updateEmail(userId, newEmail) {
   });
 }
 
+function updateProfilePicture(userId, filename) {
+  return new Promise((resolve, reject) => {
+    user_db.run(
+      `UPDATE users SET profile_picture = ? WHERE id = ?`,
+      [filename, userId],
+      function (err) {
+        if (err) return reject(err);
+        resolve(this.changes);
+      }
+    );
+  });
+}
+
 module.exports = {
   getUserById,
   setUserOnline,
@@ -106,4 +119,5 @@ module.exports = {
   updatePassword,
   updateUsername,
   updateEmail,
+  updateProfilePicture,
 };
