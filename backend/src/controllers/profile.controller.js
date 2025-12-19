@@ -1,6 +1,6 @@
-const { getUserById, updatePassword } = require('../services/profile.service');
+const { getUserById, updatePassword, updateUsername, updateEmail } = require('../services/profile.service');
 const { isUserOnline } = require('../services/profile.service');
-const {isStrongPassword} = require('../utils/validators');
+const { isStrongPassword, isValidUsername, isValidEmail } = require('../utils/validators');
 const { getUser } = require('../services/auth.service');
 
 async function profileController(request, reply) {
@@ -87,4 +87,78 @@ async function changePasswordController(request, reply) {
 }
 
 
-module.exports = { profileController , isUserOnlineController, changePasswordController};
+async function changeUsernameController(request, reply) {
+  const userId = request.session.userId;
+  const { newUsername } = request.body;
+
+  if (!userId) {
+    return reply.code(401).send({ message: 'Not logged in' });
+  }
+
+  if (!newUsername) {
+    return reply.code(400).send({ message: 'New username is required' });
+  }
+
+  if (!isValidUsername(newUsername)) {
+    return reply.code(400).send({
+      message: 'Invalid username. Must be at least 3 characters and contain only letters, numbers, or underscores.'
+    });
+  }
+
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      return reply.code(404).send({ message: 'User not found' });
+    }
+
+    await updateUsername(userId, newUsername);
+    return reply.send({ message: 'Username updated successfully', username: newUsername });
+  } catch (err) {
+    request.log.error(err);
+    if (err.message && err.message.includes('UNIQUE constraint failed')) {
+      return reply.code(409).send({ message: 'Username already exists' });
+    }
+    return reply.code(500).send({ message: 'Server error' });
+  }
+}
+
+async function changeEmailController(request, reply) {
+  const userId = request.session.userId;
+  const { newEmail } = request.body;
+
+  if (!userId) {
+    return reply.code(401).send({ message: 'Not logged in' });
+  }
+
+  if (!newEmail) {
+    return reply.code(400).send({ message: 'New email is required' });
+  }
+
+  if (!isValidEmail(newEmail)) {
+    return reply.code(400).send({ message: 'Invalid email format' });
+  }
+
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      return reply.code(404).send({ message: 'User not found' });
+    }
+
+    await updateEmail(userId, newEmail);
+    return reply.send({ message: 'Email updated successfully', email: newEmail });
+  } catch (err) {
+    request.log.error(err);
+    if (err.message && err.message.includes('UNIQUE constraint failed')) {
+      return reply.code(409).send({ message: 'Email already exists' });
+    }
+    return reply.code(500).send({ message: 'Server error' });
+  }
+}
+
+module.exports = {
+  profileController,
+  changePasswordController,
+  changeUsernameController,
+  changeEmailController,
+  isUserOnlineController
+};

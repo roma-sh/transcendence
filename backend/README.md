@@ -39,29 +39,36 @@ backend/src/
 ## APIs:
 
 login: http://localhost:3000/api/auth/login
+
 sign up: http://localhost:3000/api/auth/signup
+
 log out: http://localhost:3000/api/auth/logout
+
 user data: http://localhost:3000/api/profile
+
 user online status: http://localhost:3000/api/useronline
+
 change user password: http://localhost:3000/api/profile/password
+
 Request Body:
-'''
-json{
+
+```
+{
   "currentPassword": "OldPass123!",
   "newPassword": "NewPass456!"
 }
-'''
-
-Success Response (200):
-'''
-json{
-  "message": "Password updated successfully"
+```
+change user name: http://localhost:3000/api/profile/username
+```
+{
+  "newUsername": "newusername",
 }
-'''
-Error Responses:
-401: Not logged in / Current password incorrect
-400: Missing fields / Weak password
-500: Server error
-
+```
+change user email: http://localhost:3000/api/profile/email
+```
+{
+  "newEmail": "newemail@example.com",
+}
+```
 
 more API routes will be added

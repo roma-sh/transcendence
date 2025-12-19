@@ -1,7 +1,6 @@
 const path = require('path');
 const user_db = require(path.join(__dirname, '../db/db'));
 
-// Get user by ID
 function getUserById(userId) {
   return new Promise((resolve, reject) => {
     user_db.get(
@@ -22,8 +21,6 @@ function setUserOnline(userId) {
       [userId],
       function (err) {
         if (err) return reject(err);
-
-        // this.changes tells you how many rows were updated
         resolve(this.changes);
       }
     );
@@ -75,4 +72,38 @@ function updatePassword(userId, newPassword) {
   });
 }
 
-module.exports = { getUserById , setUserOnline , isUserOnline, setUserOffline, updatePassword};
+function updateUsername(userId, newUsername) {
+  return new Promise((resolve, reject) => {
+    user_db.run(
+      `UPDATE users SET username = ? WHERE id = ?`,
+      [newUsername, userId],
+      function (err) {
+        if (err) return reject(err);
+        resolve(this.changes);
+      }
+    );
+  });
+}
+
+function updateEmail(userId, newEmail) {
+  return new Promise((resolve, reject) => {
+    user_db.run(
+      `UPDATE users SET email = ? WHERE id = ?`,
+      [newEmail, userId],
+      function (err) {
+        if (err) return reject(err);
+        resolve(this.changes);
+      }
+    );
+  });
+}
+
+module.exports = {
+  getUserById,
+  setUserOnline,
+  isUserOnline,
+  setUserOffline,
+  updatePassword,
+  updateUsername,
+  updateEmail,
+};
