@@ -34,11 +34,7 @@ function isUserOnline(userId) {
       [userId],
       (err, row) => {
         if (err) return reject(err);
-
-        // If no user found → return null
         if (!row) return resolve(null);
-
-        // row.online is 0 or 1
         resolve(row.is_online);
       }
     );
