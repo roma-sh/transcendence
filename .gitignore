@@ -36,7 +36,5 @@ POSTGRES_USER
 .checkfile
 .env
 secrets
-DATA_SOURCE_NAME
 database/user_db.db
 backend/node_modules/
-public/

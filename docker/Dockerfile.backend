@@ -13,7 +13,6 @@ RUN cd backend && npm install
 # copying code
 COPY backend ./backend
 COPY frontend ./frontend
-COPY public ./public
 COPY database ./database
 COPY blockchain ./blockchain
 
@@ -21,7 +20,9 @@ COPY blockchain ./blockchain
 RUN npm install --save-dev typescript
 RUN npx tsc --project frontend/scripts/tsconfig.json
 
-RUN mkdir -p public/styles
+RUN mkdir -p ../public/styles
+RUN mkdir -p ../public/scripts
+
 
 COPY frontend/styles/ public/styles/
 COPY frontend/pong.html public/index.html

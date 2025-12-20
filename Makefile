@@ -64,6 +64,7 @@ setup:
 		echo "GF_SECURITY_ADMIN=" >> $(ENV_FILE); \
 		echo "GF_SECURITY_ADMIN_PASSWORD=" >> $(ENV_FILE); \
 		echo "DATA_SOURCE_NAME=postgresql://<username>:<password>@database:5432/<database>?sslmode=disable" >> $(ENV_FILE); \
+		echo "SESSION_SECRET=<32 random chars>" >> $(ENV_FILE);
 		echo "Please fill out the env file :D"; \
 	fi
 	if [ ! -d $(SSL_DIR) ]; then \
