@@ -1,0 +1,30 @@
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# root package installation
+COPY package*.json ./
+RUN npm install
+
+# backend package installation
+COPY backend/package*.json ./backend/
+RUN cd backend && npm install
+
+# copying code
+COPY backend ./backend
+COPY frontend ./frontend
+COPY public ./public
+COPY database ./database
+COPY blockchain ./blockchain
+
+# install typescript
+RUN npm install --save-dev typescript
+RUN npx tsc --project frontend/scripts/tsconfig.json
+
+RUN mkdir -p public/styles
+
+COPY frontend/styles/ public/styles/
+COPY frontend/pong.html public/index.html
+
+EXPOSE 3000
+CMD ["node", "backend/server.js"]
