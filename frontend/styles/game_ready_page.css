@@ -1,141 +1,128 @@
-/* Εξασφαλίζει ότι το περιεχόμενο της σελίδας κεντράρεται */
 .game-ready-page-container {
     display: flex;
-    flex-direction: column; /* <--- Αλλαγή: Για να στοιχηθεί και η ενότητα Controls */
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    background-color: var(--background-color, #1a1a1a);
+    min-height: calc(100vh - 80px);
+    padding: 80px 20px 40px;
+    background-color: var(--bg-color);
+    position: relative;
 }
 
-/* Το κύριο container της φόρμας/πληροφοριών */
 .game-ready-content {
-    background-color: #2c2c2c;
-    color: white;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    max-width: 600px;
-    width: 100%;
+    background: var(--bg-color-white-nine);
+    border-radius: 32px;
+    padding: 40px 60px;
+    max-width: 900px;
+    width: min(820px, 90vw);;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
     text-align: center;
-    border-top: 5px solid var(--main-color, #ff5722);
+    border: 1px solid var(--border-color);
 }
 
 .game-ready-content h2 {
-    font-size: 2.5rem;
-    color: var(--main-color, #ff5722);
-    margin-bottom: 30px;
+    margin: 0 0 30px;
+    font-size: 40px;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    color: var(--main-color);
 }
 
-/* Στυλ για την ενότητα πληροφοριών παικτών (τα δύο κουτιά) */
 .player-info {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 40px;
+    align-items: stretch;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 36px;
+    max-width: 700px;
+    margin-inline: auto;
 }
 
 .player-side {
-    flex: 1;
-    padding: 20px;
-    /* <--- ΝΕΑ ΑΛΛΑΓΗ: Ορίζουμε το background color στο main-color */
-    background-color: var(--main-color, #ff5722); 
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    min-height: 120px;
-    color: white; /* <--- ΝΕΑ ΑΛΛΑΓΗ: Το κείμενο μέσα στο πλαίσιο της πλευράς είναι λευκό */
-}
-
-.player-side:hover {
-    /* <--- ΝΕΑ ΑΛΛΑΓΗ: Ελαφρύ σκούρυνμα στο hover */
-    background-color: #e64a19; 
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    flex: 0 0 320px;
+    background: var(--bg-color-white-seven);
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    padding: 24px 26px 28px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .player-side h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+    margin: 0 0 18px;
+    font-size: 22px;
+    color: var(--main-color);
+    line-height: 1.4;
 }
 
 .player-side span {
-    /* Το όνομα του παίκτη (δυναμικό) */
-    /* <--- ΝΕΑ ΑΛΛΑΓΗ: Το όνομα του παίκτη γίνεται λευκό */
-    color: white; 
-    font-weight: bold;
-    font-size: 1.8rem;
     display: block;
-}
-
-.player-side p {
-    font-size: 0.9rem;
-    /* <--- Αφήνουμε το p (π.χ. "Player 1") λευκό ή ελαφρώς γκρι */
-    color: rgba(255, 255, 255, 0.8);
-}
-
-/* Ο διαχωριστής "VS" */
-.divider {
-    font-size: 1.8rem;
-    font-weight: bold;
-    /* <--- ΝΕΑ ΑΛΛΑΓΗ: Δίνουμε έμφαση στον διαχωριστή */
-    color: var(--main-color, #ff5722); 
-}
-
-/* Στυλ του κουμπιού GO */
-.go-button {
-    padding: 15px 50px;
     font-size: 28px;
     font-weight: bold;
-    background-color: var(--main-color, #ff5722);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.6);
+    color: var(--main-color);
 }
 
-.go-button:hover {
-    background-color: #e64a19;
-    transform: scale(1.05);
+.divider {
+    align-self: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--main-color);
 }
 
-/* <--- ΝΕΑ ΕΝΟΤΗΤΑ: Controls Formatting */
 .controls-container {
-    margin-top: 40px;
-    text-align: center;
-    color: white; /* Χρώμα για όλα τα controls */
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 20px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
 }
 
 .controls-title {
-    font-weight: bold; /* Κάνει το "CONTROLS:" bold */
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: var(--main-color, #ff5722);
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--main-color);
 }
 
 .control-key {
-    display: block; /* Βάζει το "Up" και "Down" σε ξεχωριστές γραμμές */
-    font-size: 1rem;
-    margin: 5px 0;
+    font-size: 14px;
+    color: var(--main-color);
+    margin: 2px 0;
 }
-/* <--- ΤΕΛΟΣ ΝΕΑΣ ΕΝΟΤΗΤΑΣ */
 
+.go-button {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 14px 70px;
+    border-radius: 45px;
+    border: none;
+    background: var(--main-color);
+    color: var(--bg-color-white-nine);
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    transition: opacity 0.15s, transform 0.1s;
+}
 
-/* Media Query για μικρότερες οθόνες */
-@media (max-width: 650px) {
-    .player-info {
-        flex-direction: column;
-    }
-    .divider {
-        margin: 10px 0;
-    }
+.go-button:hover {
+    opacity: 0.7;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 800px) {
+.game-ready-content {
+    padding: 26px 20px 30px;
+}
+
+.player-info {
+    flex-direction: column;
+    gap: 18px;
+}
+
+.divider {
+    order: -1;
+}
+
+.game-ready-content h2 {
+    font-size: 32px;
+}
 }

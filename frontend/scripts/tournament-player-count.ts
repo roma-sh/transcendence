@@ -1,4 +1,6 @@
-import { TournamentSettings } from "./types";
+import { TournamentSettings } from "./types.js";
+import { tSettings } from "./pong.js";
+import { addAliasesSection } from "./tournament-player-aliases.js";
 
 /**
  * Registers a click event listener on the "Next" button of the player count screen.
@@ -20,33 +22,25 @@ function generateBotAliases(tSettings: TournamentSettings) {
   return botAliases;
 }
 
-
-export function registerNextClickAfterCount(
-  tSettings: TournamentSettings,
-  callback: (tSettings: TournamentSettings) => void) {
-  
-  const nextEl = document.querySelector('.js-next-btn-after-count');
-
-  if (!nextEl) return;
-
-  nextEl.addEventListener('click', () => {
-    const playerCountEl
+export function handleNextAfterCount(event?: MouseEvent): void {
+  const playerCountEl
       = document.querySelector('#player-count-input') as HTMLInputElement | null;
 
-    if (playerCountEl && playerCountEl.checkValidity()) {
-      const humanPlayers = Number(playerCountEl.value);
-      const exponent = Math.log2(humanPlayers);
-      const nextExponent = Math.ceil(exponent);
-      const totalRequiredPlayers = Math.pow(2, nextExponent);
-      const numberOfBots = totalRequiredPlayers - humanPlayers;
-      
-      tSettings.numberOfBots = numberOfBots; 
-      tSettings.numberOfPlayers = totalRequiredPlayers;
-      
-      const botAliases = generateBotAliases(tSettings); 
-      tSettings.playerAliases = tSettings.playerAliases.concat(botAliases);
+  if (!playerCountEl || !playerCountEl.checkValidity()) {
+    return;
+  }
 
-      callback(tSettings);
-    }
-  });
+  const humanPlayers = Number(playerCountEl.value);
+  const exponent = Math.log2(humanPlayers);
+  const nextExponent = Math.ceil(exponent);
+  const totalRequiredPlayers = Math.pow(2, nextExponent);
+  const numberOfBots = totalRequiredPlayers - humanPlayers;
+  
+  tSettings.numberOfBots = numberOfBots; 
+  tSettings.numberOfPlayers = totalRequiredPlayers;
+  
+  const botAliases = generateBotAliases(tSettings); 
+  tSettings.playerAliases = tSettings.playerAliases.concat(botAliases);
+
+  addAliasesSection();
 }

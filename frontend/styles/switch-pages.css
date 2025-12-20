@@ -5,20 +5,14 @@
 #tournament-page-player-aliases,
 #log-in-page,
 #sign-up-page,
-#game-ready-page /* ⭐️ ΠΡΟΣΘΗΚΗ: Κρύβουμε τη νέα σελίδα ⭐️ */,
-#wallet-info-page
+#game-ready-page,
+#wallet-info-page,
+#winner-page,
+#profile-page,
+#settings-page
 {
-    display: none;
-    /* Χρησιμοποιούμε absolute position για να μην πιάνουν χώρο οι κρυμμένες σελίδες */
-    position: absolute; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100vh;
-}
-/* {
   display: none;
-} */
+}
 
 #welcome-page:target,
 #choose-mode-page:target,
@@ -27,11 +21,14 @@
 #tournament-page-player-aliases:target,
 #log-in-page:target,
 #sign-up-page:target,
-#wallet-info-page:target {
-  display: initial;
+#wallet-info-page:target,
+#profile-page:target,
+#settings-page:target,
+#winner-page:target {
+  display: flex;
 }
-#game-ready-page:target /* ⭐️ ΠΡΟΣΘΗΚΗ: Εμφανίζουμε τη νέα σελίδα ⭐️ */
+#game-ready-page:target
 {
     display: flex; 
-    position: relative; /* Επαναφορά της θέσης για την ορατή σελίδα */
+    position: relative;
 }

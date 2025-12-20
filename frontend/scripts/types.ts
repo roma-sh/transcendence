@@ -3,6 +3,9 @@ export interface GameState {
   isWin: boolean;
   leftScore: number;
   rightScore: number;
+  statsSent: boolean;
+  winHandled: boolean;
+  winnerSide: 'left' | 'right';
 }
 
 export interface GameConfig {
@@ -41,5 +44,22 @@ export interface ButtonRect {
 export interface TournamentSettings {
   numberOfPlayers: number,
   numberOfBots: number,
-  playerAliases: string[]
+  playerAliases: string[],
+  winnersAliases: string[],
+  secondPlaceAliases: string[],
+  secondPlaceAlias: string,
+  firstPlaceAlias: string,
+  currentMatch: null | {
+    p1Name: string;
+    p2Name: string;
+  },
 }
+
+export interface GameSettings {
+	ballSpeed: number;
+	paddleSpeed: number;
+	ballColor: string;
+	paddleColor: string;
+	bgColor: string;
+	scoreToWin: number;
+};
