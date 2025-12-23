@@ -40,4 +40,5 @@ database/user_db.db
 backend/node_modules/
 public/
 backend/api_test/cookies.txt
+backend/cookiejar
 
