@@ -4,11 +4,11 @@ const user_db = require(path.join(__dirname, '../db/db'));
 function getUserById(userId) {
   return new Promise((resolve, reject) => {
     user_db.get(
-      `SELECT id, username, email, is_online FROM users WHERE id = ?`,
+      `SELECT id, username, email, is_online, total_games, wins, profile_picture FROM users WHERE id = ?`,
       [userId],
       (err, row) => {
         if (err) return reject(err);
-        resolve(row); // row will be undefined if not found
+        resolve(row);
       }
     );
   });
@@ -34,11 +34,7 @@ function isUserOnline(userId) {
       [userId],
       (err, row) => {
         if (err) return reject(err);
-
-        // If no user found → return null
         if (!row) return resolve(null);
-
-        // row.online is 0 or 1
         resolve(row.is_online);
       }
     );
@@ -98,6 +94,19 @@ function updateEmail(userId, newEmail) {
   });
 }
 
+function updateProfilePicture(userId, filename) {
+  return new Promise((resolve, reject) => {
+    user_db.run(
+      `UPDATE users SET profile_picture = ? WHERE id = ?`,
+      [filename, userId],
+      function (err) {
+        if (err) return reject(err);
+        resolve(this.changes);
+      }
+    );
+  });
+}
+
 module.exports = {
   getUserById,
   setUserOnline,
@@ -106,4 +115,5 @@ module.exports = {
   updatePassword,
   updateUsername,
   updateEmail,
+  updateProfilePicture,
 };

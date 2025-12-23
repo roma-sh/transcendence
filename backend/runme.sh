@@ -11,6 +11,7 @@ npm install fastify \
     @fastify/cors \
     @fastify/session \
     @fastify/cookie \
+    @fastify/multipart \
     sqlite3 \
     dotenv
 
