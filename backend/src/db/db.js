@@ -23,4 +23,15 @@ user_db.run(`
   )
 `);
 
+const gracefulShutdown = () => {
+  user_db.close((err) => {
+    if (err) console.error('Error closing database:', err);
+    else console.log('Database connection closed');
+    process.exit(0);
+  });
+};
+
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
+
 module.exports = user_db;
