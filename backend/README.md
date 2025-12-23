@@ -78,6 +78,6 @@ file: Image file (JPEG, PNG, WebP) - Max 5MB
 ```
  Still need fixing : remove user profile picture: http://localhost:3000/api/profile/picture
 ```
-Request: Send empty body or no file
+Request: no file
 ```
 more API routes will be added
