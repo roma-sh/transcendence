@@ -2,7 +2,14 @@ const { signupController, loginController, logoutController } = require('../cont
 
 async function authRoutes(fastify) {
   fastify.post('/signup', signupController);
-  fastify.post('/login', loginController);
+  fastify.post("/login", {
+    config: {
+      rateLimit: {
+        max: 5,
+        timeWindow: "1 minute",
+      },
+    },
+  }, loginController);
   fastify.post('/logout', logoutController);
 }
 

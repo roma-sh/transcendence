@@ -12,6 +12,7 @@ npm install fastify \
     @fastify/session \
     @fastify/cookie \
     @fastify/multipart \
+    @fastify/rate-limit \
     sqlite3 \
     dotenv
 

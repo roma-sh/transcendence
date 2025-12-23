@@ -6,10 +6,12 @@ const path = require('path');
 const fastifyCookie = require('@fastify/cookie');
 const fastifySession = require('@fastify/session');
 const fastifyMultipart = require('@fastify/multipart');
+const fastifyRateLimit = require('@fastify/rate-limit');
 
 const app = Fastify({ logger: {
                         level: process.env.NODE_ENV === 'production' ? 'error' : 'warn'
-                      }
+                      },
+                      trustProxy: true,
                     });
 
 app.register(fastifyCors, {
@@ -40,6 +42,11 @@ app.register(fastifyMultipart, {
 app.register(fastifyStatic, {
   root: path.join(__dirname, '../public'),
   prefix: '/',
+});
+
+app.register(fastifyRateLimit, {
+  max: 100,
+  timeWindow: "1 minute",
 });
 
 app.register(require('./src/routes/auth.routes'), { prefix: '/api/auth' });
