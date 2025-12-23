@@ -46,6 +46,7 @@ app.register(require('./src/routes/auth.routes'), { prefix: '/api/auth' });
 app.register(require('./src/routes/alias.routes'), { prefix: '/api/alias' });
 app.register(require('./src/routes/stats.routes'), { prefix: '/api/stats' });
 app.register(require('./src/routes/profile.route'), { prefix: '/api' });
+app.register(require('./src/routes/game.route'), { prefix: '/api/game' });
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -60,3 +61,4 @@ app.listen({ port: PORT, host: HOST }, (err, address) => {
 
 // To-do:
 // sign out all the users when the server is down.
+

@@ -80,4 +80,11 @@ file: Image file (JPEG, PNG, WebP) - Max 5MB
 ```
 Request: no file
 ```
-more API routes will be added
+Increament of the total games: http://localhost:3000/api/game/total-games
+```
+Request: Nothing
+```
+Increament of total wins: http://localhost:3000/api/game/wins
+```
+Request: Nothing
+```
