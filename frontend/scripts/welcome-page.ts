@@ -1,24 +1,18 @@
 import {
   updateUIForAuthState,
   updateUIforUserMenu,
-  setUserMenuName,
 } from "./user-menu.js";
 
 export async function setInitHash() {
-  if (!location.hash) {
+  const isLoggedIn = await isUserOnline();
+  if (!location.hash || !isLoggedIn) {
     location.hash = '#welcome-page';
   }
 }
 
-export async function initWelcomePage() {
-
-	const isLoggedIn = await isUserOnline();
-
-  console.log('isUserOnline:', isLoggedIn);
-
-	updateUIForAuthState(isLoggedIn);
-	updateUIforUserMenu(isLoggedIn);
-	setUserMenuName();
+export function initWelcomePage() {
+	updateUIForAuthState();
+	updateUIforUserMenu();
 }
 
 export function handleGoBackChooseMode() {
@@ -37,7 +31,7 @@ export function handleOpenLogIn() {
   location.hash = '#log-in-page';
 }
 
-async function isUserOnline(): Promise<true | false> {
+export async function isUserOnline(): Promise<true | false> {
   try {
     const res = await fetch('http://localhost:3000/api/useronline', {
       method: 'GET',

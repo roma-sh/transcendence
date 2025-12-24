@@ -246,7 +246,7 @@
 
     <section id="profile-page" class="profile">
       <header class="profile__header">
-        <button class="back_btn js-profile__back_btn">← Back</button>
+        <button class="back_btn" data-action="go-back-profile">← Back</button>
         <h1>Profile</h1>
       </header>
 
@@ -293,7 +293,7 @@
 
     <section id="settings-page" class="profile">
       <header class="profile__header">
-        <button class="back_btn js-settings__back_btn">← Back</button>
+        <button class="back_btn" data-action="go-back-settings">← Back</button>
         <h1>Settings</h1>
       </header>
 
@@ -389,11 +389,17 @@
           </div>
 
           <div class="actions">
-            <button type="button" class="btn btn-primary js-settings-save">
-              Save
+            <button
+              type="button"
+              class="btn btn-primary js-settings-save"
+              data-action="settings-save">
+                Save
             </button>
-            <button type="button" class="btn btn-ghost js-settings-reset">
-              Reset to defaults
+            <button
+              type="button"
+              class="btn btn-ghost js-settings-reset"
+              data-action="settings-reset">
+                Reset to defaults
             </button>
             <span class="settings-message js-settings-message"></span>
           </div>
