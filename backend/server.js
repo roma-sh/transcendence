@@ -8,11 +8,12 @@ const fastifySession = require('@fastify/session');
 const fastifyMultipart = require('@fastify/multipart');
 const fastifyRateLimit = require('@fastify/rate-limit');
 
-const app = Fastify({ logger: {
-                        level: process.env.NODE_ENV === 'production' ? 'error' : 'warn'
-                      },
-                      trustProxy: true,
-                    });
+const app = Fastify({ logger:
+  {
+    level: process.env.NODE_ENV === 'production' ? 'error' : 'warn'
+  },
+  trustProxy: true,
+});
 
 app.register(fastifyCors, {
     origin: process.env.ALLOWED_ORIGINS?.split(',') || true,
@@ -39,9 +40,20 @@ app.register(fastifyMultipart, {
   }
 });
 
+const frontendRoot = path.join(__dirname, '../frontend');
+const uploadsRoot = path.join(__dirname, '../public/uploads');
+
 app.register(fastifyStatic, {
-  root: path.join(__dirname, '../public'),
+  root: uploadsRoot,
+  prefix: '/uploads/',
+  decorateReply: false,
+});
+
+app.register(fastifyStatic, {
+  root: frontendRoot,
   prefix: '/',
+  index: 'pong.html',
+  decorateReply: false,
 });
 
 app.register(fastifyRateLimit, {
@@ -67,4 +79,3 @@ app.listen({ port: PORT, host: HOST }, (err, address) => {
 
 // To-do:
 // sign out all the users when the server is down.
-

@@ -41,4 +41,5 @@ backend/node_modules/
 public/
 backend/api_test/cookies.txt
 backend/cookiejar
-
+frontend/scripts/js/
+frontend/styles/output.css
