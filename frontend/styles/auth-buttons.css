@@ -1,12 +1,12 @@
-.auth-button-container {
+/* .auth-button-container {
 	display: flex;
   align-items: center;
 	justify-content: center;
   margin-top: 10px;
   margin-bottom: 10px;
-}
+} */
 
-.auth-button {
+/* .auth-button {
 	background: var(--main-color);
 	padding: 15px 60px;
 	border: none;
@@ -21,24 +21,24 @@
 
 .auth-button:hover {
 	opacity: 0.7;
-}
+} */
 
-#sign-up-page,
+/* #sign-up-page,
 #log-in-page {
   padding: 50px;
   text-align: center;
   align-items: center;
   justify-content: center;
-}
+} */
 
-.auth-form h2 {
+/* .auth-form h2 {
     color: var(--main-color);
     margin-bottom: 20px;
     font-size: 32px;
     font-weight: 700;
-}
+} */
 
-.auth-form {
+/* .auth-form {
   width: min(440px, 92vw);
   margin: 20px auto;
   display: flex;
@@ -49,24 +49,24 @@
   padding: 36px 40px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
+} */
 
-.auth-form input {
+/* .auth-form input {
   padding: 15px;
   font-size: 18px; 
   border: 1px solid #ddd;
   border-radius: 10px;
   transition: border-color 0.3s, box-shadow 0.3s;
   background: var(--bg-color-white-seven)
-}
+} */
 
-.auth-form input:focus {
+/* .auth-form input:focus {
     border-color: var(--main-color);
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     outline: none;
-}
+} */
 
-.auth-submit-button {
+/* .auth-submit-button {
   padding: 15px;
   font-size: 20px;
   font-weight: bold;
@@ -77,27 +77,27 @@
   cursor: pointer;
   transition: transform 0.1s, background-color 0.3s;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
+} */
 
-.auth-submit-button:hover {
+/* .auth-submit-button:hover {
   background: #3a3230;
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-}
+} */
 
-.signup-login-btns {
+/* .signup-login-btns {
   position: absolute;
   top: 16px;
   right: 16px;
   display: flex;
   gap: 12px;
-}
+} */
 
-.sign-up-button {
+/* .sign-up-button {
   background-color: var(--bg-color-white-seven);
   color: var(--main-color);
   border: 2px solid var(--main-color);
-}
+} */
 
 .play-connect-wallet-btns-hidden,
 .signup-login-btns-hidden {

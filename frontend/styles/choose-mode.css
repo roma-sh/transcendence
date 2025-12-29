@@ -1,12 +1,12 @@
-.game-options {
+/* .game-options {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
   padding: 5vh 5vw;
-}
+} */
 
-.game-option-1,
+/* .game-option-1,
 .game-option-2 {
   width: min(300px, 40vw);
   height: min(300px, 40vh);
@@ -22,28 +22,28 @@
   background-color: var(--bg-color-white-seven);
 
   transition: background-color 0.15s;
-}
+} */
 
-.game-option-1 {
+/* .game-option-1 {
   margin-right: 30px;
-}
+} */
 
-.game-option-1:hover,
+/* .game-option-1:hover,
 .game-option-2:hover {
   background-color: rgb(240, 238, 238);
-}
+} */
 
 .game-option-clicked {
   background-color: rgb(240, 238, 238);
 }
 
-.start-button-container {
+/* .start-button-container {
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
 
-.start-button {
+/* .start-button {
   background: var(--main-color);
   padding: 20px 100px;
   border: none;
@@ -58,4 +58,4 @@
 
 .start-button:hover {
   opacity: 0.7;
-}
+} */

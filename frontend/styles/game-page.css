@@ -1,13 +1,13 @@
-.game-window {
+/* .game-window {
   display: flex;
   flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
+} */
 
-#gameCanvas {
+/* #gameCanvas {
   border: 2px solid var(--border-color);
   border-radius: 20px;
   display: block;
-}
+} */

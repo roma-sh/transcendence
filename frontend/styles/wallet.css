@@ -1,4 +1,4 @@
-.wallet-info-container {
+/* .wallet-info-container {
     background: #fff;
     padding: 24px;
     text-align: center;
@@ -9,21 +9,21 @@
     border-radius: 16px;
     border: 1px solid #e5e7eb;
     box-shadow: none;
-}
+} */
 
-.wallet-details {
+/* .wallet-details {
     text-align: left;
     margin: 1.5rem 0;
     padding: 1rem;
     background: #f5f5f5;
     border-radius: 5px;
-}
+} */
 
-.wallet-details p {
+/* .wallet-details p {
     margin: 0.5rem 0;
-}
+} */
 
-.disconnect-and-back-btns {
+/* .disconnect-and-back-btns {
     display: flex;
     gap: 12px;
-}
+} */
