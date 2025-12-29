@@ -4,16 +4,18 @@ export async function updateUIforUserMenu() {
 
   const isLoggedIn = await isUserOnline();
 
+  console.log("isLoggedIn: ", isLoggedIn);
+
 	const buttonCont = document.querySelector(
 		'.js-user-menu-button-container'
-	);
+	) as HTMLElement | null;
 
 	if (!buttonCont) return;
 
 	if (isLoggedIn) {
-		buttonCont.classList.remove("user-menu-button-container-hidden");
+    buttonCont.style.display = 'flex';
 	} else {
-		buttonCont.classList.add("user-menu-button-container-hidden");
+    buttonCont.style.display = 'none';
 	}
 
   setUserMenuName();
@@ -50,17 +52,19 @@ export async function updateUIForAuthState() {
 
   const isLoggedIn = await isUserOnline();
 
-  const authBtns = document.querySelector(".js-signup-login-btns");
-  const playConnectWalletBtns = document.querySelector(".js-play-connect-wallet-btns");
+  const authBtns = document.querySelector(
+    ".js-signup-login-btns") as HTMLElement | null;
+  const playConnectWalletBtns = document.querySelector(
+    ".js-play-connect-wallet-btns") as HTMLElement | null;
 
   if (!playConnectWalletBtns || !authBtns) return;
 
   if (isLoggedIn) {
-    authBtns.classList.add("signup-login-btns-hidden");
-    playConnectWalletBtns.classList.remove("play-connect-wallet-btns-hidden");
+    authBtns.style.display = "none";
+    playConnectWalletBtns.style.display = "block";
   } else {
-    authBtns.classList.remove("signup-login-btns-hidden");
-    playConnectWalletBtns.classList.add("play-connect-wallet-btns-hidden");
+    authBtns.style.display = "flex";
+    playConnectWalletBtns.style.display = "none";
   }
 }
 

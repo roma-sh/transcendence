@@ -55,7 +55,14 @@ function generateInputsForAliases( tSettings: TournamentSettings) {
 
     let inputValue = '';
     let disabledAttribute = '';
-    let inputClass = 'player-alias-input js-player-alias-input';
+    let inputClass = 'js-player-alias-input';
+    inputClass += `
+      rounded-[5px] border-2 border-solid
+      border-(--border-color) w-[270px] pl-[10px]
+      py-[15px] text-[18px] text-(--main-color)
+      mb-[10px] bg-(--bg-color-white-seven)
+      placeholder:text-(--main-color)
+    `;
 
     if (isBotInput) {
       // Bot Logic: Correct naming (Bot 1, Bot 2, etc.)

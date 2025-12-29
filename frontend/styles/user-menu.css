@@ -1,15 +1,15 @@
-.user-menu-button-container {
+/* .user-menu-button-container {
 	display: flex;
   justify-content: flex-end;
 	position: fixed;
 	top: 16px;
 	right: 16px;
 	z-index: 1000;
-}
+} */
 
-.user-menu-button-container-hidden {
+/* .user-menu-button-container-hidden {
 	display: none;
-}
+} */
 
 /* .user-menu-button {
 	background: var(--bg-color-white-seven);

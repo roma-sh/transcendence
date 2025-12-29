@@ -108,7 +108,7 @@
     transform: translateY(-1px);
 } */
 
-@media (max-width: 800px) {
+/* @media (max-width: 800px) {
 .game-ready-content {
     padding: 26px 20px 30px;
 }
@@ -125,4 +125,4 @@
 .game-ready-content h2 {
     font-size: 32px;
 }
-}
+} */

@@ -99,12 +99,7 @@
   border: 2px solid var(--main-color);
 } */
 
-.play-connect-wallet-btns-hidden,
-.signup-login-btns-hidden {
-  display: none;
-}
-
-.connect-wallet-btn::before {
+/* .connect-wallet-btn::before {
   content: "";
   display: inline-block;
   width: 10px;
@@ -120,4 +115,4 @@
 
 .connect-wallet-btn.connected::before {
   background-color: #4CAF50;
-}
+} */

@@ -6,17 +6,17 @@
     <title>Pong</title>
     <link rel="stylesheet" href="./styles/output.css">
     <!-- <link rel="stylesheet" href="./styles/pong.css" /> -->
-    <link rel="stylesheet" href="./styles/general.css" />
+    <!-- <link rel="stylesheet" href="./styles/general.css" /> -->
     <link rel="stylesheet" href="./styles/switch-pages.css" />
-    <link rel="stylesheet" href="./styles/choose-mode.css" />
+    <!-- <link rel="stylesheet" href="./styles/choose-mode.css" /> -->
     <!-- <link rel="stylesheet" href="./styles/game-page.css" /> -->
     <!-- <link rel="stylesheet" href="./styles/tournament-player-count.css" /> -->
-    <link rel="stylesheet" href="./styles/tournament-player-aliases.css" />
-    <link rel="stylesheet" href="./styles/auth-buttons.css" />
-    <link rel="stylesheet" href="./styles/game_ready_page.css" />
+    <!-- <link rel="stylesheet" href="./styles/tournament-player-aliases.css" /> -->
+    <!-- <link rel="stylesheet" href="./styles/auth-buttons.css" /> -->
+    <!-- <link rel="stylesheet" href="./styles/game_ready_page.css" /> -->
     <!-- <link rel="stylesheet" href="./styles/wallet.css" /> -->
-    <link rel="stylesheet" href="./styles/user-menu.css">
-    <link rel="stylesheet" href="./styles/profile-page.css">
+    <!-- <link rel="stylesheet" href="./styles/user-menu.css"> -->
+    <!-- <link rel="stylesheet" href="./styles/profile-page.css"> -->
     <!-- <link rel="stylesheet" href="./styles/settings-page.css"> -->
   </head>
   <body class="h-full m-0 p-0 min-h-screen font-[Arial] bg-(--bg-color)">
@@ -24,7 +24,8 @@
     <div class=
         "user-menu-button-container
         js-user-menu-button-container
-        user-menu-button-container-hidden">
+        user-menu-button-container-hidden
+        flex justify-end fixed top-[16px] right-[16px] z-1000">
       <button
         data-action="toggle-user-menu"
         class="user-menu-button js-user-menu-button
@@ -72,8 +73,8 @@
     <section  id="welcome-page"
       class="min-h-screen box-border flex flex-col
         justify-center items-center relative">
-      <div class="signup-login-btns signup-login-btns-hidden js-signup-login-btns
-          absolute top-[16px] right-[16px] flex gap-[12px]">
+      <div class="signup-login-btns js-signup-login-btns
+          absolute top-[16px] right-[16px] gap-[12px] hidden">
         <button
           data-action="open-sign-up"
           class="auth-button sign-up-button js-sign-up-button
@@ -111,7 +112,7 @@
           w-[80px] h-[clamp(200px,45vh,400px)] bg-(--main-color)
           shadow-[0_10px_20px_rgba(0,0,0,0.2)] rounded-[40px] ml-[70px]"></div>
       </div>
-      <div class="js-play-connect-wallet-btns play-connect-wallet-btns-hidden">
+      <div class="js-play-connect-wallet-btns hidden">
         <div class="play-button-container flex items-center justify-center">
           <button
             data-action="open-choose-mode"
@@ -123,7 +124,7 @@
           </button>
         </div>
         <div class="auth-button-container
-            flex items-center justify-center mt-[10px] mb-[10px]">
+            flex items-center justify-center mt-[10px] mb-[10px] relative">
           <button
             data-action="connect-wallet"
             class="auth-button connect-wallet-btn js-connect-wallet-button
@@ -132,6 +133,11 @@
               font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
               CONNECT WALLET
           </button>
+          <span
+            id="js-wallet-dot"
+            class="inline-block w-[10px] h-[10px] rounded-[50%]
+              bg-transparent absolute top-[28px] left-[41px]">
+          </span>
         </div>
       </div>
     </section>
@@ -141,9 +147,9 @@
         justify-center items-center relative">
       <div class="banner flex items-center justify-center py-[5vh] px-[5vw]">
           <div class="middle-section flex flex-col items-center">
-              <h2>🏆 TOURNAMENT WINNERS 🏆</h2>
-              <h1 id="first-place-winner"></h1> 
-              <h3 id="second-place-winner"></h3>
+              <h2 class="text-[30px] font-bold">🏆 TOURNAMENT WINNERS 🏆</h2>
+              <h3 id="first-place-winner" class="text-[20px]"></h3>
+              <h3 id="second-place-winner" class="text-[20px]"></h3>
           </div>
       </div>
       <div class="play-button-container flex items-center justify-center">
@@ -264,13 +270,16 @@
       <div class="game-ready-content
           bg-(--bg-color-white-nine) rounded-[32px] py-[40px] px-[60px]
           max-w-[900px] w-[min(820px,90vw)] shadow-[0_14px_32px_rgba(0,0,0,0.12)]
-          text-center border border-solid border-(--border-color)">
-        <h2 class="mt-0 mx-0 mb-[30px] text-[40px] uppercase text-(--main-color)">
-          Game Ready!
+          text-center border border-solid border-(--border-color)
+          max-[800px]:pt-[26px] max-[800px]:px-[20px] max-[800px]:pb-[30px]">
+        <h2 class="mt-0 mx-0 mb-[30px] text-[40px] uppercase text-(--main-color)
+          max-[800px]:text-[32px]">
+            Game Ready!
         </h2>
         <div class="player-info
           flex items-stretch justify-center gap-[40px] mb-[36px]
-          max-w-[700px] mx-auto">
+          max-w-[700px] mx-auto
+          max-[800px]:flex-col max-[800px]:gap-[18px]">
           <div class="player-side left
               flex-[0_0_320px] bg-(--bg-color-white-seven)
               rounded-[24px] border border-solid border-(--border-color)
@@ -298,7 +307,8 @@
             </div>
           </div>
           <div
-            class="divider self-center text-[22px] font-bold text-(--main-color)">
+            class="divider self-center text-[22px] font-bold text-(--main-color)
+            max-[800px]:-order-1">
               VS
           </div>
           <div class="player-side right
@@ -534,9 +544,6 @@
       </div>
     </section>
 
-    <!-- check here the back button, because
-     styles are different a little bit compared to
-     other back buttons !!! -->
     <section id="profile-page"
       class="profile min-h-screen box-border flex flex-col relative
         items-stretch justify-start
@@ -595,7 +602,8 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-[12px] mt-[12px]">
+        <div class="grid grid-cols-2 gap-[12px] mt-[12px]
+            max-[640px]:grid-cols-1">
           <div class="field">
             <label class="block text-[#6b7280] text-[12px] mb-[4px]">Full name</label>
             <div class="value js-fullname
@@ -864,6 +872,13 @@
         </form>
       </div>
     </section>
+    <div class="
+      hidden rounded-[5px] border-2 border-solid
+      border-(--border-color) w-[270px] pl-[10px]
+      py-[15px] text-[18px] text-(--main-color)
+      mb-[10px] bg-(--bg-color-white-seven)
+      placeholder:text-(--main-color)">
+    </div>
 
     <script type="module" src="./scripts/js/pong.js"></script>
   </body>

@@ -16,7 +16,7 @@
   margin-bottom: 0px;
 } */
 
-.player-alias-input {
+/* .player-alias-input {
   border-radius: 5px;
   border: 2px solid var(--border-color);
   width: 270px;
@@ -31,7 +31,7 @@
 
 .player-alias-input::placeholder {
   color: var(--main-color);
-}
+} */
 
 /* .next-btn-after-aliases {
   border: none;
