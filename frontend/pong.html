@@ -5,19 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pong</title>
     <link rel="stylesheet" href="./styles/output.css">
-    <!-- <link rel="stylesheet" href="./styles/pong.css" /> -->
-    <!-- <link rel="stylesheet" href="./styles/general.css" /> -->
     <link rel="stylesheet" href="./styles/switch-pages.css" />
-    <!-- <link rel="stylesheet" href="./styles/choose-mode.css" /> -->
-    <!-- <link rel="stylesheet" href="./styles/game-page.css" /> -->
-    <!-- <link rel="stylesheet" href="./styles/tournament-player-count.css" /> -->
-    <!-- <link rel="stylesheet" href="./styles/tournament-player-aliases.css" /> -->
-    <!-- <link rel="stylesheet" href="./styles/auth-buttons.css" /> -->
-    <!-- <link rel="stylesheet" href="./styles/game_ready_page.css" /> -->
-    <!-- <link rel="stylesheet" href="./styles/wallet.css" /> -->
-    <!-- <link rel="stylesheet" href="./styles/user-menu.css"> -->
-    <!-- <link rel="stylesheet" href="./styles/profile-page.css"> -->
-    <!-- <link rel="stylesheet" href="./styles/settings-page.css"> -->
   </head>
   <body class="h-full m-0 p-0 min-h-screen font-[Arial] bg-(--bg-color)">
 
@@ -78,20 +66,20 @@
         <button
           data-action="open-sign-up"
           class="auth-button sign-up-button js-sign-up-button
-              py-[15px] px-[60px] rounded-[45px]
-              cursor-pointer text-[24px]
-              font-bold font-[Arial] transition-opacity hover:opacity-[0.7]
-              bg-(--bg-color-white-seven) text-(--main-color)
-              border-2 border-solid border-(--main-color)">
-            SIGN UP
+            py-[15px] px-[60px] rounded-[45px]
+            cursor-pointer text-[24px]
+            font-bold font-[Arial] transition-opacity hover:opacity-[0.7]
+            bg-(--bg-color-white-seven) text-(--main-color)
+            border-2 border-solid border-(--main-color)">
+              SIGN UP
         </button>
         <button
           data-action="open-log-in"
           class="auth-button log-in-button js-log-in-button
-              bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
-              text-(--bg-color-white-nine) cursor-pointer text-[24px]
-              font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
-            LOG IN
+            bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
+            text-(--bg-color-white-nine) cursor-pointer text-[24px]
+            font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
+              LOG IN
         </button>
       </div>
       <div class="banner flex items-center justify-center py-[5vh] px-[5vw]">
@@ -102,10 +90,10 @@
           <h1 id="game-name" class="text-[clamp(64px,12vw,150px)] font-[Arial] text-(--main-color) m-0">PONG</h1>
           <div id="ball"
             class="mt-[30px] w-[75px] h-[75px] rounded-[50%] bg-(--main-color)
-                shadow-[0_12px_26px_rgba(0,0,0,0.35)] animate-bob
-                after:absolute after:w-[140%] after:h-[140%]
-                after:top-[-40%] after:left-[-10%] after:opacity-[0.9]
-                bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.45),transparent_45%)]">
+              shadow-[0_12px_26px_rgba(0,0,0,0.35)] animate-bob
+              after:absolute after:w-[140%] after:h-[140%]
+              after:top-[-40%] after:left-[-10%] after:opacity-[0.9]
+              bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.45),transparent_45%)]">
           </div>
         </div>
         <div class="paddle paddle-right
@@ -131,7 +119,7 @@
               bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
               text-(--bg-color-white-nine) cursor-pointer text-[24px]
               font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
-              CONNECT WALLET
+                CONNECT WALLET
           </button>
           <span
             id="js-wallet-dot"
@@ -159,7 +147,7 @@
               bg-(--main-color) px-[60px] py-[15px] border-0 rounded-[45px]
               text-(--bg-color-white-nine) cursor-pointer text-[24px] font-bold
               font-[Arial] transition-opacity hover:opacity-[0.7]">
-              Back To Main Menu
+                Back To Main Menu
           </button>
       </div>
     </section>
@@ -185,7 +173,7 @@
               bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
               text-(--bg-color-white-nine) cursor-pointer text-[24px]
               font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
-              Disconnect
+                Disconnect
           </button>
           <button
             data-action="wallet-back-to-menu"
@@ -193,7 +181,7 @@
               bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
               text-(--bg-color-white-nine) cursor-pointer text-[24px]
               font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
-              Back to Menu
+                Back to Menu
           </button>
         </div>
       </div>
