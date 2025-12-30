@@ -64,7 +64,7 @@ export function game(): void {
     paddleHeight: 100,
     ballRadius: 10,
     maxScore: settings.scoreToWin,
-    ballInitSpeed: settings.ballSpeed
+    ballInitSpeed: settings.ballSpeed + 5
   };
 
   const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
