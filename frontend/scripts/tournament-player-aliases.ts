@@ -61,7 +61,7 @@ function generateInputsForAliases( tSettings: TournamentSettings) {
       border-(--border-color) w-[270px] pl-[10px]
       py-[15px] text-[18px] text-(--main-color)
       mb-[10px] bg-(--bg-color-white-seven)
-      placeholder:text-(--main-color)
+      placeholder:text-(--main-color) placeholder:text-[18px]
     `;
 
     if (isBotInput) {

@@ -193,7 +193,7 @@
       <button
         data-action="go-back-choose-mode"
         class="back_btn js-choose-mode-back-btn
-          absolute top-[16px] left-[16px]
+          absolute top-[29.5px] left-[16px]
           inline-flex items-center gap-[6px]
           text-(--main-color) bg-transparent border-0
           text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
@@ -243,12 +243,12 @@
       class="game-ready-page-container
         box-border flex flex-col
         justify-center items-center relative
-        min-h-[calc(100vh-80px)] pt-[80px] px-[20px] pb-[40px]
+        min-h-[calc(100vh-80px)] pt-[94px] px-[20px] pb-0
         bg-(--bg-color)">
       <button
         data-action="go-back-game-ready-page"
         class="back_btn
-          absolute top-[16px] left-[16px]
+          absolute top-[29.5px] left-[16px]
           inline-flex items-center gap-[6px]
           text-(--main-color) bg-transparent border-0
           text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
@@ -256,23 +256,24 @@
             ← Back
       </button>
       <div class="game-ready-content
-          bg-(--bg-color-white-nine) rounded-[32px] py-[40px] px-[60px]
-          max-w-[900px] w-[min(820px,90vw)] shadow-[0_14px_32px_rgba(0,0,0,0.12)]
-          text-center border border-solid border-(--border-color)
+          bg-(--bg-color-white-nine) rounded-[32px] py-[30px] px-[60px]
+          max-w-[900px] min-w-[220px] w-[min(820px,90vw)] min-h-[452px]
+          shadow-[0_14px_32px_rgba(0,0,0,0.12)]
+          text-center border border-solid border-[#e5e7eb]
           max-[800px]:pt-[26px] max-[800px]:px-[20px] max-[800px]:pb-[30px]">
-        <h2 class="mt-0 mx-0 mb-[30px] text-[40px] uppercase text-(--main-color)
+        <h2 class="mt-0 mx-0 mb-[20px] text-[40px] uppercase text-(--main-color)
           max-[800px]:text-[32px]">
             Game Ready!
         </h2>
         <div class="player-info
-          flex items-stretch justify-center gap-[40px] mb-[36px]
+          flex items-stretch justify-center gap-[40px] mb-[30px]
           max-w-[700px] mx-auto
           max-[800px]:flex-col max-[800px]:gap-[18px]">
           <div class="player-side left
-              flex-[0_0_320px] bg-(--bg-color-white-seven)
+              flex-1 min-w-[150px] bg-(--bg-color-white-seven)
               rounded-[24px] border border-solid border-(--border-color)
               pt-[24px] px-[26px] pb-[28px] box-border text-center">
-            <h3 class="mt-0 mx-0 mb-[18px] text-[22px] text-(--main-color) leading-[1.4]">
+            <h3 class="mt-0 mx-0 mb-[10px] text-[18px] text-(--main-color) leading-[1.4]">
               <span class="js-p1-name
                 block text-[28px] font-bold text-(--main-color)">
                   Player 1
@@ -280,7 +281,7 @@
               (Left Side)
             </h3>
             <div class="controls-container
-              mt-[18px] pt-[16px] border-t border-solid border-t-(--border-color)">
+              mt-0 pt-[5px] border-t border-solid border-t-(--border-color)">
                 <div class="controls-title
                   text-[14px] font-bold tracking-[0.08em] uppercase
                   mb-[8px] text-(--main-color)">
@@ -300,10 +301,10 @@
               VS
           </div>
           <div class="player-side right
-              flex-[0_0_320px] bg-(--bg-color-white-seven)
+              flex-1 min-w-[150px] bg-(--bg-color-white-seven)
               rounded-[24px] border border-solid border-(--border-color)
               pt-[24px] px-[26px] pb-[28px] box-border text-center">
-            <h3 class="mt-0 mx-0 mb-[18px] text-[22px] text-(--main-color) leading-[1.4]">
+            <h3 class="mt-0 mx-0 mb-[10px] text-[18px] text-(--main-color) leading-[1.4]">
               <span class="js-p2-name
                 block text-[28px] font-bold text-(--main-color)">
                   Player 2
@@ -311,7 +312,7 @@
               (Right Side)
             </h3>
             <div class="controls-container
-              mt-[18px] pt-[16px] border-t border-solid border-t-(--border-color)">
+              mt-0 pt-[5px] border-t border-solid border-t-(--border-color)">
                 <div class="controls-title
                   text-[14px] font-bold tracking-[0.08em] uppercase
                   mb-[8px] text-(--main-color)">
@@ -359,7 +360,7 @@
       <button
         data-action="go-back-tournament"
         class="back_btn js-tournament-page-back-btn
-          absolute top-[16px] left-[16px]
+          absolute top-[29.5px] left-[16px]
           inline-flex items-center gap-[6px]
           text-(--main-color) bg-transparent border-0
           text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
@@ -397,7 +398,7 @@
       <button
         data-action="go-back-player-aliases"
         class="back_btn js-tournament-player-aliases-back-btn
-          absolute top-[16px] left-[16px]
+          absolute top-[29.5px] left-[16px]
           inline-flex items-center gap-[6px]
           text-(--main-color) bg-transparent border-0
           text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
@@ -432,7 +433,7 @@
       <button
         data-action="go-back-signup"
         class="back_btn js-sign-up-back-btn
-          absolute top-[16px] left-[16px]
+          absolute top-[29.5px] left-[16px]
           inline-flex items-center gap-[6px]
           text-(--main-color) bg-transparent border-0
           text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
@@ -489,7 +490,7 @@
       <button
         data-action="go-back-login"
         class="back_btn js-log-in-back-btn
-          absolute top-[16px] left-[16px]
+          absolute top-[29.5px] left-[16px]
           inline-flex items-center gap-[6px]
           text-(--main-color) bg-transparent border-0
           text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
@@ -536,7 +537,7 @@
       class="profile min-h-screen box-border flex flex-col relative
         items-stretch justify-start
         my-0 mx-auto font-[Arial,sans-serif] text-[#222]
-        w-full max-w-none pt-[16px] px-[24px] pb-[32px]">
+        w-full max-w-none pt-[33px] px-[16px] pb-[32px]">
       <header class="profile__header
         relative flex items-center justify-center mb-[12px]">
           <button
@@ -653,7 +654,7 @@
       class="profile min-h-screen box-border flex flex-col relative
         items-stretch justify-start
         my-0 mx-auto font-[Arial,sans-serif] text-[#222]
-        w-full max-w-none pt-[16px] px-[24px] pb-[32px]">
+        w-full max-w-none pt-[33px] px-[16px] pb-[32px]">
       <header class="profile__header
         relative flex items-center justify-center mb-[12px]">
           <button
