@@ -1,7 +1,7 @@
 import { GameSettings } from "./types.js";
 
 const DEFAULT_SETTINGS: GameSettings = {
-	ballSpeed: 9,
+	ballSpeed: 4,
 	paddleSpeed: 7,
 	ballColor: "#FFA500",
 	paddleColor: "#463D3D",
