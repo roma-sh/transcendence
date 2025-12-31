@@ -36,7 +36,11 @@ import {
 	handleDisconnectWallet,
 	handleWalletBackToMenu
 } from "./wallet-connect.js";
-import { handleGoBackProfile } from "./profile-page.js";
+import {
+	handleGoBackProfile,
+	handleTogglePasswordModal,
+	handleUpdatePassword
+} from "./profile-page.js";
 import {
 	handleGoBackSettings,
 	handleSettingsSave,
@@ -73,6 +77,8 @@ export function setupGlobalClicksDelegation() {
 			"go-back-settings": handleGoBackSettings,
 			"settings-save": handleSettingsSave,
 			"settings-reset": handleSettingsReset,
+			"toggle-password-modal": handleTogglePasswordModal,
+			"update-password": handleUpdatePassword,
 	};
 
 	document.addEventListener('click', (e) => {

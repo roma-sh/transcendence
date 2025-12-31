@@ -633,6 +633,7 @@
         <div class="actions flex gap-[10px] mt-[14px]">
           <button
             type="button"
+            data-action="toggle-password-modal"
             class="btn btn-primary js-change-pass
             py-[10px] px-[14px] rounded-[999px] font-bold
             text-[14px] cursor-pointer
@@ -647,6 +648,75 @@
             border-(--border-soft-gray) hover:bg-(--bg-color-gray)">
               Log out
           </button>
+        </div>
+        <div class="js-pass-modal fixed inset-0 z-2000 hidden">
+          <button
+            data-action="close-pass-modal"
+            class="absolute inset-0 bg-black/40 backdrop-blur-[2px]">
+          </button>
+          <div class="relative mx-auto mt-[90px] w-[min(520px,calc(100%-32px))]
+              rounded-[18px] border border-solid border-(--border-soft-gray)
+              bg-white shadow-xl">
+              <div class="flex items-center px-[16px] py-[14px]
+                border-b border-solid border-(--border-soft-gray)">
+                <div class="flex-1 text-center">
+                  <h3 class="m-0 text-[16px] font-bold">Change password</h3>
+                </div>
+                <button
+                  data-action="toggle-password-modal"
+                  class="rounded-[10px] px-[10px] py-[6px]
+                  hover:bg-(--bg-color-gray) cursor-pointer">
+                    ✕
+                </button>
+              </div>
+
+              <div class="form-section p-[16px] grid gap-[12px]">
+                <label class="grid gap-[6px]">
+                  <span class="text-[12px] text-(--text-secondary)">Current password</span>
+                  <input type="password" autocomplete="current-password"
+                    class="w-full rounded-[10px] border border-solid border-(--border-soft-gray)
+                      px-[12px] py-[10px] outline-none focus:ring-2 focus:ring-black/10">
+                </label>
+                <label class="grid gap-[6px]">
+                  <span class="text-[12px] text-(--text-secondary)">New password</span>
+                  <input type="password" autocomplete="new-password"
+                    class="w-full rounded-[10px] border border-solid border-(--border-soft-gray)
+                      px-[12px] py-[10px] outline-none focus:ring-2 focus:ring-black/10">
+                </label>
+                <label class="grid gap-[6px]">
+                  <span class="text-[12px] text-(--text-secondary)">Confirm new password</span>
+                  <input type="password" autocomplete="new-password"
+                    class="w-full rounded-[10px] border border-solid border-(--border-soft-gray)
+                      px-[12px] py-[10px] outline-none focus:ring-2 focus:ring-black/10">
+                </label>
+
+                <div class="flex items-center gap-[10px] mt-[4px]">
+                  <button
+                    data-action="update-password"
+                    class="py-[10px] px-[14px] rounded-[999px] font-bold text-[14px]
+                      bg-(--main-color) text-white cursor-pointer hover:opacity-[0.9]">
+                        Update password
+                  </button>
+                  <button
+                    data-action="toggle-password-modal"
+                    class="py-[10px] px-[14px] rounded-[999px] font-bold text-[14px]
+                      bg-white border border-solid border-(--border-soft-gray)
+                      hover:bg-(--bg-color-gray) cursor-pointer">
+                        Cancel
+                  </button>
+
+                  <div class="js-pass-msg-container
+                    px-[12px] py-[8px] rounded-[999px] bg-(--bg-color-white-seven)
+                    text-[12px] text-(--main-color) pointer-events-none
+                    opacity-0 transition-opacity duration-200">
+                    <span class="js-pass-msg-dot inline-block
+                      w-[8px] h-[8px] rounded-full"></span>
+                    <span class="js-pass-msg"></span>
+                  </div>
+
+                </div>
+              </div>
+          </div>
         </div>
       </div>
     </section>

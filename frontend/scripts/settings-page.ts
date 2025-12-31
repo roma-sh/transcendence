@@ -173,7 +173,7 @@ export function handleSettingsSave() {
 }
 
 let opacityTimer: number | null = null;
-function toggleOpacity(el : HTMLElement | null) {
+export function toggleOpacity(el : HTMLElement | null) {
 	if (!el) return;
 
 	if (opacityTimer) clearTimeout(opacityTimer);
@@ -185,7 +185,7 @@ function toggleOpacity(el : HTMLElement | null) {
     el.classList.add("opacity-0");
     el.classList.remove("opacity-100");
 		opacityTimer = null;
-  }, 2000);
+  }, 1800);
 }
 
 export function handleSettingsReset() {
