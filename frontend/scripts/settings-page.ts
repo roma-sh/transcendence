@@ -169,6 +169,23 @@ export function handleSettingsSave() {
 	if (!settingsDOM) return;
 	saveSettings(currentSettings);
 	showMessage(settingsDOM.messageEl, "Settings saved");
+	toggleOpacity(document.querySelector('.js-settings-msg-container'));
+}
+
+let opacityTimer: number | null = null;
+function toggleOpacity(el : HTMLElement | null) {
+	if (!el) return;
+
+	if (opacityTimer) clearTimeout(opacityTimer);
+
+	el.classList.remove('opacity-0');
+	el.classList.add('opacity-100');
+
+	opacityTimer = window.setTimeout(() => {
+    el.classList.add("opacity-0");
+    el.classList.remove("opacity-100");
+		opacityTimer = null;
+  }, 2000);
 }
 
 export function handleSettingsReset() {
@@ -176,6 +193,7 @@ export function handleSettingsReset() {
 	currentSettings = { ...DEFAULT_SETTINGS };
 	render(currentSettings);
 	showMessage(settingsDOM.messageEl, "Reset to default values");
+	toggleOpacity(document.querySelector('.js-settings-msg-container'));
 }
 
 export function loadGameSettings(): GameSettings {

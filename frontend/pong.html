@@ -835,7 +835,7 @@
             </div>
           </div>
 
-          <div class="actions flex gap-[10px] mt-[14px]">
+          <div class="actions flex gap-[10px] mt-[14px] items-center">
             <button
               data-action="settings-save"
               type="button"
@@ -854,11 +854,13 @@
               border-solid border-(--border-soft-gray) hover:bg-(--bg-color-gray)">
                 Reset to defaults
             </button>
-            <span
-              class="settings-message js-settings-message
-              text-[12px] text-(--text-secondary)">
-            </span>
-          </div>
+            <div class="js-settings-msg-container
+              px-[12px] py-[8px] rounded-[999px] bg-(--bg-color-white-seven)
+              text-[12px] text-(--main-color) pointer-events-none
+              opacity-0 transition-opacity duration-200">
+              <span class="inline-block w-[8px] h-[8px] rounded-full bg-green-500"></span>
+              <span class="settings-message js-settings-message">Settings saved</span>
+            </div>
         </form>
       </div>
     </section>
