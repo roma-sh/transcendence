@@ -1,5 +1,7 @@
 import { isUserOnline } from "./welcome-page.js";
 
+const USER_MENU_RETURN_KEY = "userMenuReturnHash";
+
 export async function updateUIforUserMenu() {
 
   const isLoggedIn = await isUserOnline();
@@ -39,11 +41,26 @@ export function handleToggleUserMenu(e: MouseEvent) {
 }
 
 export function handleOpenProfile() {
+  storeUserMenuReturnHash();
 	location.hash = '#profile-page';
 }
 
 export function handleOpenSettings() {
+  storeUserMenuReturnHash();
 	location.hash = '#settings-page';
+}
+
+export function getUserMenuReturnHash(): string | null {
+  return sessionStorage.getItem(USER_MENU_RETURN_KEY);
+}
+
+export function clearUserMenuReturnHash(): void {
+  sessionStorage.removeItem(USER_MENU_RETURN_KEY);
+}
+
+function storeUserMenuReturnHash(): void {
+  const currentHash = location.hash || '#welcome-page';
+  sessionStorage.setItem(USER_MENU_RETURN_KEY, currentHash);
 }
 
 /** Toggles auth buttons and game buttons (play and connect wallet)

@@ -1,4 +1,8 @@
 import { GameSettings } from "./types.js";
+import {
+	clearUserMenuReturnHash,
+	getUserMenuReturnHash
+} from "./user-menu.js";
 
 const DEFAULT_SETTINGS: GameSettings = {
 	ballSpeed: 4,
@@ -36,6 +40,14 @@ type SettingsDOM = {
 let settingsDOM: SettingsDOM | null = null;
 
 export function handleGoBackSettings() {
+	const returnHash = getUserMenuReturnHash();
+	clearUserMenuReturnHash();
+
+	if (returnHash && returnHash !== location.hash) {
+		location.hash = returnHash;
+		return;
+	}
+
 	location.hash = '#welcome-page';
 }
 

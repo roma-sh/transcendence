@@ -1,4 +1,17 @@
+import {
+	clearUserMenuReturnHash,
+	getUserMenuReturnHash
+} from "./user-menu.js";
+
 export function handleGoBackProfile() {
+	const returnHash = getUserMenuReturnHash();
+	clearUserMenuReturnHash();
+
+	if (returnHash && returnHash !== location.hash) {
+		location.hash = returnHash;
+		return;
+	}
+
 	location.hash = '#welcome-page';
 }
 
