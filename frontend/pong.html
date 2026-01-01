@@ -558,9 +558,20 @@
         bg-white border border-solid border-(--border-soft-gray)
         rounded-[16px] px-[16px] py-[16px] mt-[16px]">
         <div class="identity flex items-center gap-[12px]">
-          <div class="avatar js-avatar
+          <div class="avatar js-avatar group
             size-[56px] rounded-[50%] grid place-items-center
-            bg-(--main-color) text-white font-bold text-[18px]">
+            bg-(--main-color) text-white font-bold text-[18px]
+            cursor-pointer relative overflow-hidden">
+            <input
+              type="file"
+              accept="image/png, image/jpeg, image/webp"
+              class="absolute inset-0 opacity-0 cursor-pointer z-2">
+            <div class="absolute inset-0 opacity-0
+              bg-black/40 transition-opacity duration-200
+              grid place-items-center pointer-events-none
+              group-hover:opacity-100">
+                <span class="text-[20px]">📷</span>
+            </div>
           </div>
           <div class="who flex-1">
             <h2 class="name js-name m-0 text-[18px] font-bold"></h2>
@@ -581,14 +592,14 @@
           <div class="stat
             text-center border border-solid border-(--border-soft-gray)
             rounded-[10px] bg-(--bg-color-gray) px-[10px] py-[10px]">
-            <div class="num js-wins font-bold">0</div>
+            <div class="num js-wins font-bold"></div>
             <div class="label text-(--text-secondary) text-[12px]">Wins</div>
           </div>
           <div class="stat
             text-center border border-solid border-(--border-soft-gray)
             rounded-[10px] bg-(--bg-color-gray) px-[10px] py-[10px]">
-            <div class="num js-losses font-bold">0</div>
-            <div class="label text-(--text-secondary) text-[12px]">Losses</div>
+            <div class="num js-total-games font-bold"></div>
+            <div class="label text-(--text-secondary) text-[12px]">Total games</div>
           </div>
         </div>
 

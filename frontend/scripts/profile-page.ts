@@ -18,38 +18,48 @@ export function handleGoBackProfile() {
 	location.hash = '#welcome-page';
 }
 
-export function initProfilePage() {
-	const name = localStorage.getItem('userName') as string;
+export async function initProfilePage() {
 
-	setText('.js-name', name);
-	setText('.js-fullname', name);
+	try {
+		const res = await fetch("http://localhost:3000/api/profile", {
+			method: "GET",
+			credentials: "include",
+			headers: { "Content-Type": "application/json" }
+		});
 
-	const uname = '@' + firstWord(name).toLowerCase();
-	setText('.js-username', uname);
-	setText('.js-username2', uname);
+		if (!res.ok) {
+      console.warn("Failed to load profile from server", res.status);
+      return;
+    }
 
-	const email = `${firstWord(name).toLowerCase()}@example.com`;
-	setText('.js-email', email);
+		const data = await res.json();
 
-	setText('.js-avatar', initials(name));
+		const user = data.user;
+    if (!user) return;
+
+		setText('.js-name', user.username);
+    setText('.js-fullname', user.username);
+    setText('.js-username', "@" + user.username.toLowerCase());
+    setText('.js-username2', "@" + user.username.toLowerCase());
+    setText('.js-email', user.email);
+		setText('.js-wins', user.wins);
+		setText('.js-total-games', user.total_games);
+
+		const avatar = document.querySelector(
+		".js-avatar") as HTMLElement | null;
+
+		let url = '/assets/default_user.jpg';
+		if (user.profile_picture) url = `/uploads/profiles/${user.profile_picture}`;
+		if (avatar) setImage(url, avatar);
+
+	} catch (err) {
+		console.log(err);
+	}
 }
 
 function setText(selector: string, value: string) {
 	const el = document.querySelector(selector) as HTMLElement | null;
 	if (el) el.textContent = value;
-}
-
-function firstWord(text: string) {
-	return (text.match(/\S+/)?.[0]) || '';
-}
-
-function initials(name: string) {
-	return name
-		.split(/\s+/)
-		.filter(Boolean)
-		.slice(0, 2)
-		.map(s => s[0]!.toUpperCase())
-		.join('');
 }
 
 export function handleTogglePasswordModal() {
@@ -147,4 +157,67 @@ function updatePassMsgDot(color: string) {
 		msg_dot.style.backgroundColor = 'rgb(239,68,68)';
 	if (color === 'green')
 		msg_dot.style.backgroundColor = 'rgb(34,197,94)';
+}
+
+export function initAvatarUpload() {
+	const input = document.querySelector(
+    ".js-avatar input[type='file']"
+  ) as HTMLInputElement | null;
+	const avatar = document.querySelector(
+		".js-avatar") as HTMLElement | null;
+
+	if (!input || !avatar) return;
+
+	input.addEventListener("change", async () => {
+		const file = input.files?.[0];
+    if (!file) return;
+
+		try {
+			const url = await handleUploadProfileImage(file);
+			if (url === '') throw new Error('Failed to upload an image.');
+
+			const finalUrl = `${url}?t=${Date.now()}`;
+			setImage(finalUrl, avatar);
+		} catch (err) {
+			console.error(err);
+			setImage('/assets/default_user.jpg', avatar);
+		} finally {
+      input.value = "";
+    }
+	});
+}
+
+function setImage(url_image: string, el: HTMLElement) {
+	el.style.backgroundImage = `url(${url_image})`;
+	el.style.backgroundSize = "cover";
+	el.style.backgroundPosition = "center";
+}
+
+export async function handleUploadProfileImage(file: File) : Promise<string> {
+	const allowed = ["image/jpeg", "image/png", "image/webp"];
+	if (!allowed.includes(file.type)) {
+		throw new Error("Only JPEG, PNG, or WebP images are allowed.");
+	}
+
+	const maxBytes = 5 * 1024 * 1024; // 5MB
+	if (file.size > maxBytes) {
+		throw new Error("Image is too large. Max size is 5MB.");
+	}
+
+	const fd = new FormData();
+	fd.append("file", file);
+
+	const res = await fetch("http://localhost:3000/api/profile/picture", {
+		method: "PUT",
+		credentials: "include",
+		body: fd,
+	});
+
+	let url = '';
+	try {
+		const data = await res.json();
+		if (data && data.url) url = data.url;
+	} catch {}
+
+	return res.ok ? url : "";
 }

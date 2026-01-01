@@ -11,7 +11,7 @@ import { initWinnerAnnouncementPage } from './winner-page.js';
 import { setupGlobalClicksDelegation } from './clicks-delegation.js';
 import { game } from './game.js';
 import { updateUIforUserMenu } from './user-menu.js';
-import { initProfilePage } from "./profile-page.js";
+import { initProfilePage, initAvatarUpload } from "./profile-page.js";
 import { initSettingsPage } from "./settings-page.js";
 
 export const tSettings : TournamentSettings = {
@@ -34,6 +34,8 @@ setInitHash();
 initWalletConnect();
 
 updateUIforUserMenu();
+
+initAvatarUpload();
 
 // Function to handle hash-based navigation
 function handleHashChange() {
