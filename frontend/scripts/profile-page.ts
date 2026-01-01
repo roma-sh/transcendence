@@ -96,7 +96,7 @@ export async function handleUpdatePassword() {
 	}
 
 	try {
-		const res = await fetch("/api/profile/password", {
+		const res = await fetch("http://localhost:3000/api/profile/password", {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

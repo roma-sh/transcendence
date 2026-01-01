@@ -92,8 +92,6 @@ export async function handleLogOut(): Promise<boolean> {
       credentials: 'include',
     });
 
-    console.log('Logout status:', res.status);
-
     if (!res.ok) {
       console.error(' failed:', res.status);
       return false;
@@ -102,7 +100,6 @@ export async function handleLogOut(): Promise<boolean> {
     let data: any = null;
     try {
       data = await res.json();
-      console.log('Logout response:', data);
     } catch {
       // backend might return empty response
     }
