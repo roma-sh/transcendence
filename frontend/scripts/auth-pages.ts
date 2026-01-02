@@ -1,3 +1,11 @@
+import {
+  toggleOpacity,
+  showMessage
+} from "./settings-page.js";
+import {
+  updatePassMsgDot
+} from "./profile-page.js";
+
 export function handleGoBackSignUp() {
   location.hash = '#welcome-page';
 }
@@ -8,8 +16,16 @@ export function handleGoBackLogIn() {
 
 export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
 
-  const signUpSection = document.querySelector('#sign-up-page') as HTMLElement;
+  const signUpSection = document.querySelector(
+    '#sign-up-page') as HTMLElement | null;
   if (!signUpSection) return;
+
+  const signupTextDotEl = document.querySelector(
+    '.js-signup-text-dot') as HTMLElement | null;
+  const signupStatusText = document.querySelector(
+    '.js-signup-status-text') as HTMLElement | null;
+  const signupStatus = document.querySelector(
+    '.js-signup-status') as HTMLElement | null;
 
   const usernameInput = signUpSection.querySelector('input[placeholder="Username"]') as HTMLInputElement;
   const emailInput = signUpSection.querySelector('input[placeholder="Email"]') as HTMLInputElement;
@@ -22,7 +38,9 @@ export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
   const password = passwordInput.value;
 
   if (!username || !email || !password) {
-    alert('Please fill in all fields');
+    updatePassMsgDot('red', signupTextDotEl);
+    showMessage(signupStatusText, "Please fill in all fields!");
+    toggleOpacity(signupStatus);
     return;
   }
 
@@ -37,15 +55,23 @@ export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
     const result = await response.json();
 
     if (response.ok) {
-      alert('Signed up successfully!');
-      // Optionally redirect to login page or clear form
-      location.hash = '#log-in-page';
+      updatePassMsgDot('green', signupTextDotEl);
+      showMessage(signupStatusText, "Signed up successfully!");
+      toggleOpacity(signupStatus);
+      window.setTimeout(() => {
+        location.hash = '#log-in-page';
+      }, 1800);
     } else {
-      alert(result.error || 'Registration failed');
+      const errText = String(result?.error ?? "Sign up failed");
+      let msg = errText.split(".")[0];
+      updatePassMsgDot('red', signupTextDotEl);
+      showMessage(signupStatusText, msg);
+      toggleOpacity(signupStatus);
     }
   } catch (err) {
-    console.error('Signup error:', err);
-    alert('Error while signing up. Please try again.');
+    updatePassMsgDot('red', signupTextDotEl);
+    showMessage(signupStatusText, "Error while signing up!");
+    toggleOpacity(signupStatus);
   }
 }
 

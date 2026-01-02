@@ -438,7 +438,7 @@
     <section id="sign-up-page"
       class="min-h-screen box-border flex flex-col
         justify-center items-center relative
-        p-[50px] text-center">
+        px-[50px] pt-[50px] pb-0 text-center">
       <button
         data-action="go-back-signup"
         class="back_btn js-sign-up-back-btn
@@ -452,7 +452,7 @@
       <div class="auth-form
           w-[min(440px,92vw)] my-[20px] mx-auto flex flex-col gap-[20px]
           bg-(--bg-color-white-seven) py-[36px] px-[40px] rounded-[15px]
-          shadow-[0_10px_30px_var(--shadow-10)]">
+          shadow-[0_10px_30px_var(--shadow-10)] relative">
         <h2 class="text-(--main-color) mb-[20px] text-[32px] font-bold">
           Sign Up
         </h2>
@@ -489,6 +489,15 @@
             hover:shadow-[0_6px_15px_rgba(0,0,0,0.25)]">
               Register
         </button>
+        <div class="js-signup-status
+          absolute left-1/2 bottom-0 -translate-x-1/2
+          flex items-center gap-[8px] px-[12px] py-[8px]
+          bg-transparent text-[12px] text-(--main-color)
+          opacity-0 transition-opacity duration-200">
+            <span class="js-signup-text-dot
+              size-[8px] rounded-full bg-green-500"></span>
+            <span class="js-signup-status-text">message</span>
+        </div>
       </div>
     </section>
 

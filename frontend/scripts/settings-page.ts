@@ -215,6 +215,6 @@ function clearMessage(el: HTMLElement | null) {
 	if (el) el.textContent = "";
 }
 
-function showMessage(el: HTMLElement | null, text: string) {
+export function showMessage(el: HTMLElement | null, text: string) {
 	if (el) el.textContent = text;
 }
