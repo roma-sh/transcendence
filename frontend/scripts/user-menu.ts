@@ -6,8 +6,6 @@ export async function updateUIforUserMenu() {
 
   const isLoggedIn = await isUserOnline();
 
-  console.log("isLoggedIn: ", isLoggedIn);
-
 	const buttonCont = document.querySelector(
 		'.js-user-menu-button-container'
 	) as HTMLElement | null;

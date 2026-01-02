@@ -39,7 +39,10 @@ import {
 import {
 	handleGoBackProfile,
 	handleTogglePasswordModal,
-	handleUpdatePassword
+	handleUpdatePassword,
+	handleEditProfileData,
+	handleSaveProfileChange,
+	handleCancelProfileChange,
 } from "./profile-page.js";
 import {
 	handleGoBackSettings,
@@ -79,6 +82,9 @@ export function setupGlobalClicksDelegation() {
 			"settings-reset": handleSettingsReset,
 			"toggle-password-modal": handleTogglePasswordModal,
 			"update-password": handleUpdatePassword,
+			"edit-profile-data": handleEditProfileData,
+			"save-profile-change": handleSaveProfileChange,
+			"cancel-profile-change": handleCancelProfileChange,
 	};
 
 	document.addEventListener('click', (e) => {

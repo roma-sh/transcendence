@@ -193,7 +193,7 @@ function setImage(url_image: string, el: HTMLElement) {
 	el.style.backgroundPosition = "center";
 }
 
-export async function handleUploadProfileImage(file: File) : Promise<string> {
+async function handleUploadProfileImage(file: File) : Promise<string> {
 	const allowed = ["image/jpeg", "image/png", "image/webp"];
 	if (!allowed.includes(file.type)) {
 		throw new Error("Only JPEG, PNG, or WebP images are allowed.");
@@ -220,4 +220,129 @@ export async function handleUploadProfileImage(file: File) : Promise<string> {
 	} catch {}
 
 	return res.ok ? url : "";
+}
+
+function toggleProfileEditUI() {
+	const emailDiv = document.querySelector(
+		'.js-email') as HTMLElement | null;
+	const emailInput = document.querySelector(
+		'.js-email-input') as HTMLInputElement | null;
+	const fullnameDiv = document.querySelector(
+		'.js-fullname') as HTMLElement | null;
+	const fullnameInput = document.querySelector(
+		'.js-fullname-input') as HTMLInputElement | null;
+	const editBtn = document.querySelector(
+		'.js-profile-edit') as HTMLElement | null;
+	const saveCancelBtns = document.querySelector(
+		'.js-profile-save-cancel-btns') as HTMLElement | null;
+
+	if (!emailDiv || !emailInput
+		|| !editBtn || !saveCancelBtns
+		|| !fullnameDiv || !fullnameInput) return;
+
+	emailDiv.classList.toggle('hidden');
+	emailInput.classList.toggle('hidden');
+	fullnameDiv.classList.toggle('hidden');
+	fullnameInput.classList.toggle('hidden');
+
+	editBtn.classList.toggle('hidden');
+	saveCancelBtns.classList.toggle('hidden');
+}
+
+export function handleEditProfileData() {
+	const emailDiv = document.querySelector(
+		'.js-email') as HTMLElement | null;
+	const emailInput = document.querySelector(
+		'.js-email-input') as HTMLInputElement | null;
+	const fullnameDiv = document.querySelector(
+		'.js-fullname') as HTMLElement | null;
+	const fullnameInput = document.querySelector(
+		'.js-fullname-input') as HTMLInputElement | null;
+
+	if (!emailDiv || !emailInput
+		|| !fullnameDiv || !fullnameInput) return;
+
+	emailInput.value = (emailDiv.textContent ?? "").trim();
+	fullnameInput.value = (fullnameDiv.textContent ?? "").trim();
+
+	toggleProfileEditUI();
+}
+
+export async function handleSaveProfileChange() {
+	const emailInput = document.querySelector(
+		'.js-email-input') as HTMLInputElement | null;
+	const fullnameInput = document.querySelector(
+		'.js-fullname-input') as HTMLInputElement | null;
+	const emailDiv = document.querySelector(
+		'.js-email') as HTMLElement | null;
+	const fullnameDiv = document.querySelector(
+		'.js-fullname') as HTMLElement | null;
+
+	if (!emailInput || !fullnameInput
+		|| !emailDiv || !fullnameDiv) return;
+
+	const currentEmail = (emailDiv.textContent ?? "").trim();
+  const currentFullname = (fullnameDiv.textContent ?? "").trim();
+
+	const newEmail = emailInput.value.trim();
+  const newFullname = fullnameInput.value.trim();
+
+	if (!newEmail || !newEmail.includes("@")
+		|| !newFullname) return;
+
+	const fullnameChanged = newFullname !== currentFullname;
+  const emailChanged = newEmail !== currentEmail;
+
+	try {
+		if (fullnameChanged) {
+			const s = await updateFullname(newFullname);
+			console.log(s);
+		}
+		if (emailChanged) {
+			const s = await updateEmail(newEmail);
+			console.log(s);
+		}
+
+		await initProfilePage();
+
+		toggleProfileEditUI();
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+export function handleCancelProfileChange() {
+	toggleProfileEditUI();
+}
+
+async function updateFullname(newUsername: string): Promise<string> {
+	const res = await fetch("http://localhost:3000/api/profile/username", {
+    method: "PUT",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ newUsername }),
+  });
+	let msg = '';
+	const data = await res.json();
+
+	if (data && data.message) msg = data.message;
+
+	if (!res.ok) throw new Error(msg || "Failed to update username");
+	return msg;
+}
+
+async function updateEmail(newEmail: string): Promise<string> {
+	const res = await fetch("http://localhost:3000/api/profile/email", {
+    method: "PUT",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ newEmail }),
+  });
+	let msg = '';
+	const data = await res.json();
+
+	if (data && data.message) msg = data.message;
+
+	if (!res.ok) throw new Error(msg || "Failed to update email");
+	return msg;
 }
