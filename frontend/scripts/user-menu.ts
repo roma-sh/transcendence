@@ -48,6 +48,10 @@ export function handleOpenSettings() {
 	location.hash = '#settings-page';
 }
 
+export function handleOpenWelcomePage() {
+  location.hash = '#welcome-page';
+}
+
 export function getUserMenuReturnHash(): string | null {
   return sessionStorage.getItem(USER_MENU_RETURN_KEY);
 }
