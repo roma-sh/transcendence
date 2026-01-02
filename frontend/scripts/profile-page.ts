@@ -346,3 +346,8 @@ async function updateEmail(newEmail: string): Promise<string> {
 	if (!res.ok) throw new Error(msg || "Failed to update email");
 	return msg;
 }
+
+export function handleRemoveAvatar() {
+	console.log(`use 'http://localhost:3000/api/profile/picture'
+		API with an empty request body to remove the user avatar`);
+}

@@ -43,6 +43,7 @@ import {
 	handleEditProfileData,
 	handleSaveProfileChange,
 	handleCancelProfileChange,
+	handleRemoveAvatar,
 } from "./profile-page.js";
 import {
 	handleGoBackSettings,
@@ -85,6 +86,7 @@ export function setupGlobalClicksDelegation() {
 			"edit-profile-data": handleEditProfileData,
 			"save-profile-change": handleSaveProfileChange,
 			"cancel-profile-change": handleCancelProfileChange,
+			"remove-avatar": handleRemoveAvatar,
 	};
 
 	document.addEventListener('click', (e) => {
