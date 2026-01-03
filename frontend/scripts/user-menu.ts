@@ -26,9 +26,9 @@ function setUserMenuName() {
 
 	const userMenuBtn = document.querySelector(
 			'.js-user-menu-button'
-		) as HTMLButtonElement;
-	
-	userMenuBtn.textContent = userName;
+		) as HTMLButtonElement | null;
+
+	if (userMenuBtn) userMenuBtn.textContent = userName;
 }
 
 export function handleToggleUserMenu(e: MouseEvent) {
@@ -46,6 +46,10 @@ export function handleOpenProfile() {
 export function handleOpenSettings() {
   storeUserMenuReturnHash();
 	location.hash = '#settings-page';
+}
+
+export function handleOpenWelcomePage() {
+  location.hash = '#welcome-page';
 }
 
 export function getUserMenuReturnHash(): string | null {

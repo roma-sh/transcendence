@@ -2,7 +2,8 @@ import {
 	handleToggleUserMenu,
 	handleOpenProfile,
 	handleOpenSettings,
-	handleLogOut
+	handleLogOut,
+	handleOpenWelcomePage
 } from "./user-menu.js";
 import {
 	handleOpenChooseMode,
@@ -43,7 +44,7 @@ import {
 	handleEditProfileData,
 	handleSaveProfileChange,
 	handleCancelProfileChange,
-	handleRemoveAvatar,
+	handleRemoveAvatar
 } from "./profile-page.js";
 import {
 	handleGoBackSettings,
@@ -54,6 +55,7 @@ import {
 export function setupGlobalClicksDelegation() {
 	const actions: Record<string, (event?: MouseEvent) => void> = {
 			"toggle-user-menu": handleToggleUserMenu,
+			"open-welcome-page": handleOpenWelcomePage,
 			"open-profile": handleOpenProfile,
 			"open-settings": handleOpenSettings,
 			"open-choose-mode": handleOpenChooseMode,

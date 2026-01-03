@@ -1,3 +1,5 @@
+import { tSettings } from "./pong.js";
+
 export function handleGameOptionSelect(event?: MouseEvent): void {
   const clicked = (event?.target as HTMLElement)?.closest('.js-game-option') as HTMLElement | null;
   if (!clicked) return;
@@ -22,12 +24,25 @@ export function handleStartGameOption() {
     option = optionEl.dataset.option || '';
 
   if (option === 'quick-play') {
+    resetTournamentState();
     location.hash = '#game-page';
   } else if (option === 'tournament') {
+    resetTournamentState();
     location.hash = '#tournament-page';
   }
 }
 
 export function handleGoBackTournament() {
   location.hash = '#choose-mode-page';
+}
+
+export function resetTournamentState(): void {
+  tSettings.numberOfPlayers = 1;
+  tSettings.numberOfBots = 0;
+  tSettings.playerAliases = [];
+  tSettings.winnersAliases = [];
+  tSettings.secondPlaceAliases = [];
+  tSettings.secondPlaceAlias = "";
+  tSettings.firstPlaceAlias = "";
+  tSettings.currentMatch = null;
 }

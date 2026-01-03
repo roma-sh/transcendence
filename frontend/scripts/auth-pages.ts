@@ -1,3 +1,11 @@
+import {
+  toggleOpacity,
+  showMessage
+} from "./settings-page.js";
+import {
+  updatePassMsgDot
+} from "./profile-page.js";
+
 export function handleGoBackSignUp() {
   location.hash = '#welcome-page';
 }
@@ -8,12 +16,23 @@ export function handleGoBackLogIn() {
 
 export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
 
-  const signUpSection = document.querySelector('#sign-up-page') as HTMLElement;
+  const signUpSection = document.querySelector(
+    '#sign-up-page') as HTMLElement | null;
   if (!signUpSection) return;
 
-  const usernameInput = signUpSection.querySelector('input[placeholder="Username"]') as HTMLInputElement;
-  const emailInput = signUpSection.querySelector('input[placeholder="Email"]') as HTMLInputElement;
-  const passwordInput = signUpSection.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+  const signupTextDotEl = document.querySelector(
+    '.js-signup-text-dot') as HTMLElement | null;
+  const signupStatusText = document.querySelector(
+    '.js-signup-status-text') as HTMLElement | null;
+  const signupStatus = document.querySelector(
+    '.js-signup-status') as HTMLElement | null;
+
+  const usernameInput = signUpSection.querySelector(
+    'input[placeholder="Username"]') as HTMLInputElement | null;
+  const emailInput = signUpSection.querySelector(
+    'input[placeholder="Email"]') as HTMLInputElement | null;
+  const passwordInput = signUpSection.querySelector(
+    'input[placeholder="Password"]') as HTMLInputElement | null;
 
   if (!usernameInput || !emailInput || !passwordInput) return;
 
@@ -22,7 +41,9 @@ export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
   const password = passwordInput.value;
 
   if (!username || !email || !password) {
-    alert('Please fill in all fields');
+    updatePassMsgDot('red', signupTextDotEl);
+    showMessage(signupStatusText, "Please fill in all fields!");
+    toggleOpacity(signupStatus);
     return;
   }
 
@@ -37,25 +58,43 @@ export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
     const result = await response.json();
 
     if (response.ok) {
-      alert('Signed up successfully!');
-      // Optionally redirect to login page or clear form
-      location.hash = '#log-in-page';
+      updatePassMsgDot('green', signupTextDotEl);
+      showMessage(signupStatusText, "Signed up successfully!");
+      toggleOpacity(signupStatus);
+      window.setTimeout(() => {
+        location.hash = '#log-in-page';
+      }, 1800);
     } else {
-      alert(result.error || 'Registration failed');
+      const errText = String(result?.error ?? "Sign up failed");
+      let msg = errText.split(".")[0];
+      updatePassMsgDot('red', signupTextDotEl);
+      showMessage(signupStatusText, msg);
+      toggleOpacity(signupStatus);
     }
   } catch (err) {
-    console.error('Signup error:', err);
-    alert('Error while signing up. Please try again.');
+    updatePassMsgDot('red', signupTextDotEl);
+    showMessage(signupStatusText, "Error while signing up!");
+    toggleOpacity(signupStatus);
   }
 }
 
 export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
 
-  const logInSection = document.querySelector('#log-in-page') as HTMLElement;
+  const logInSection = document.querySelector(
+    '#log-in-page') as HTMLElement | null;
   if (!logInSection) return;
 
-  const usernameInput = logInSection.querySelector('input[placeholder="Username or Email"]') as HTMLInputElement;
-  const passwordInput = logInSection.querySelector('input[placeholder="Password"]') as HTMLInputElement;
+  const loginTextDotEl = document.querySelector(
+    '.js-login-text-dot') as HTMLElement | null;
+  const loginStatusText = document.querySelector(
+    '.js-login-status-text') as HTMLElement | null;
+  const loginStatus = document.querySelector(
+    '.js-login-status') as HTMLElement | null;
+
+  const usernameInput = logInSection.querySelector(
+    'input[placeholder="Username or Email"]') as HTMLInputElement | null;
+  const passwordInput = logInSection.querySelector(
+    'input[placeholder="Password"]') as HTMLInputElement | null;
 
   if (!usernameInput || !passwordInput) return;
 
@@ -63,7 +102,9 @@ export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
   const password = passwordInput.value;
 
   if (!identifier || !password) {
-    alert('Please fill in all fields');
+    updatePassMsgDot('red', loginTextDotEl);
+    showMessage(loginStatusText, "Please fill in all fields!");
+    toggleOpacity(loginStatus);
     return;
   }
 
@@ -78,26 +119,20 @@ export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
       body: JSON.stringify({ username: identifier, password }),
     });
 
-    console.log('Response status:', response.status);
-
-    let result: any;
-    try {
-      result = await response.json();
-    } catch (e) {
-      const text = await response.text();
-      console.error('Failed to parse JSON:', text);
-      alert('Server returned invalid response');
-      return;
-    }
+    let result = await response.json();
 
     if (response.ok) {
       localStorage.setItem('userName', result.user.username);
       location.hash = '#welcome-page';
     } else {
-      alert(result.error || 'Invalid username/email or password');
+      let msg = result.message || 'Error while logging in!';
+      updatePassMsgDot('red', loginTextDotEl);
+      showMessage(loginStatusText, msg);
+      toggleOpacity(loginStatus);
     }
   } catch (error) {
-    console.error('Login error:', error);
-    alert('Error while logging in. Please try again.');
+    updatePassMsgDot('red', loginTextDotEl);
+    showMessage(loginStatusText, "Error while logging in!");
+    toggleOpacity(loginStatus);
   }
 }

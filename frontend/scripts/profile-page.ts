@@ -127,7 +127,7 @@ export async function handleUpdatePassword() {
 
 		if (!res.ok) {
 			if (msg === '') msg = "Failed to update password";
-			if (msg.includes('Weak password')) msg = 'Weak password';
+			msg = msg.split(".")[0];
 			updatePassMsg(msg, 'red');
 		} else {
 			if (msg === '') msg = 'Password updated';
@@ -139,24 +139,23 @@ export async function handleUpdatePassword() {
 function updatePassMsg(text: string, color: string) {
 	const msg = document.querySelector(
 		'.js-pass-msg') as HTMLElement | null;
+	const msg_dot = document.querySelector(
+		'.js-pass-msg-dot') as HTMLElement | null;
 
 	if (msg) msg.textContent = text;
-	updatePassMsgDot(color);
+	updatePassMsgDot(color, msg_dot);
 
 	toggleOpacity(document.querySelector(
 		'.js-pass-msg-container'));
 }
 
-function updatePassMsgDot(color: string) {
-	const msg_dot = document.querySelector(
-		'.js-pass-msg-dot') as HTMLElement | null;
-
-	if (!msg_dot) return;
+export function updatePassMsgDot(color: string, el: HTMLElement | null) {
+	if (!el) return;
 
 	if (color === 'red')
-		msg_dot.style.backgroundColor = 'rgb(239,68,68)';
+		el.style.backgroundColor = 'rgb(239,68,68)';
 	if (color === 'green')
-		msg_dot.style.backgroundColor = 'rgb(34,197,94)';
+		el.style.backgroundColor = 'rgb(34,197,94)';
 }
 
 export function initAvatarUpload() {

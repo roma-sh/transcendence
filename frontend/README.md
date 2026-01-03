@@ -39,9 +39,7 @@ Important: imports inside `.ts` files use the `.js` extension (e.g.
 directly.
 
 If you change TypeScript:
-- Run `make` inside `frontend/` to compile (`tsc --project ./scripts/tsconfig.json`),
-  or
-- Let `backend/runme.sh` compile it for you.
+- Run `make` inside `frontend/` to compile (`tsc --project ./scripts/tsconfig.json`).
 
 ## Tailwind setup
 - **Input:** `frontend/styles/input.css`

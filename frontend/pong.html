@@ -25,9 +25,17 @@
       </button>
       <div class="user-dropdown js-user-dropdown
           absolute top-[calc(100%+8px)] right-0
-          bg-(--bg-color-white-seven) border border-solid
+          bg-[rgb(255,254,254)] border border-solid
           border-(--border-soft-gray) rounded-[10px] shadow-[0_4px_10px_var(--shadow-10)]
           hidden flex-col min-w-[160px] px-[8px] py-[8px] justify-center">
+        <div
+          data-action="open-welcome-page"
+          class="block w-full text-left font-[Arial,sans-serif]
+            text-[16px] no-underline text-(--text-on-light)
+            bg-transparent border-0 px-[10px] py-[10px]
+            rounded-[6px] cursor-pointer hover:bg-(--bg-color-gray)">
+              Main
+        </div>
         <div
           data-action="open-profile"
           class="js-profile-link
@@ -82,7 +90,7 @@
               LOG IN
         </button>
       </div>
-      <div class="banner flex items-center justify-center py-[5vh] px-[5vw]">
+      <div class="banner flex items-center justify-center pb-[4vh] pt-[9.7vh] px-[5vw]">
         <div class="paddle paddle-left
           w-[80px] h-[clamp(200px,45vh,400px)] bg-(--main-color)
           shadow-[0_10px_20px_var(--shadow-20)] rounded-[40px] mr-[70px]"></div>
@@ -353,6 +361,13 @@
               rounded-[20px] block">
           </canvas>
       </div>
+      <div
+        class="countdown-overlay
+          absolute inset-0 items-center justify-center
+          bg-[rgba(255,255,255,0.6)] text-[96px] font-bold
+          text-(--main-color) tabular-nums select-none animate-pulse hidden">
+          3
+      </div>
     </section>
 
     <section id="tournament-page"
@@ -430,7 +445,7 @@
     <section id="sign-up-page"
       class="min-h-screen box-border flex flex-col
         justify-center items-center relative
-        p-[50px] text-center">
+        px-[50px] pt-[50px] pb-0 text-center">
       <button
         data-action="go-back-signup"
         class="back_btn js-sign-up-back-btn
@@ -444,7 +459,7 @@
       <div class="auth-form
           w-[min(440px,92vw)] my-[20px] mx-auto flex flex-col gap-[20px]
           bg-(--bg-color-white-seven) py-[36px] px-[40px] rounded-[15px]
-          shadow-[0_10px_30px_var(--shadow-10)]">
+          shadow-[0_10px_30px_var(--shadow-10)] relative">
         <h2 class="text-(--main-color) mb-[20px] text-[32px] font-bold">
           Sign Up
         </h2>
@@ -481,6 +496,15 @@
             hover:shadow-[0_6px_15px_rgba(0,0,0,0.25)]">
               Register
         </button>
+        <div class="js-signup-status
+          absolute left-1/2 bottom-0 -translate-x-1/2
+          flex items-center gap-[8px] px-[12px] py-[8px]
+          bg-transparent text-[12px] text-(--main-color)
+          opacity-0 transition-opacity duration-200">
+            <span class="js-signup-text-dot
+              size-[8px] rounded-full bg-green-500"></span>
+            <span class="js-signup-status-text">message</span>
+        </div>
       </div>
     </section>
 
@@ -501,7 +525,7 @@
       <div class="auth-form
           w-[min(440px,92vw)] my-[20px] mx-auto flex flex-col gap-[20px]
           bg-(--bg-color-white-seven) py-[36px] px-[40px] rounded-[15px]
-          shadow-[0_10px_30px_var(--shadow-10)]">
+          shadow-[0_10px_30px_var(--shadow-10)] relative">
         <h2 class="text-(--main-color) mb-[20px] text-[32px] font-bold">
           Log In
         </h2>
@@ -531,6 +555,15 @@
             hover:shadow-[0_6px_15px_rgba(0,0,0,0.25)]">
               Login
         </button>
+        <div class="js-login-status
+          absolute left-1/2 bottom-0 -translate-x-1/2
+          flex items-center gap-[8px] px-[12px] py-[8px]
+          bg-transparent text-[12px] text-(--main-color)
+          opacity-0 transition-opacity duration-200">
+            <span class="js-login-text-dot
+              size-[8px] rounded-full bg-green-500"></span>
+            <span class="js-login-status-text">message</span>
+        </div>
       </div>
     </section>
 
