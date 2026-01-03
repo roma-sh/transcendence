@@ -103,6 +103,11 @@ export function game(): void {
 
   const keys: KeyMap = {}; 
 
+  gameState.isPaused = true;
+  startCountdown(() => {
+    gameState.isPaused = false;
+  });
+
   function gameLoop() {
     if (!ctx) return;
 
@@ -232,4 +237,29 @@ async function updatePlayerStats(winnerAlias: string, loserAlias: string) {
     } catch (error) {
         console.error('Network error while updating stats:', error);
     }
+}
+
+function startCountdown(startGame: () => void) {
+  const countdownEl = document.querySelector(
+    '.countdown-overlay') as HTMLElement | null;
+
+  if (!countdownEl) return;
+
+  let count = 3;
+  countdownEl.textContent = String(count);
+  countdownEl.classList.remove('hidden');
+  countdownEl.classList.add('flex');
+
+  const interval = setInterval(() => {
+    count--;
+
+    if (count > 0) {
+      countdownEl.textContent = String(count);
+    } else {
+      clearInterval(interval);
+      countdownEl.classList.add('hidden');
+      countdownEl.classList.remove('flex');
+      startGame();
+    }
+  }, 1000);
 }
