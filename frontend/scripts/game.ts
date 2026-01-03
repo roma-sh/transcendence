@@ -187,15 +187,17 @@ function handleWinOnce(
 
   gameState.winnerSide = winner;
 
-  tSettings.winnersAliases.push(winnerName);
+  if (tSettings.currentMatch) {
+    tSettings.winnersAliases.push(winnerName);
 
-  console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
-  if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
-  {
-    tSettings.secondPlaceAliases.push(loserName);
-    console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
+    console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
+    if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
+    {
+      tSettings.secondPlaceAliases.push(loserName);
+      console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
+    }
+    console.log(`Winner of this match: ${winnerName}`);
   }
-  console.log(`Winner of this match: ${winnerName}`);
 
   const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
 
