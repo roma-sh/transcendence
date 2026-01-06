@@ -6,6 +6,10 @@ const path = require('path');
 const fastifyCookie = require('@fastify/cookie');
 const fastifySession = require('@fastify/session');
 
+require('dotenv').config(); 
+const fastifyCookie = require('@fastify/cookie');
+const fastifySession = require('@fastify/session');
+
 const app = Fastify({ logger: {
                         level: process.env.NODE_ENV === 'production' ? 'error' : 'warn'
                       }

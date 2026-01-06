@@ -11,7 +11,6 @@ SSL_DIR		= ./docker/proxy/certs
 SSL_CERT	= $(SSL_DIR)/selfsigned.crt
 SSL_KEY		= $(SSL_DIR)/selfsigned.key
 
-
 # re only recreates the instance and keeps the DB
 # to delete the database fclean and all is needed seperately to reset completely
 
@@ -21,7 +20,7 @@ all: build up
 
 build:
 	if [ ! -f $(CHECKFILE) ]; then \
-		echo "$(RED)Please set up the enviroment first !$(NC)" ;\
+		echo "$(RED)Please set up the enviroment first !$(NC)" ; \
 		echo "Please run 'make setup'"; \
 		exit 1; \
 	fi
@@ -57,13 +56,12 @@ logs-f:
 
 setup:
 	if [ ! -f $(ENV_FILE) ]; then \
-		echo "POSTGRES_USER=" > $(ENV_FILE); \
-		echo "POSTGRES_PASSWORD=" >> $(ENV_FILE); \
-		echo "POSTGRES_DB=" >> $(ENV_FILE); \
-		echo "DATABASE_URL=postgresql://<username>:<password>@database:5432/<database>?sslmode=disable" >> $(ENV_FILE); \
 		echo "GF_SECURITY_ADMIN=" >> $(ENV_FILE); \
 		echo "GF_SECURITY_ADMIN_PASSWORD=" >> $(ENV_FILE); \
-		echo "DATA_SOURCE_NAME=postgresql://<username>:<password>@database:5432/<database>?sslmode=disable" >> $(ENV_FILE); \
+		echo "CLIENT_ID=" >> $(ENV_FILE); \
+		echo "CLIENT_SECRET=" >> $(ENV_FILE); \
+		echo "GOOGLE_REDIRECT_URL=" >> $(ENV_FILE); \
+		echo "SESSION_SECRET=<put 32 chars here>" >> $(ENV_FILE); \
 		echo "Please fill out the env file :D"; \
 	fi
 	if [ ! -d $(SSL_DIR) ]; then \
