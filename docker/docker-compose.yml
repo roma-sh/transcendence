@@ -6,7 +6,7 @@ services:
       dockerfile: docker/Dockerfile.backend
     container_name: back-end
     volumes:
-      - db_data:/usr/app/database
+      - db_data:/usr/src/database
     env_file:
       - .env
     restart:  always
@@ -61,15 +61,6 @@ services:
     container_name: node-exporter
     command:
       - '--path.rootfs=/host'
-    restart: always
-    networks:
-      - trance-net
-
-  postgres-exporter:
-    image: prometheuscommunity/postgres-exporter:latest
-    container_name: postgres-exporter
-    env_file:
-      - .env
     restart: always
     networks:
       - trance-net

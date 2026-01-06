@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20-bookworm
 
 WORKDIR /usr/src/app
 
@@ -15,9 +15,14 @@ COPY backend ./backend
 COPY frontend ./frontend
 COPY database ./database
 COPY blockchain ./blockchain
+COPY auth ./auth
 
 # install typescript
 RUN npm install --save-dev typescript
+
+# notr sure if already installed via package.json 
+RUN npm install @fastify/cookie @fastify/session undici dotenv
+
 RUN npx tsc --project frontend/scripts/tsconfig.json
 
 RUN mkdir -p ../public/styles

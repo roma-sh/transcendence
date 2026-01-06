@@ -9,6 +9,7 @@
     "chain:compile": "npm --prefix blockchain run compile",
     "chain:deploy:fuji": "npm --prefix blockchain run deploy:fuji"
   },
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/roma-sh/transcendence.git"
