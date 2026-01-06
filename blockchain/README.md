@@ -75,6 +75,78 @@ This installs:
 - Hardhat Toolbox (testing and compilation tools)
 - dotenv (environment variable management)
 
+**Note**: You also need to install frontend dependencies:
+```bash
+cd ../frontend
+npm install
+```
+This installs `ethers.js` which is required for frontend blockchain integration.
+
+---
+
+## Quick Start for New Users (After Pulling from GitHub)
+
+**⚠️ Important**: The `public/` folder is ignored in git (contains generated files). When you first pull this repository, the `pong.json` file won't exist. You **must deploy the contract** to create it.
+
+### Step-by-Step Setup
+
+1. **Install Dependencies**:
+   ```bash
+   # Install blockchain dependencies
+   cd blockchain
+   npm install
+   
+   # Install frontend dependencies (includes ethers.js)
+   cd ../frontend
+   npm install
+   ```
+
+2. **Get Test AVAX Tokens**:
+   - Visit [Avalanche Faucet](https://faucet.avalanche.network/)
+   - Enter your wallet address
+   - Request test AVAX tokens (needed for gas fees)
+
+3. **Configure Environment**:
+   Create `blockchain/.env` file:
+   ```bash
+   cd blockchain
+   # Create .env file
+   echo "FUJI_RPC_URL=https://api.avax-test.network/ext/bc/C/rpc" > .env
+   echo "PRIVATE_KEY=your_private_key_here" >> .env
+   ```
+   
+   **⚠️ Security**: Use a test account private key, NOT your main wallet. Never commit `.env` to git.
+
+4. **Deploy Contract** (This creates `pong.json` automatically):
+   ```bash
+   cd blockchain
+   npm run deploy:fuji
+   ```
+   
+   This will:
+   - ✅ Deploy the contract to Avalanche Fuji Testnet
+   - ✅ **Automatically create** `public/scripts/js/contract/` directory (if it doesn't exist)
+   - ✅ **Automatically create** `public/scripts/js/contract/pong.json` with contract address and ABI
+   - ✅ Display the deployment address and transaction hash
+
+5. **Verify Deployment**:
+   - Check that `public/scripts/js/contract/pong.json` exists
+   - Verify it contains a real address (not `0x0000...`)
+   - View your contract on [Snowtrace Testnet](https://testnet.snowtrace.io/)
+
+### After Deployment
+
+Once deployed, the frontend will automatically use the contract address from `pong.json`. The file structure will be:
+```
+public/
+└── scripts/
+    └── js/
+        └── contract/
+            └── pong.json  (created by deploy script, contains address + ABI)
+```
+
+**Note**: Each developer/user needs to deploy their own contract instance (or coordinate to use a shared deployed address if working in a team).
+
 ---
 
 ## Configuration
@@ -225,12 +297,23 @@ All transactions can be viewed on [Snowtrace Testnet](https://testnet.snowtrace.
 
 ## Troubleshooting
 
-### Contract Not Deployed
+### Contract Not Deployed / pong.json Missing
 
-If `pong.json` shows `0x0000...` address:
-- Run `npm run deploy:fuji` to deploy the contract
-- Ensure `.env` file is configured correctly
-- Check you have test AVAX for gas fees
+**If `pong.json` doesn't exist or shows `0x0000...` address:**
+
+This is normal when first pulling the repository! The `public/` folder is ignored in git.
+
+**Solution:**
+1. Ensure you've installed dependencies: `cd blockchain && npm install`
+2. Create `blockchain/.env` file with `PRIVATE_KEY` and `FUJI_RPC_URL`
+3. Get test AVAX from [Avalanche Faucet](https://faucet.avalanche.network/)
+4. Run `npm run deploy:fuji` to deploy the contract
+5. The deploy script will automatically create `public/scripts/js/contract/pong.json`
+
+**If the file still doesn't exist after deployment:**
+- Check that deployment completed successfully
+- Verify the deploy script output shows "Contract metadata saved to: ..."
+- Check file permissions in the `public/` directory
 
 ### Network Errors
 
@@ -247,10 +330,20 @@ If `pong.json` shows `0x0000...` address:
 
 ### Frontend Integration Issues
 
-- Ensure contract is deployed and `pong.json` has valid address
-- Check wallet is connected in frontend
-- Verify network is Avalanche Fuji Testnet
+**If frontend shows "Contract not deployed" error:**
+- Ensure contract is deployed: `cd blockchain && npm run deploy:fuji`
+- Verify `public/scripts/js/contract/pong.json` exists and has a valid address (not `0x0000...`)
+- Check that `public/` directory is accessible by the web server
+
+**If wallet connection fails:**
+- Check wallet is connected in frontend (MetaMask extension)
+- Verify network is Avalanche Fuji Testnet (Chain ID: 43113)
 - Check browser console for error messages
+
+**If transactions fail:**
+- Ensure you have sufficient test AVAX balance
+- Verify you're on the correct network (Avalanche Fuji Testnet)
+- Check that the contract address in `pong.json` matches your deployed contract
 
 ---
 
