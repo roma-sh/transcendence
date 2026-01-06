@@ -20,7 +20,7 @@ echo "Copied pong.html to public/index.html"
 
 # Step 4: Compile TypeScript
 echo "Compiling TypeScript..."
-tsc --project ../frontend/scripts/tsconfig.json
+npx tsc --project ../frontend/scripts/tsconfig.json
 
 # Step 5: Copy CSS files
 cp ../frontend/styles/*.css ../public/styles/
