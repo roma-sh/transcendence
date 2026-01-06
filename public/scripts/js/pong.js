@@ -44,7 +44,7 @@ function handleHashChange() {
     else if (hash === '#user-profile') {
         initUserProfilePage();
     }
-    else if (hash.startsWith('#winner-page')) {
+    else if (hash === '#winner-page') {
         initWinnerAnnouncementPage(tSettings);
     }
 }

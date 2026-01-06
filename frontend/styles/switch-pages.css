@@ -28,7 +28,7 @@
 #log-in-page:target,
 #sign-up-page:target,
 #wallet-info-page:target,
-#winner-page {
+#winner-page:target {
   display: initial;
 }
 #game-ready-page:target

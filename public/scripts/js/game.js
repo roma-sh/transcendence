@@ -98,10 +98,22 @@ export function game(player1Name, player2Name) {
                 const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
                 const winnerName = winner === 'left' ? p1Name : p2Name;
                 const loserName = winner === 'left' ? p2Name : p1Name;
-                tSettings.winnersAliases.push(winnerName);
+                console.log("WinnerName = ", winnerName);
+                if (winnerName !== "Player 1" && winnerName !== "Player 2") {
+                    tSettings.winnersAliases.push(winnerName);
+                }
+                else {
+                    console.log("Default winner detected, not saving.");
+                }
                 console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
                 if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0) {
-                    tSettings.secondPlaceAliases.push(loserName);
+                    if (loserName !== "Player 1" && loserName !== "Player 2") {
+                        console.log("Hellooooo");
+                        tSettings.secondPlaceAliases.push(loserName);
+                    }
+                    else {
+                        console.log("Hellooooo1111");
+                    }
                     console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
                 }
                 console.log(`Winner of this match: ${winnerName}`);
@@ -113,6 +125,7 @@ export function game(player1Name, player2Name) {
                 drawWinText(ctx, canvas, winner);
                 if (p1Name == "Player 1" && p2Name == "Player 2") {
                     const mainMenuRect = drawButton(ctx, canvas, winner, 'BACK TO MAIN', 130);
+                    tSettings.winnersAliases = [];
                     bindButtonEvent(canvas, mainMenuRect, () => {
                         location.hash = 'welcome-page';
                     });
