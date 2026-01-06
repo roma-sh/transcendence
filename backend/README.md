@@ -70,5 +70,21 @@ change user email: http://localhost:3000/api/profile/email
   "newEmail": "newemail@example.com",
 }
 ```
-
-more API routes will be added
+change user profile picture: http://localhost:3000/api/profile/picture
+```
+Request Type: multipart/form-data
+Form Data:
+file: Image file (JPEG, PNG, WebP) - Max 5MB
+```
+ Still need fixing : remove user profile picture: http://localhost:3000/api/profile/picture
+```
+Request: no file
+```
+Increament of the total games: http://localhost:3000/api/game/total-games
+```
+Request: Nothing
+```
+Increament of total wins: http://localhost:3000/api/game/wins
+```
+Request: Nothing
+```

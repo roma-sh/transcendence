@@ -18,8 +18,20 @@ user_db.run(`
     password TEXT NOT NULL,
     total_games INTEGER DEFAULT 0,
     wins INTEGER DEFAULT 0,
-    is_online INTEGER DEFAULT 0
+    is_online INTEGER DEFAULT 0,
+    profile_picture TEXT DEFAULT NULL
   )
 `);
+
+const gracefulShutdown = () => {
+  user_db.close((err) => {
+    if (err) console.error('Error closing database:', err);
+    else console.log('Database connection closed');
+    process.exit(0);
+  });
+};
+
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
 
 module.exports = user_db;

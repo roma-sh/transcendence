@@ -1,405 +1,1034 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pong</title>
-    <link rel="stylesheet" href="./styles/pong.css" />
-    <link rel="stylesheet" href="./styles/general.css" />
+    <link rel="stylesheet" href="./styles/output.css">
     <link rel="stylesheet" href="./styles/switch-pages.css" />
-    <link rel="stylesheet" href="./styles/choose-mode.css" />
-    <link rel="stylesheet" href="./styles/game-page.css" />
-    <link rel="stylesheet" href="./styles/tournament-player-count.css" />
-    <link rel="stylesheet" href="./styles/tournament-player-aliases.css" />
-    <link rel="stylesheet" href="./styles/auth-buttons.css" />
-    <link rel="stylesheet" href="./styles/game_ready_page.css" />
-    <link rel="stylesheet" href="./styles/wallet.css" />
-    <link rel="stylesheet" href="./styles/user-menu.css">
-    <link rel="stylesheet" href="./styles/profile-page.css">
-    <link rel="stylesheet" href="./styles/settings-page.css">
   </head>
-  <body>
+  <body class="h-full m-0 p-0 min-h-screen font-[Arial] bg-(--bg-color)">
+
     <div class=
-      "user-menu-button-container
-      js-user-menu-button-container
-      user-menu-button-container-hidden">
-        <button class="user-menu-button js-user-menu-button" data-action="toggle-user-menu"></button>
-        <div class="user-dropdown js-user-dropdown">
-          <div class="js-profile-link" data-action="open-profile">Profile</div>
-          <div class="js-settings-link" data-action="open-settings">Settings</div>
-          <button data-action="log-out">Log out</button>
+        "user-menu-button-container
+        js-user-menu-button-container
+        user-menu-button-container-hidden
+        flex justify-end fixed top-[16px] right-[16px] z-1000">
+      <button
+        data-action="toggle-user-menu"
+        class="user-menu-button js-user-menu-button
+          bg-(--bg-color-white-seven) py-[15px] px-[60px]
+          border-2 border-solid border-(--main-color)
+          rounded-[45px] text-(--text-on-light) cursor-pointer
+          text-[24px] font-bold font-[Arial] transition-opacity
+          hover:opacity-[0.7]">
+      </button>
+      <div class="user-dropdown js-user-dropdown
+          absolute top-[calc(100%+8px)] right-0
+          bg-[rgb(255,254,254)] border border-solid
+          border-(--border-soft-gray) rounded-[10px] shadow-[0_4px_10px_var(--shadow-10)]
+          hidden flex-col min-w-[160px] px-[8px] py-[8px] justify-center">
+        <div
+          data-action="open-welcome-page"
+          class="block w-full text-left font-[Arial,sans-serif]
+            text-[16px] no-underline text-(--text-on-light)
+            bg-transparent border-0 px-[10px] py-[10px]
+            rounded-[6px] cursor-pointer hover:bg-(--bg-color-gray)">
+              Main
         </div>
+        <div
+          data-action="open-profile"
+          class="js-profile-link
+            block w-full text-left font-[Arial,sans-serif]
+            text-[16px] no-underline text-(--text-on-light)
+            bg-transparent border-0 px-[10px] py-[10px]
+            rounded-[6px] cursor-pointer hover:bg-(--bg-color-gray)">
+              Profile
+        </div>
+        <div
+          data-action="open-settings"
+          class="js-settings-link
+            block w-full text-left font-[Arial,sans-serif]
+            text-[16px] no-underline text-(--text-on-light)
+            bg-transparent border-0 px-[10px] py-[10px]
+            rounded-[6px] cursor-pointer hover:bg-(--bg-color-gray)">
+              Settings
+        </div>
+        <button
+          data-action="log-out"
+          class="
+            block w-full text-left font-[Arial,sans-serif]
+            text-[16px] no-underline text-(--text-on-light)
+            bg-transparent border-0 px-[10px] py-[10px]
+            rounded-[6px] cursor-pointer hover:bg-(--bg-color-gray)">
+              Log out
+        </button>
+      </div>
     </div>
-    <section id="welcome-page">
-      <div class="signup-login-btns signup-login-btns-hidden js-signup-login-btns">
+
+    <section  id="welcome-page"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative">
+      <div class="signup-login-btns js-signup-login-btns
+          absolute top-[16px] right-[16px] gap-[12px] hidden">
         <button
-          class="auth-button sign-up-button js-sign-up-button"
-          data-action="open-sign-up">
-            SIGN UP
+          data-action="open-sign-up"
+          class="auth-button sign-up-button js-sign-up-button
+            py-[15px] px-[60px] rounded-[45px]
+            cursor-pointer text-[24px]
+            font-bold font-[Arial] transition-opacity hover:opacity-[0.7]
+            bg-(--bg-color-white-seven) text-(--main-color)
+            border-2 border-solid border-(--main-color)">
+              SIGN UP
         </button>
         <button
-          class="auth-button log-in-button js-log-in-button"
-          data-action="open-log-in">
-            LOG IN
+          data-action="open-log-in"
+          class="auth-button log-in-button js-log-in-button
+            bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
+            text-(--bg-color-white-nine) cursor-pointer text-[24px]
+            font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
+              LOG IN
         </button>
       </div>
-      <div class="banner">
-        <div class="paddle paddle-left"></div>
-        <div class="middle-section">
-          <h1 id="game-name">PONG</h1>
-          <div id="ball"></div>
+      <div class="banner flex items-center justify-center pb-[4vh] pt-[9.7vh] px-[5vw]">
+        <div class="paddle paddle-left
+          w-[80px] h-[clamp(200px,45vh,400px)] bg-(--main-color)
+          shadow-[0_10px_20px_var(--shadow-20)] rounded-[40px] mr-[70px]"></div>
+        <div class="middle-section flex flex-col items-center">
+          <h1 id="game-name" class="text-[clamp(64px,12vw,150px)] font-[Arial] text-(--text-on-light) m-0">PONG</h1>
+          <div id="ball"
+            class="mt-[30px] w-[75px] h-[75px] rounded-[50%] bg-(--main-color)
+              shadow-[0_12px_26px_var(--shadow-35)] animate-bob
+              after:absolute after:w-[140%] after:h-[140%]
+              after:top-[-40%] after:left-[-10%] after:opacity-[0.9]
+              bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.45),transparent_45%)]">
+          </div>
         </div>
-        <div class="paddle paddle-right"></div>
+        <div class="paddle paddle-right
+          w-[80px] h-[clamp(200px,45vh,400px)] bg-(--main-color)
+          shadow-[0_10px_20px_var(--shadow-20)] rounded-[40px] ml-[70px]"></div>
       </div>
-      <div class="js-play-connect-wallet-btns play-connect-wallet-btns-hidden">
-        <div class="play-button-container">
+      <div class="js-play-connect-wallet-btns hidden">
+        <div class="play-button-container flex items-center justify-center">
           <button
-            class="play-button js-play-button"
-            data-action="open-choose-mode">
+            data-action="open-choose-mode"
+            class="play-button js-play-button
+            bg-(--main-color) px-[60px] py-[15px] border-0 rounded-[45px]
+            text-(--text-on-dark) cursor-pointer text-[24px] font-bold
+            font-[Arial] transition-opacity hover:opacity-[0.7]">
               PLAY
           </button>
         </div>
-        <div class="auth-button-container">
+        <div class="auth-button-container
+            flex items-center justify-center mt-[10px] mb-[10px] relative">
           <button
-            class="auth-button connect-wallet-btn js-connect-wallet-button"
-            data-action="connect-wallet">
-              CONNECT WALLET
+            data-action="connect-wallet"
+            class="auth-button connect-wallet-btn js-connect-wallet-button
+              bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
+              text-(--text-on-dark) cursor-pointer text-[24px]
+              font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
+                CONNECT WALLET
           </button>
+          <span
+            id="js-wallet-dot"
+            class="inline-block w-[10px] h-[10px] rounded-[50%]
+              bg-transparent absolute top-[28px] left-[41px]">
+          </span>
         </div>
       </div>
     </section>
 
-    <section id="winner-page">
-        <div class="banner">
-            <div class="middle-section">
-                <h2>🏆 TOURNAMENT WINNERS 🏆</h2>
-                <h1 id="first-place-winner"></h1> 
-                <h3 id="second-place-winner"></h3>
-            </div>
-        </div>
-        <div class="play-button-container">
-            <button
-              class="play-button"
-              data-action="go-to-welcome-page">
+    <section id="winner-page"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative">
+      <div class="banner flex items-center justify-center py-[5vh] px-[5vw]">
+          <div class="middle-section flex flex-col items-center">
+              <h2 class="text-[30px] font-bold">🏆 TOURNAMENT WINNERS 🏆</h2>
+              <h3 id="first-place-winner" class="text-[20px]"></h3>
+              <h3 id="second-place-winner" class="text-[20px]"></h3>
+          </div>
+      </div>
+      <div class="play-button-container flex items-center justify-center">
+          <button
+            data-action="go-to-welcome-page"
+            class="play-button
+              bg-(--main-color) px-[60px] py-[15px] border-0 rounded-[45px]
+              text-(--bg-color-white-nine) cursor-pointer text-[24px] font-bold
+              font-[Arial] transition-opacity hover:opacity-[0.7]">
                 Back To Main Menu
-            </button>
-        </div>
+          </button>
+      </div>
     </section>
 
-    <section id="wallet-info-page">
-      <div class="wallet-info-container">
+    <section id="wallet-info-page"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative">
+      <div class="wallet-info-container
+          bg-white px-[24px] py-[24px] text-center text-(--main-color)
+          min-w-[420px] rounded-[16px] border border-solid
+          border-(--border-soft-gray) shadow-[none]">
         <h2>Wallet Connected</h2>
-        <div class="wallet-details">
-          <p><strong>Address:</strong> <span id="wallet-address"></span></p>
-          <p><strong>Network:</strong> <span id="wallet-network"></span></p>
-          <p><strong>Balance:</strong> <span id="wallet-balance"></span></p>
+        <div class="wallet-details
+            text-left my-6 mx-0 px-4 py-4 bg-(--bg-color-gray) rounded-[5px]">
+          <p class="my-2 mx-0"><strong>Address:</strong> <span id="wallet-address"></span></p>
+          <p class="my-2 mx-0"><strong>Network:</strong> <span id="wallet-network"></span></p>
+          <p class="my-2 mx-0"><strong>Balance:</strong> <span id="wallet-balance"></span></p>
         </div>
-        <div class="disconnect-and-back-btns">
+        <div class="disconnect-and-back-btns
+            flex gap-[12px]">
           <button
-            class="auth-button js-disconnect-wallet"
-            data-action="disconnect-wallet">
-              Disconnect
+            data-action="disconnect-wallet"
+            class="auth-button js-disconnect-wallet
+              bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
+              text-(--bg-color-white-nine) cursor-pointer text-[24px]
+              font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
+                Disconnect
           </button>
           <button
-            class="auth-button js-back-to-welcome"
-            data-action="wallet-back-to-menu">
-              Back to Menu
+            data-action="wallet-back-to-menu"
+            class="auth-button js-back-to-welcome
+              bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
+              text-(--bg-color-white-nine) cursor-pointer text-[24px]
+              font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
+                Back to Menu
           </button>
         </div>
       </div>
     </section>
 
-    <section id="choose-mode-page">
+    <section id="choose-mode-page"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative">
       <button
-        class="back_btn js-choose-mode-back-btn"
-        data-action="go-back-choose-mode">
-          ← Back
+        data-action="go-back-choose-mode"
+        class="back_btn js-choose-mode-back-btn
+          absolute top-[29.5px] left-[16px]
+          inline-flex items-center gap-[6px]
+          text-(--main-color) bg-transparent border-0
+          text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
+          cursor-pointer transition-[background] hover:bg-(--hover-06)">
+            ← Back
       </button>
-      <div class="game-options">
+      <div class="game-options
+          flex items-center justify-center mb-[24px] py-[5vh] px-[5vw]">
         <div
-          class="game-option-1 js-game-option"
           data-option="quick-play"
-          data-action="select-game-option">
-            <p>Quick Play</p>
+          data-action="select-game-option"
+          class="game-option-1 js-game-option
+            w-[min(300px,40vw)] h-[min(300px,40vh)] border-2 border-solid
+            border-(--border-color) rounded-[20px] flex items-center
+            justify-center cursor-pointer text-[clamp(24px,4vw,50px)]
+            font-[Arial] text-(--main-color) bg-(--bg-color-white-seven)
+            transition-[background-color] mr-[30px] hover:bg-[rgb(240,238,238)]">
+              <p class="m-0">Quick Play</p>
         </div>
         <div
-          class="game-option-2 js-game-option"
           data-option="tournament"
-          data-action="select-game-option">
-            <p>Tournament</p>
+          data-action="select-game-option"
+          class="game-option-2 js-game-option
+            w-[min(300px,40vw)] h-[min(300px,40vh)] border-2 border-solid
+            border-(--border-color) rounded-[20px] flex items-center
+            justify-center cursor-pointer text-[clamp(24px,4vw,50px)]
+            font-[Arial] text-(--main-color) bg-(--bg-color-white-seven)
+            transition-[background-color] hover:bg-[rgb(240,238,238)]">
+              <p class="m-0">Tournament</p>
         </div>
       </div>
-      <div class="start-button-container">
+      <div class="start-button-container
+          flex items-center justify-center">
         <button
-          class="start-button js-start-button"
-          data-action="start-game-option">
-            START
+          data-action="start-game-option"
+          class="start-button js-start-button
+            bg-(--main-color) py-[20px] px-[100px] border-0
+            rounded-[45px] text-(--bg-color-white-nine)
+            cursor-pointer text-[30px] font-bold font-[Arial]
+            transition-opacity hover:opacity-[0.7]">
+              START
         </button>
       </div>
     </section>
 
-	<section id="game-ready-page" class="game-ready-page-container">
-    <button
-      class="back_btn"
-      data-action="go-back-game-ready-page">
-        ← Back
-    </button>
-		<div class="game-ready-content">
-		  <h2>Game Ready!</h2>
-		  <div class="player-info">
-			<div class="player-side left">
-			  <h3><span class="js-p1-name">Player 1</span> (Left Side)</h3>
-        <div class="controls-container">
-          <div class="controls-title">CONTROLS:</div>
-          <div class="control-key">Up:  (W)</div>
-          <div class="control-key">Down: (S)</div>
-      </div>
-			</div>
-			<div class="divider">VS</div>
-			<div class="player-side right">
-			  <h3><span class="js-p2-name">Player 2</span> (Right Side)</h3>
-			  <div class="controls-container">
-          <div class="controls-title">CONTROLS:</div>
-          <div class="control-key">Up: ArrowUp</div>
-          <div class="control-key">Down: ArrowDown</div>
-      </div>
-			</div>
-		  </div>
-		  <button class="go-button js-start-game-btn" data-action="start-tournament">GO!</button>
-		</div>
-	</section>
-
-    <section id="game-page">
-      <div class="game-window">
-        <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <section id="game-ready-page"
+      class="game-ready-page-container
+        box-border flex flex-col
+        justify-center items-center relative
+        min-h-[calc(100vh-80px)] pt-[94px] px-[20px] pb-0
+        bg-(--bg-color)">
+      <button
+        data-action="go-back-game-ready-page"
+        class="back_btn
+          absolute top-[29.5px] left-[16px]
+          inline-flex items-center gap-[6px]
+          text-(--main-color) bg-transparent border-0
+          text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
+          cursor-pointer transition-[background] hover:bg-(--hover-06)">
+            ← Back
+      </button>
+      <div class="game-ready-content
+          bg-(--bg-color-white-nine) rounded-[32px] py-[30px] px-[60px]
+          max-w-[900px] min-w-[220px] w-[min(820px,90vw)] min-h-[452px]
+          shadow-[0_14px_32px_rgba(0,0,0,0.12)]
+          text-center border border-solid border-(--border-soft-gray)
+          max-[800px]:pt-[26px] max-[800px]:px-[20px] max-[800px]:pb-[30px]">
+        <h2 class="mt-0 mx-0 mb-[20px] text-[40px] uppercase text-(--main-color)
+          max-[800px]:text-[32px]">
+            Game Ready!
+        </h2>
+        <div class="player-info
+          flex items-stretch justify-center gap-[40px] mb-[30px]
+          max-w-[700px] mx-auto
+          max-[800px]:flex-col max-[800px]:gap-[18px]">
+          <div class="player-side left
+              flex-1 min-w-[150px] bg-(--bg-color-white-seven)
+              rounded-[24px] border border-solid border-(--border-color)
+              pt-[24px] px-[26px] pb-[28px] box-border text-center">
+            <h3 class="mt-0 mx-0 mb-[10px] text-[18px] text-(--main-color) leading-[1.4]">
+              <span class="js-p1-name
+                block text-[28px] font-bold text-(--main-color)">
+                  Player 1
+              </span>
+              (Left Side)
+            </h3>
+            <div class="controls-container
+              mt-0 pt-[5px] border-t border-solid border-t-(--border-color)">
+                <div class="controls-title
+                  text-[14px] font-bold tracking-[0.08em] uppercase
+                  mb-[8px] text-(--main-color)">
+                    CONTROLS:
+                </div>
+                <div class="control-key text-[14px] text-(--main-color) my-[2px] mx-0">
+                  Up:  (W)
+                </div>
+                <div class="control-key text-[14px] text-(--main-color) my-[2px] mx-0">
+                  Down: (S)
+                </div>
+            </div>
+          </div>
+          <div
+            class="divider self-center text-[22px] font-bold text-(--main-color)
+            max-[800px]:-order-1">
+              VS
+          </div>
+          <div class="player-side right
+              flex-1 min-w-[150px] bg-(--bg-color-white-seven)
+              rounded-[24px] border border-solid border-(--border-color)
+              pt-[24px] px-[26px] pb-[28px] box-border text-center">
+            <h3 class="mt-0 mx-0 mb-[10px] text-[18px] text-(--main-color) leading-[1.4]">
+              <span class="js-p2-name
+                block text-[28px] font-bold text-(--main-color)">
+                  Player 2
+              </span>
+              (Right Side)
+            </h3>
+            <div class="controls-container
+              mt-0 pt-[5px] border-t border-solid border-t-(--border-color)">
+                <div class="controls-title
+                  text-[14px] font-bold tracking-[0.08em] uppercase
+                  mb-[8px] text-(--main-color)">
+                    CONTROLS:
+                </div>
+                <div class="control-key text-[14px] text-(--main-color) my-[2px] mx-0">
+                  Up: ArrowUp
+                </div>
+                <div class="control-key text-[14px] text-(--main-color) my-[2px] mx-0">
+                  Down: ArrowDown
+                </div>
+            </div>
+          </div>
+        </div>
+        <button
+          data-action="start-tournament"
+          class="go-button js-start-game-btn
+            inline-block mt-[8px] py-[14px] px-[70px]
+            rounded-[45px] border-0 bg-(--main-color)
+            text-(--bg-color-white-nine) text-[24px]
+            font-bold cursor-pointer font-[Arial,sans-serif]
+            transition-[opacity,transform] duration-[150ms,100ms]
+            hover:opacity-[0.7] hover:transform-[translateY(-1px)]">
+              GO!
+        </button>
       </div>
     </section>
 
-    <section id="tournament-page">
+    <section id="game-page"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative">
+      <div class="game-window
+        flex flex-1 flex-col items-center justify-center">
+          <canvas
+            id="gameCanvas" width="800" height="500"
+            class="border-2 border-solid border-(--border-color)
+              rounded-[20px] block">
+          </canvas>
+      </div>
+      <div
+        class="countdown-overlay
+          absolute inset-0 items-center justify-center
+          bg-[rgba(255,255,255,0.6)] text-[96px] font-bold
+          text-(--main-color) tabular-nums select-none animate-pulse hidden">
+          3
+      </div>
+    </section>
+
+    <section id="tournament-page"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative">
       <button
-        class="back_btn js-tournament-page-back-btn"
-        data-action="go-back-tournament">
-          ← Back
+        data-action="go-back-tournament"
+        class="back_btn js-tournament-page-back-btn
+          absolute top-[29.5px] left-[16px]
+          inline-flex items-center gap-[6px]
+          text-(--main-color) bg-transparent border-0
+          text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
+          cursor-pointer transition-[background] hover:bg-(--hover-06)">
+            ← Back
       </button>
-      <div class="player-count">
-        <p>Enter number of players</p>
+      <div class="player-count
+        h-screen flex flex-col items-center justify-center">
+        <p class="m-0 text-[40px] text-(--main-color)">
+          Enter number of players
+        </p>
         <input type="number"
           id="player-count-input"
           name="playerCount"
-          value="2" max="100" min="2">
+          value="2" max="100" min="2"
+          class="px-[15px] py-[15px] w-[388px] mt-[20px]
+          border-2 border-solid border-(--border-color)
+          rounded-[4px] text-[20px] font-[Arial] text-(--main-color)
+          bg-(--bg-color-white-seven)">
         <button
-          class="next-btn-after-count js-next-btn-after-count"
-          data-action="next-after-count">
+          data-action="next-after-count"
+          class="next-btn-after-count js-next-btn-after-count
+          border-0 py-[10px] px-[50px] mt-[40px] rounded-[20px]
+          text-[20px] font-bold font-[Arial] text-center
+          text-white bg-(--main-color) cursor-pointer
+          transition-opacity hover:opacity-[0.7]">
             NEXT
         </button>
       </div>
     </section>
 
-    <section id="tournament-page-player-aliases">
+    <section id="tournament-page-player-aliases"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative">
       <button
-        class="back_btn js-tournament-player-aliases-back-btn"
-        data-action="go-back-player-aliases">
-          ← Back
+        data-action="go-back-player-aliases"
+        class="back_btn js-tournament-player-aliases-back-btn
+          absolute top-[29.5px] left-[16px]
+          inline-flex items-center gap-[6px]
+          text-(--main-color) bg-transparent border-0
+          text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
+          cursor-pointer transition-[background] hover:bg-(--hover-06)">
+            ← Back
       </button>
-      <div class="player-aliases js-player-aliases">
-        <p id="enter-aliases-hint">Enter aliases</p>
+      <div class="player-aliases js-player-aliases
+          flex flex-col items-center justify-center mb-0">
+        <p
+          id="enter-aliases-hint"
+          class="mx-0 mt-[20px] mb-[20px] text-[40px]
+          text-(--main-color) flex items-center justify-center">
+            Enter aliases
+        </p>
         <div class="aliase-inputs"></div>
         <button
-          class="next-btn-after-aliases js-next-btn-after-aliases"
-          data-action="next-after-aliases">
+          data-action="next-after-aliases"
+          class="next-btn-after-aliases js-next-btn-after-aliases
+          border-0 py-[10px] px-[50px] mt-[15px] rounded-[20px]
+          text-[20px] font-bold font-[Arial] text-center
+          text-(--bg-color-white-nine) bg-(--main-color)
+          cursor-pointer transition-opacity hover:opacity-[0.7]">
             NEXT
         </button>
       </div>
     </section>
 
-    <section id="sign-up-page">
-      <button class="back_btn js-sign-up-back-btn" data-action="go-back-signup">← Back</button>
-      <div class="auth-form">
-        <h2>Sign Up</h2>
-        <input type="text" id="username" placeholder="Username" />
-        <input type="email" id="email" placeholder="Email" />
-        <input type="password" id="password" placeholder="Password" />
+    <section id="sign-up-page"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative
+        px-[50px] pt-[50px] pb-0 text-center">
+      <button
+        data-action="go-back-signup"
+        class="back_btn js-sign-up-back-btn
+          absolute top-[29.5px] left-[16px]
+          inline-flex items-center gap-[6px]
+          text-(--main-color) bg-transparent border-0
+          text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
+          cursor-pointer transition-[background] hover:bg-(--hover-06)">
+            ← Back
+      </button>
+      <div class="auth-form
+          w-[min(440px,92vw)] my-[20px] mx-auto flex flex-col gap-[20px]
+          bg-(--bg-color-white-seven) py-[36px] px-[40px] rounded-[15px]
+          shadow-[0_10px_30px_var(--shadow-10)] relative">
+        <h2 class="text-(--main-color) mb-[20px] text-[32px] font-bold">
+          Sign Up
+        </h2>
+        <input type="text" id="username" placeholder="Username"
+          class="px-[15px] py-[15px] text-[18px] border border-solid
+            border-(--border-soft-gray) rounded-[10px]
+            transition-[border-color,box-shadow] duration-300
+            bg-(--bg-color-white-seven)
+            focus:border-(--main-color) focus:shadow-[0_0_8px_rgba(0,123,255,0.2)]
+            focus:outline-none" />
+        <input type="email" id="email" placeholder="Email"
+          class="px-[15px] py-[15px] text-[18px] border border-solid
+            border-(--border-soft-gray) rounded-[10px]
+            transition-[border-color,box-shadow] duration-300
+            bg-(--bg-color-white-seven)
+            focus:border-(--main-color) focus:shadow-[0_0_8px_rgba(0,123,255,0.2)]
+            focus:outline-none" />
+        <input type="password" id="password" placeholder="Password"
+          class="px-[15px] py-[15px] text-[18px] border border-solid
+            border-(--border-soft-gray) rounded-[10px]
+            transition-[border-color,box-shadow] duration-300
+            bg-(--bg-color-white-seven)
+            focus:border-(--main-color) focus:shadow-[0_0_8px_rgba(0,123,255,0.2)]
+            focus:outline-none" />
         <button
-          class="auth-submit-button"
           id="registerBtn"
-          data-action="submit-sign-up">
-            Register
+          data-action="submit-sign-up"
+          class="auth-submit-button
+            px-[15px] py-[15px] text-[20px] font-bold bg-(--main-color)
+            text-white border-0 rounded-[10px] cursor-pointer
+            transition-[transform,background-color] duration-[100ms,300ms]
+            shadow-[0_4px_10px_var(--shadow-20)]
+            hover:opacity-[0.7] hover:transform-[translateY(-2px)]
+            hover:shadow-[0_6px_15px_rgba(0,0,0,0.25)]">
+              Register
         </button>
+        <div class="js-signup-status
+          absolute left-1/2 bottom-0 -translate-x-1/2
+          flex items-center gap-[8px] px-[12px] py-[8px]
+          bg-transparent text-[12px] text-(--main-color)
+          opacity-0 transition-opacity duration-200">
+            <span class="js-signup-text-dot
+              size-[8px] rounded-full bg-green-500"></span>
+            <span class="js-signup-status-text">message</span>
+        </div>
       </div>
     </section>
 
-
-    <section id="log-in-page">
-      <button class="back_btn js-log-in-back-btn" data-action="go-back-login">← Back</button>
-      <div class="auth-form">
-        <h2>Log In</h2>
-        <input type="text" id="login-username-email" placeholder="Username or Email" />
-        <input type="password" id="login-password" placeholder="Password" />
+    <section id="log-in-page"
+      class="min-h-screen box-border flex flex-col
+        justify-center items-center relative
+        p-[50px] text-center">
+      <button
+        data-action="go-back-login"
+        class="back_btn js-log-in-back-btn
+          absolute top-[29.5px] left-[16px]
+          inline-flex items-center gap-[6px]
+          text-(--main-color) bg-transparent border-0
+          text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
+          cursor-pointer transition-[background] hover:bg-(--hover-06)">
+            ← Back
+      </button>
+      <div class="auth-form
+          w-[min(440px,92vw)] my-[20px] mx-auto flex flex-col gap-[20px]
+          bg-(--bg-color-white-seven) py-[36px] px-[40px] rounded-[15px]
+          shadow-[0_10px_30px_var(--shadow-10)] relative">
+        <h2 class="text-(--main-color) mb-[20px] text-[32px] font-bold">
+          Log In
+        </h2>
+        <input type="text" id="login-username-email" placeholder="Username or Email"
+          class="px-[15px] py-[15px] text-[18px] border border-solid
+            border-(--border-soft-gray) rounded-[10px]
+            transition-[border-color,box-shadow] duration-300
+            bg-(--bg-color-white-seven)
+            focus:border-(--main-color) focus:shadow-[0_0_8px_rgba(0,123,255,0.2)]
+            focus:outline-none" />
+        <input type="password" id="login-password" placeholder="Password"
+          class="px-[15px] py-[15px] text-[18px] border border-solid
+            border-(--border-soft-gray) rounded-[10px]
+            transition-[border-color,box-shadow] duration-300
+            bg-(--bg-color-white-seven)
+            focus:border-(--main-color) focus:shadow-[0_0_8px_rgba(0,123,255,0.2)]
+            focus:outline-none" />
         <button
           id="login-button"
-          class="auth-submit-button"
-          data-action="submit-log-in">
-            Login
+          data-action="submit-log-in"
+          class="auth-submit-button
+            px-[15px] py-[15px] text-[20px] font-bold bg-(--main-color)
+            text-white border-0 rounded-[10px] cursor-pointer
+            transition-[transform,background-color] duration-[100ms,300ms]
+            shadow-[0_4px_10px_var(--shadow-20)]
+            hover:opacity-[0.7] hover:transform-[translateY(-2px)]
+            hover:shadow-[0_6px_15px_rgba(0,0,0,0.25)]">
+              Login
         </button>
-      </div>
-    </section>
-
-    <section id="profile-page" class="profile">
-      <header class="profile__header">
-        <button class="back_btn js-profile__back_btn">← Back</button>
-        <h1>Profile</h1>
-      </header>
-
-      <div class="card">
-        <div class="identity">
-          <div class="avatar js-avatar"></div>
-          <div class="who">
-            <h2 class="name js-name"></h2>
-            <p class="muted js-username"></p>
-          </div>
-          <button class="btn btn-ghost js-edit" type="button">Edit</button>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><div class="num js-wins">0</div><div class="label">Wins</div></div>
-          <div class="stat"><div class="num js-losses">0</div><div class="label">Losses</div></div>
-        </div>
-
-        <div class="grid">
-          <div class="field">
-            <label>Full name</label>
-            <div class="value js-fullname"></div>
-          </div>
-          <div class="field">
-            <label>Username</label>
-            <div class="value js-username2"></div>
-          </div>
-          <div class="field">
-            <label>Email</label>
-            <div class="value js-email"></div>
-          </div>
-          <div class="field">
-            <label>Wallet</label>
-            <div class="value"><span class="badge badge-ok js-wallet">Connected</span></div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-primary js-change-pass" type="button">Change password</button>
-          <button class="btn btn-ghost js-logout" type="button">Log out</button>
+        <div class="js-login-status
+          absolute left-1/2 bottom-0 -translate-x-1/2
+          flex items-center gap-[8px] px-[12px] py-[8px]
+          bg-transparent text-[12px] text-(--main-color)
+          opacity-0 transition-opacity duration-200">
+            <span class="js-login-text-dot
+              size-[8px] rounded-full bg-green-500"></span>
+            <span class="js-login-status-text">message</span>
         </div>
       </div>
     </section>
 
-    <section id="settings-page" class="profile">
-      <header class="profile__header">
-        <button class="back_btn js-settings__back_btn">← Back</button>
-        <h1>Settings</h1>
+    <section id="profile-page"
+      class="profile min-h-screen box-border flex flex-col relative
+        items-stretch justify-start
+        my-0 mx-auto font-[Arial,sans-serif] text-(--main-color)
+        w-full max-w-none pt-[33px] px-[16px] pb-[32px]">
+      <header class="profile__header
+        relative flex items-center justify-center mb-[12px]">
+          <button
+            data-action="go-back-profile"
+            class="back_btn
+              absolute left-0 top-[50%] transform-[translateY(-50%)]
+              inline-flex items-center gap-[6px]
+              text-(--main-color) bg-transparent border-0
+              text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
+              cursor-pointer transition-[background] hover:bg-(--hover-06)">
+                ← Back
+          </button>
+          <h1 class="mx-0 my-0 text-[22px] font-bold">Profile</h1>
       </header>
 
-      <div class="card-settings-page">
-        <!-- <h3 class="section-title">Game settings</h3> -->
+      <div class="card
+        bg-white border border-solid border-(--border-soft-gray)
+        rounded-[16px] px-[16px] py-[16px] mt-[16px]">
+        <div class="identity flex items-center gap-[12px]">
+          <div class="avatar js-avatar group
+            size-[56px] rounded-[50%] grid place-items-center
+            bg-(--main-color) text-white font-bold text-[18px]
+            cursor-pointer relative">
+            <div class="absolute inset-0 rounded-full overflow-hidden z-0">
+              <input
+                type="file"
+                accept="image/png, image/jpeg, image/webp"
+                class="absolute inset-0 opacity-0 cursor-pointer z-2">
+              <div class="absolute inset-0 opacity-0
+                bg-black/40 transition-opacity duration-200
+                grid place-items-center pointer-events-none
+                group-hover:opacity-100">
+                  <span class="text-[20px]">📷</span>
+              </div>
+            </div>
+            <button
+              data-action="remove-avatar"
+              class="absolute top-0 right-0 z-20 size-[18px] rounded-full
+                bg-black/60 text-white text-[12px] grid place-items-center
+                scale-90 opacity-0 transition-all duration-200
+                group-hover:opacity-100 hover:scale-105 cursor-pointer">
+                  ✕
+            </button>
+          </div>
+          <div class="who flex-1">
+            <h2 class="name js-name m-0 text-[18px] font-bold"></h2>
+            <p class="muted js-username mt-[2px] mx-0 mb-0 text-(--text-secondary) text-[12px]"></p>
+          </div>
+          <button
+            data-action="edit-profile-data"
+            class="btn btn-ghost js-profile-edit
+            py-[10px] px-[14px] rounded-[999px] font-bold
+            text-[14px] cursor-pointer bg-white border border-solid
+            border-(--border-soft-gray) hover:bg-(--bg-color-gray)">
+              Edit
+          </button>
+          <div class="js-profile-save-cancel-btns hidden">
+            <button
+              data-action="save-profile-change"
+              class="py-[10px] px-[14px] rounded-[999px]
+              font-bold text-white text-[14px] cursor-pointer
+              bg-(--main-color) border-0 hover:opacity-[0.7]">
+                Save
+            </button>
+            <button
+              data-action="cancel-profile-change"
+              class="py-[10px] px-[14px] rounded-[999px] font-bold
+              text-[14px] cursor-pointer bg-white border border-solid
+              border-(--border-soft-gray) hover:bg-(--bg-color-gray)">
+                Cancel
+            </button>
+          </div>
+        </div>
 
-        <form class="settings-form js-settings-form" onsubmit="return false;">
+        <div class="stats
+          grid grid-cols-[repeat(2,1fr)] gap-[8px] mt-[12px]">
+          <div class="stat
+            text-center border border-solid border-(--border-soft-gray)
+            rounded-[10px] bg-(--bg-color-gray) px-[10px] py-[10px]">
+            <div class="num js-wins font-bold"></div>
+            <div class="label text-(--text-secondary) text-[12px]">Wins</div>
+          </div>
+          <div class="stat
+            text-center border border-solid border-(--border-soft-gray)
+            rounded-[10px] bg-(--bg-color-gray) px-[10px] py-[10px]">
+            <div class="num js-total-games font-bold"></div>
+            <div class="label text-(--text-secondary) text-[12px]">Total games</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-[12px] mt-[12px]
+            max-[640px]:grid-cols-1">
+          <div class="field">
+            <label class="block text-(--text-secondary) text-[12px] mb-[4px]">Full name</label>
+            <div class="value js-fullname
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]">
+            </div>
+            <input
+              type="text"
+              class="js-fullname-input hidden
+                w-full py-[10px] px-[12px]
+                rounded-[8px] bg-white text-(--main-color)
+                border border-green-500
+                shadow-[0_4px_14px_rgba(34,197,94,0.25)]
+                focus:shadow-[0_4px_20px_rgba(34,197,94,0.4)]
+                focus:outline-none">
+          </div>
+          <div class="field">
+            <label class="block text-(--text-secondary) text-[12px] mb-[4px]">Username</label>
+            <div class="value js-username2
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]">
+            </div>
+          </div>
+          <div class="field">
+            <label class="block text-(--text-secondary) text-[12px] mb-[4px]">Email</label>
+            <div class="value js-email
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]">
+            </div>
+            <input
+              type="email"
+              class="js-email-input hidden
+                w-full py-[10px] px-[12px]
+                rounded-[8px] bg-white text-(--main-color)
+                border border-green-500
+                shadow-[0_4px_14px_rgba(34,197,94,0.25)]
+                focus:shadow-[0_4px_20px_rgba(34,197,94,0.4)]
+                focus:outline-none">
+          </div>
+          <div class="field">
+            <label class="block text-(--text-secondary) text-[12px] mb-[4px]">Wallet</label>
+            <div class="value
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]">
+              <span class="badge badge-ok js-wallet
+                inline-block py-[4px] px-[10px] rounded-[999px]
+                text-[12px] font-bold
+                bg-(--bg-wallet-status) text-(--text-wallet-status)">
+                  Connected
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions flex gap-[10px] mt-[14px]">
+          <button
+            type="button"
+            data-action="toggle-password-modal"
+            class="btn btn-primary js-change-pass
+            py-[10px] px-[14px] rounded-[999px] font-bold
+            text-[14px] cursor-pointer
+            bg-(--main-color) text-white border-0 hover:opacity-[0.7]">
+              Change password
+          </button>
+          <button
+            data-action="log-out"
+            class="btn btn-ghost js-logout
+            py-[10px] px-[14px] rounded-[999px] font-bold
+            text-[14px] cursor-pointer bg-white border border-solid
+            border-(--border-soft-gray) hover:bg-(--bg-color-gray)">
+              Log out
+          </button>
+        </div>
+        <div class="js-pass-modal fixed inset-0 z-2000 hidden">
+          <button
+            data-action="close-pass-modal"
+            class="absolute inset-0 bg-black/40 backdrop-blur-[2px]">
+          </button>
+          <div class="relative mx-auto mt-[90px] w-[min(520px,calc(100%-32px))]
+              rounded-[18px] border border-solid border-(--border-soft-gray)
+              bg-white shadow-xl">
+              <div class="flex items-center px-[16px] py-[14px]
+                border-b border-solid border-(--border-soft-gray)">
+                <div class="flex-1 text-center">
+                  <h3 class="m-0 text-[16px] font-bold">Change password</h3>
+                </div>
+                <button
+                  data-action="toggle-password-modal"
+                  class="rounded-[10px] px-[10px] py-[6px]
+                  hover:bg-(--bg-color-gray) cursor-pointer">
+                    ✕
+                </button>
+              </div>
+
+              <div class="form-section p-[16px] grid gap-[12px]">
+                <label class="grid gap-[6px]">
+                  <span class="text-[12px] text-(--text-secondary)">Current password</span>
+                  <input type="password" autocomplete="current-password"
+                    class="w-full rounded-[10px] border border-solid border-(--border-soft-gray)
+                      px-[12px] py-[10px] outline-none focus:ring-2 focus:ring-black/10">
+                </label>
+                <label class="grid gap-[6px]">
+                  <span class="text-[12px] text-(--text-secondary)">New password</span>
+                  <input type="password" autocomplete="new-password"
+                    class="w-full rounded-[10px] border border-solid border-(--border-soft-gray)
+                      px-[12px] py-[10px] outline-none focus:ring-2 focus:ring-black/10">
+                </label>
+                <label class="grid gap-[6px]">
+                  <span class="text-[12px] text-(--text-secondary)">Confirm new password</span>
+                  <input type="password" autocomplete="new-password"
+                    class="w-full rounded-[10px] border border-solid border-(--border-soft-gray)
+                      px-[12px] py-[10px] outline-none focus:ring-2 focus:ring-black/10">
+                </label>
+
+                <div class="flex items-center gap-[10px] mt-[4px]">
+                  <button
+                    data-action="update-password"
+                    class="py-[10px] px-[14px] rounded-[999px] font-bold text-[14px]
+                      bg-(--main-color) text-white cursor-pointer hover:opacity-[0.9]">
+                        Update password
+                  </button>
+                  <button
+                    data-action="toggle-password-modal"
+                    class="py-[10px] px-[14px] rounded-[999px] font-bold text-[14px]
+                      bg-white border border-solid border-(--border-soft-gray)
+                      hover:bg-(--bg-color-gray) cursor-pointer">
+                        Cancel
+                  </button>
+
+                  <div class="js-pass-msg-container
+                    px-[12px] py-[8px] rounded-[999px] bg-(--bg-color-white-seven)
+                    text-[12px] text-(--main-color) pointer-events-none
+                    opacity-0 transition-opacity duration-200">
+                    <span class="js-pass-msg-dot inline-block
+                      w-[8px] h-[8px] rounded-full"></span>
+                    <span class="js-pass-msg"></span>
+                  </div>
+
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-page"
+      class="profile min-h-screen box-border flex flex-col relative
+        items-stretch justify-start
+        my-0 mx-auto font-[Arial,sans-serif] text-(--main-color)
+        w-full max-w-none pt-[33px] px-[16px] pb-[32px]">
+      <header class="profile__header
+        relative flex items-center justify-center mb-[12px]">
+          <button
+            data-action="go-back-settings"
+            class="back_btn
+              absolute left-0 top-[50%] transform-[translateY(-50%)]
+              inline-flex items-center gap-[6px]
+              text-(--main-color) bg-transparent border-0
+              text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
+              cursor-pointer transition-[background] hover:bg-(--hover-06)">
+                ← Back
+          </button>
+          <h1 class="mx-0 my-0 text-[22px] font-bold">Settings</h1>
+      </header>
+
+      <div
+        class="card-settings-page
+          bg-white border border-solid border-(--border-soft-gray)
+          rounded-[16px] px-[16px] py-[16px] mt-[16px]
+          flex justify-center">
+        <form
+          onsubmit="return false;"
+          class="settings-form js-settings-form
+          grid gap-[12px] mt-[12px] min-w-[500px]">
           <!-- Ball speed -->
           <div class="field">
-            <label for="ball-speed">Ball speed</label>
-            <div class="value settings-value-row">
+            <label
+              for="ball-speed"
+              class="block text-(--text-secondary) text-[12px] mb-[4px]">
+                Ball speed
+            </label>
+            <div class="value settings-value-row
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]
+              flex items-center gap-[10px]">
               <input
                 id="ball-speed"
                 type="range"
                 min="1"
                 max="10"
-                class="js-ball-speed"
+                class="js-ball-speed flex-1"
               />
-              <span class="settings-value js-ball-speed-value"></span>
+              <span
+                class="settings-value js-ball-speed-value
+                  min-w-[24px] text-right text-[13px] text-(--text-secondary)">
+              </span>
             </div>
-            <p class="settings-helper">How fast the ball moves.</p>
+            <p class="settings-helper
+              mt-[4px] mx-0 mb-0 text-[11px] text-(--help-message)">
+                How fast the ball moves.
+            </p>
           </div>
 
           <!-- Paddle speed -->
           <div class="field">
-            <label for="paddle-speed">Paddle speed</label>
-            <div class="value settings-value-row">
+            <label
+              for="paddle-speed"
+              class="block text-(--text-secondary) text-[12px] mb-[4px]">
+                Paddle speed
+            </label>
+            <div class="value settings-value-row
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]
+              flex items-center gap-[10px]">
               <input
                 id="paddle-speed"
                 type="range"
                 min="1"
                 max="10"
-                class="js-paddle-speed"
+                class="js-paddle-speed flex-1"
               />
-              <span class="settings-value js-paddle-speed-value"></span>
+              <span
+                class="settings-value js-paddle-speed-value
+                  min-w-[24px] text-right text-[13px] text-(--text-secondary)">
+              </span>
             </div>
-            <p class="settings-helper">How fast paddles move.</p>
+            <p
+              class="settings-helper
+              mt-[4px] mx-0 mb-0 text-[11px] text-(--help-message)">
+                How fast paddles move.
+            </p>
           </div>
 
           <!-- Score needed to win -->
           <div class="field">
-            <label for="score-to-win">Score needed to win</label>
-            <div class="value settings-value-row">
+            <label
+              for="score-to-win"
+              class="block text-(--text-secondary) text-[12px] mb-[4px]">
+                Score needed to win
+            </label>
+            <div class="value settings-value-row
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]
+              flex items-center gap-[10px]">
               <input
                 id="score-to-win"
                 type="number"
                 min="1"
                 max="21"
                 step="1"
-                class="js-score-to-win"
+                class="js-score-to-win w-[80px]"
               />
             </div>
-            <p class="settings-helper">Points a player must reach to win the game.</p>
+            <p
+              class="settings-helper
+              mt-[4px] mx-0 mb-0 text-[11px] text-(--help-message)">
+                Points a player must reach to win the game.
+            </p>
           </div>
 
           <!-- Ball color -->
           <div class="field">
-            <label for="ball-color">Ball color</label>
-            <div class="value settings-value-row">
+            <label
+              for="ball-color"
+              class="block text-(--text-secondary) text-[12px] mb-[4px]">
+                Ball color
+            </label>
+            <div class="value settings-value-row
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]
+              flex items-center gap-[10px]">
               <input
                 id="ball-color"
                 type="color"
                 class="js-ball-color"
               />
-              <span class="settings-color-text js-ball-color-text"></span>
+              <span
+                class="settings-color-text js-ball-color-text
+                  text-[13px] text-(--text-secondary)">
+              </span>
             </div>
           </div>
 
           <!-- Paddle color -->
           <div class="field">
-            <label for="paddle-color">Paddle color</label>
-            <div class="value settings-value-row">
+            <label
+              for="paddle-color"
+              class="block text-(--text-secondary) text-[12px] mb-[4px]">
+                Paddle color
+            </label>
+            <div class="value settings-value-row
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]
+              flex items-center gap-[10px]">
               <input
                 id="paddle-color"
                 type="color"
                 class="js-paddle-color"
               />
-              <span class="settings-color-text js-paddle-color-text"></span>
+              <span
+                class="settings-color-text js-paddle-color-text
+                  text-[13px] text-(--text-secondary)">
+              </span>
             </div>
           </div>
 
           <!-- Background color -->
           <div class="field">
-            <label for="bg-color">Background color</label>
-            <div class="value settings-value-row">
+            <label
+              for="bg-color"
+              class="block text-(--text-secondary) text-[12px] mb-[4px]">
+                Background color
+            </label>
+            <div class="value settings-value-row
+              py-[10px] px-[12px] border border-solid
+              border-(--border-soft-gray) rounded-[8px]
+              flex items-center gap-[10px]">
               <input
                 id="bg-color"
                 type="color"
                 class="js-bg-color"
               />
-              <span class="settings-color-text js-bg-color-text"></span>
+              <span
+                class="settings-color-text js-bg-color-text
+                  text-[13px] text-(--text-secondary)">
+              </span>
             </div>
           </div>
 
-          <div class="actions">
-            <button type="button" class="btn btn-primary js-settings-save">
-              Save
+          <div class="actions flex gap-[10px] mt-[14px] items-center">
+            <button
+              data-action="settings-save"
+              type="button"
+              class="btn btn-primary js-settings-save
+              py-[10px] px-[14px] rounded-[999px] font-bold
+              text-[14px] cursor-pointer
+              bg-(--main-color) text-white border-0 hover:opacity-[0.9]">
+                Save
             </button>
-            <button type="button" class="btn btn-ghost js-settings-reset">
-              Reset to defaults
+            <button
+              data-action="settings-reset"
+              type="button"
+              class="btn btn-ghost js-settings-reset
+              py-[10px] px-[14px] rounded-[999px] font-bold
+              text-[14px] cursor-pointer bg-white border
+              border-solid border-(--border-soft-gray) hover:bg-(--bg-color-gray)">
+                Reset to defaults
             </button>
-            <span class="settings-message js-settings-message"></span>
-          </div>
+            <div class="js-settings-msg-container
+              px-[12px] py-[8px] rounded-[999px] bg-(--bg-color-white-seven)
+              text-[12px] text-(--main-color) pointer-events-none
+              opacity-0 transition-opacity duration-200">
+              <span class="inline-block w-[8px] h-[8px] rounded-full bg-green-500"></span>
+              <span class="settings-message js-settings-message">Settings saved</span>
+            </div>
         </form>
       </div>
     </section>
+    <div class="
+      hidden rounded-[5px] border-2 border-solid
+      border-(--border-color) w-[270px] pl-[10px]
+      py-[15px] text-[18px] text-(--main-color)
+      mb-[10px] bg-(--bg-color-white-seven)
+      placeholder:text-(--main-color)">
+    </div>
 
     <script type="module" src="./scripts/js/pong.js"></script>
   </body>

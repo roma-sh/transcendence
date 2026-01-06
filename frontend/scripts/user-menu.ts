@@ -1,28 +1,34 @@
-import { initProfilePage } from "./profile-page.js";
-import { initSettingsPage } from "./settings-page.js";
+import { isUserOnline } from "./welcome-page.js";
 
-export function updateUIforUserMenu(isLoggedIn: boolean) {
+const USER_MENU_RETURN_KEY = "userMenuReturnHash";
+
+export async function updateUIforUserMenu() {
+
+  const isLoggedIn = await isUserOnline();
+
 	const buttonCont = document.querySelector(
 		'.js-user-menu-button-container'
-	);
+	) as HTMLElement | null;
 
 	if (!buttonCont) return;
 
 	if (isLoggedIn) {
-		buttonCont.classList.remove("user-menu-button-container-hidden");
+    buttonCont.style.display = 'flex';
 	} else {
-		buttonCont.classList.add("user-menu-button-container-hidden");
+    buttonCont.style.display = 'none';
 	}
+
+  setUserMenuName();
 }
 
-export function setUserMenuName() {
+function setUserMenuName() {
 	const userName = localStorage.getItem('userName');
 
 	const userMenuBtn = document.querySelector(
 			'.js-user-menu-button'
-		) as HTMLButtonElement;
-	
-	userMenuBtn.textContent = userName;
+		) as HTMLButtonElement | null;
+
+	if (userMenuBtn) userMenuBtn.textContent = userName;
 }
 
 export function handleToggleUserMenu(e: MouseEvent) {
@@ -33,30 +39,51 @@ export function handleToggleUserMenu(e: MouseEvent) {
 }
 
 export function handleOpenProfile() {
-	initProfilePage();
+  storeUserMenuReturnHash();
 	location.hash = '#profile-page';
 }
 
 export function handleOpenSettings() {
-	initSettingsPage();
+  storeUserMenuReturnHash();
 	location.hash = '#settings-page';
+}
+
+export function handleOpenWelcomePage() {
+  location.hash = '#welcome-page';
+}
+
+export function getUserMenuReturnHash(): string | null {
+  return sessionStorage.getItem(USER_MENU_RETURN_KEY);
+}
+
+export function clearUserMenuReturnHash(): void {
+  sessionStorage.removeItem(USER_MENU_RETURN_KEY);
+}
+
+function storeUserMenuReturnHash(): void {
+  const currentHash = location.hash || '#welcome-page';
+  sessionStorage.setItem(USER_MENU_RETURN_KEY, currentHash);
 }
 
 /** Toggles auth buttons and game buttons (play and connect wallet)
  * depending on whether the user is logged in. */
-export function updateUIForAuthState(isLoggedIn: boolean): void {
+export async function updateUIForAuthState() {
 
-  const authBtns = document.querySelector(".js-signup-login-btns");
-  const playConnectWalletBtns = document.querySelector(".js-play-connect-wallet-btns");
+  const isLoggedIn = await isUserOnline();
+
+  const authBtns = document.querySelector(
+    ".js-signup-login-btns") as HTMLElement | null;
+  const playConnectWalletBtns = document.querySelector(
+    ".js-play-connect-wallet-btns") as HTMLElement | null;
 
   if (!playConnectWalletBtns || !authBtns) return;
 
   if (isLoggedIn) {
-    authBtns.classList.add("signup-login-btns-hidden");
-    playConnectWalletBtns.classList.remove("play-connect-wallet-btns-hidden");
+    authBtns.style.display = "none";
+    playConnectWalletBtns.style.display = "block";
   } else {
-    authBtns.classList.remove("signup-login-btns-hidden");
-    playConnectWalletBtns.classList.add("play-connect-wallet-btns-hidden");
+    authBtns.style.display = "flex";
+    playConnectWalletBtns.style.display = "none";
   }
 }
 
@@ -67,8 +94,6 @@ export async function handleLogOut(): Promise<boolean> {
       credentials: 'include',
     });
 
-    console.log('Logout status:', res.status);
-
     if (!res.ok) {
       console.error(' failed:', res.status);
       return false;
@@ -77,7 +102,6 @@ export async function handleLogOut(): Promise<boolean> {
     let data: any = null;
     try {
       data = await res.json();
-      console.log('Logout response:', data);
     } catch {
       // backend might return empty response
     }

@@ -36,7 +36,12 @@ POSTGRES_USER
 .checkfile
 .env
 secrets
-DATA_SOURCE_NAME
 database/user_db.db
 backend/node_modules/
 public/
+backend/api_test/cookies.txt
+backend/cookiejar
+frontend/scripts/js/
+frontend/styles/output.css
+
+notes.txt

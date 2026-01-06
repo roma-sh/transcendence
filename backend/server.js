@@ -5,15 +5,15 @@ const fastifyCors = require('@fastify/cors');
 const path = require('path');
 const fastifyCookie = require('@fastify/cookie');
 const fastifySession = require('@fastify/session');
+const fastifyMultipart = require('@fastify/multipart');
+const fastifyRateLimit = require('@fastify/rate-limit');
 
-require('dotenv').config(); 
-const fastifyCookie = require('@fastify/cookie');
-const fastifySession = require('@fastify/session');
-
-const app = Fastify({ logger: {
-                        level: process.env.NODE_ENV === 'production' ? 'error' : 'warn'
-                      }
-                    });
+const app = Fastify({ logger:
+  {
+    level: process.env.NODE_ENV === 'production' ? 'error' : 'warn'
+  },
+  trustProxy: true,
+});
 
 app.register(fastifyCors, {
     origin: process.env.ALLOWED_ORIGINS?.split(',') || true,
@@ -34,15 +34,37 @@ app.register(fastifySession, {
     saveUninitialized: false
 });
 
+app.register(fastifyMultipart, {
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB max file size
+  }
+});
+
+const frontendRoot = path.join(__dirname, '../frontend');
+const uploadsRoot = path.join(__dirname, '../public/uploads');
+
 app.register(fastifyStatic, {
-  root: path.join(__dirname, '../public'),
+  root: uploadsRoot,
+  prefix: '/uploads/',
+  decorateReply: false,
+});
+
+app.register(fastifyStatic, {
+  root: frontendRoot,
   prefix: '/',
+  index: 'pong.html',
+  decorateReply: false,
+});
+
+app.register(fastifyRateLimit, {
+  max: 100,
+  timeWindow: "1 minute",
 });
 
 app.register(require('./src/routes/auth.routes'), { prefix: '/api/auth' });
 app.register(require('./src/routes/alias.routes'), { prefix: '/api/alias' });
-app.register(require('./src/routes/stats.routes'), { prefix: '/api/stats' });
 app.register(require('./src/routes/profile.route'), { prefix: '/api' });
+app.register(require('./src/routes/game.route'), { prefix: '/api/game' });
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const HOST = process.env.HOST || '0.0.0.0';

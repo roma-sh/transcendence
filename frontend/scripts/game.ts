@@ -64,7 +64,7 @@ export function game(): void {
     paddleHeight: 100,
     ballRadius: 10,
     maxScore: settings.scoreToWin,
-    ballInitSpeed: settings.ballSpeed
+    ballInitSpeed: settings.ballSpeed + 5
   };
 
   const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -102,6 +102,11 @@ export function game(): void {
   resetBall(ball, canvas, gameConfig);
 
   const keys: KeyMap = {}; 
+
+  gameState.isPaused = true;
+  startCountdown(() => {
+    gameState.isPaused = false;
+  });
 
   function gameLoop() {
     if (!ctx) return;
@@ -182,15 +187,17 @@ function handleWinOnce(
 
   gameState.winnerSide = winner;
 
-  tSettings.winnersAliases.push(winnerName);
+  if (tSettings.currentMatch) {
+    tSettings.winnersAliases.push(winnerName);
 
-  console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
-  if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
-  {
-    tSettings.secondPlaceAliases.push(loserName);
-    console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
+    console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
+    if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
+    {
+      tSettings.secondPlaceAliases.push(loserName);
+      console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
+    }
+    console.log(`Winner of this match: ${winnerName}`);
   }
-  console.log(`Winner of this match: ${winnerName}`);
 
   const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
 
@@ -232,4 +239,29 @@ async function updatePlayerStats(winnerAlias: string, loserAlias: string) {
     } catch (error) {
         console.error('Network error while updating stats:', error);
     }
+}
+
+function startCountdown(startGame: () => void) {
+  const countdownEl = document.querySelector(
+    '.countdown-overlay') as HTMLElement | null;
+
+  if (!countdownEl) return;
+
+  let count = 3;
+  countdownEl.textContent = String(count);
+  countdownEl.classList.remove('hidden');
+  countdownEl.classList.add('flex');
+
+  const interval = setInterval(() => {
+    count--;
+
+    if (count > 0) {
+      countdownEl.textContent = String(count);
+    } else {
+      clearInterval(interval);
+      countdownEl.classList.add('hidden');
+      countdownEl.classList.remove('flex');
+      startGame();
+    }
+  }, 1000);
 }

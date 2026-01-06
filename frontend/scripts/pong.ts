@@ -10,6 +10,9 @@ import { initWalletConnect } from './wallet-connect.js';
 import { initWinnerAnnouncementPage } from './winner-page.js';
 import { setupGlobalClicksDelegation } from './clicks-delegation.js';
 import { game } from './game.js';
+import { updateUIforUserMenu } from './user-menu.js';
+import { initProfilePage, initAvatarUpload } from "./profile-page.js";
+import { initSettingsPage } from "./settings-page.js";
 
 export const tSettings : TournamentSettings = {
   numberOfPlayers: 1,
@@ -30,12 +33,20 @@ setInitHash();
 // Initialize wallet connection - add this after the other initializations
 initWalletConnect();
 
+updateUIforUserMenu();
+
+initAvatarUpload();
+
 // Function to handle hash-based navigation
 function handleHashChange() {
   const hash = location.hash;
 
   if (hash === '#welcome-page') {
     initWelcomePage();
+  } else if (hash === '#profile-page') {
+    initProfilePage();
+  } else if (hash === '#settings-page') {
+    initSettingsPage();
   } else if (hash === '#game-page') {
     game();
   } else if (hash === '#game-ready-page') {

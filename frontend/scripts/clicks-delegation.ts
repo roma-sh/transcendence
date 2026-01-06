@@ -2,7 +2,8 @@ import {
 	handleToggleUserMenu,
 	handleOpenProfile,
 	handleOpenSettings,
-	handleLogOut
+	handleLogOut,
+	handleOpenWelcomePage
 } from "./user-menu.js";
 import {
 	handleOpenChooseMode,
@@ -36,10 +37,25 @@ import {
 	handleDisconnectWallet,
 	handleWalletBackToMenu
 } from "./wallet-connect.js";
+import {
+	handleGoBackProfile,
+	handleTogglePasswordModal,
+	handleUpdatePassword,
+	handleEditProfileData,
+	handleSaveProfileChange,
+	handleCancelProfileChange,
+	handleRemoveAvatar
+} from "./profile-page.js";
+import {
+	handleGoBackSettings,
+	handleSettingsSave,
+	handleSettingsReset
+} from "./settings-page.js";
 
 export function setupGlobalClicksDelegation() {
 	const actions: Record<string, (event?: MouseEvent) => void> = {
 			"toggle-user-menu": handleToggleUserMenu,
+			"open-welcome-page": handleOpenWelcomePage,
 			"open-profile": handleOpenProfile,
 			"open-settings": handleOpenSettings,
 			"open-choose-mode": handleOpenChooseMode,
@@ -62,7 +78,17 @@ export function setupGlobalClicksDelegation() {
 			"connect-wallet": handleConnectWallet,
 			"disconnect-wallet": handleDisconnectWallet,
 			"wallet-back-to-menu": handleWalletBackToMenu,
-			"start-game-option": handleStartGameOption
+			"start-game-option": handleStartGameOption,
+			"go-back-profile": handleGoBackProfile,
+			"go-back-settings": handleGoBackSettings,
+			"settings-save": handleSettingsSave,
+			"settings-reset": handleSettingsReset,
+			"toggle-password-modal": handleTogglePasswordModal,
+			"update-password": handleUpdatePassword,
+			"edit-profile-data": handleEditProfileData,
+			"save-profile-change": handleSaveProfileChange,
+			"cancel-profile-change": handleCancelProfileChange,
+			"remove-avatar": handleRemoveAvatar,
 	};
 
 	document.addEventListener('click', (e) => {
