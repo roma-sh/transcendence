@@ -94,26 +94,6 @@ function generateInputsForAliases( tSettings: TournamentSettings) {
   return html; // We return only the HTML string
 }
 
-// --- 2. Helper Function: Alias Check ---
-async function checkAliasExists(alias: string): Promise<boolean> {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/alias/${encodeURIComponent(alias)}`
-    );
-
-    if (!response.ok) {
-      console.error('checkAlias failed with status:', response.status);
-      return false;
-    }
-
-    const data = await response.json();
-    return Boolean(data.exists);
-  } catch (error) {
-    console.error('checkAlias ERROR:', error);
-    return false;
-  }
-}
-
 // --- 3. Handler for the NEXT Button ---
 export async function handleNextAfterAliases() {
 
@@ -133,27 +113,15 @@ export async function handleNextAfterAliases() {
     return;
   }
 
-  const aliasesExist: string[] = [];
-  const aliasesDoNotExist: string[] = [];
-
-  // Check if Aliases exist
-  for (const alias of humanAliases) {
-    const exists = await checkAliasExists(alias); 
-    if (exists) {
-      aliasesExist.push(alias);
-    } else {
-      aliasesDoNotExist.push(alias);
-    }
+  // Validate: no duplicates
+  const lower = humanAliases.map(a => a.toLowerCase());
+  const hasDup = new Set(lower).size !== lower.length;
+  if (hasDup) {
+    alert("Player aliases must be unique.");
+    return;
   }
 
-  // Result handling
-  if (aliasesDoNotExist.length > 0) {
-    alert(`Unfortunately, user(s) "${aliasesDoNotExist.join(', ')}" were not found in our database. Please sign up first.`);
-    return; // We stop if there are invalid aliases
-  }
-
-  // If we reach here, all human aliases are valid
-  if (aliasesExist.length > 0 || tSettings.numberOfBots > 0) {
+  if (humanAliases.length > 0 || tSettings.numberOfBots > 0) {
       
     // *****************************************************************
     // ** Dynamically Create Bot Aliases **
@@ -167,7 +135,7 @@ export async function handleNextAfterAliases() {
 
     // 6. COMBINATION of Human Players and Bots
     const finalTournamentAliases: string[] = [
-        ...aliasesExist,       // Confirmed humans
+        ...humanAliases,       // Confirmed humans
         ...createdBotAliases   // Generated Bots
     ];
 
