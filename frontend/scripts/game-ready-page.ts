@@ -1,48 +1,39 @@
-import { TournamentSettings } from "./types.js";
-import { game } from "./game.js";
 import { tSettings } from "./pong.js";
 
 export function handleGoBackGameReadyPage() {
   location.hash = '#tournament-page-player-aliases';
 }
 
-export function initGameReadyPage(tSettings: TournamentSettings) {
+export function initGameReadyPage() {
 
   if (tSettings.playerAliases.length == 0) {
     if (tSettings.winnersAliases.length == 1) {
       tSettings.playerAliases = [];
       tSettings.secondPlaceAlias = tSettings.secondPlaceAliases.pop()!;
-      console.log("First place winner : ", tSettings.winnersAliases[0]);
-      console.log("Second place winner : ", tSettings.secondPlaceAlias);
       tSettings.firstPlaceAlias = tSettings.winnersAliases.pop()!;
       tSettings.winnersAliases = [];
       tSettings.secondPlaceAliases = [];
       location.hash = `#winner-page`;
       return;
     }
-    console.log('Winners: ' + tSettings.winnersAliases);
+
     tSettings.playerAliases = tSettings.winnersAliases.slice(); // Copy winners to the next round
     tSettings.winnersAliases = []; // Clear winners for the next round
-    console.log("All matches in this round completed. Preparing for the next round. Players left : ", tSettings.playerAliases.length);
-    // location.hash = '#game-ready-page';
   }
 
-  console.log("Aliases BEFORE extraction:", tSettings.playerAliases);
-  console.log("List Length BEFORE extraction:", tSettings.playerAliases.length);
-  
   // 1. Extract the First Player (Start of the list)
   // shift() removes and returns the first element.
   const p1Name = tSettings.playerAliases.shift(); 
-  
+
   // 2. Extract the Last Player (End of the list)
   // pop() removes and returns the last element.
   const p2Name = tSettings.playerAliases.pop();
-  
-  console.log("p1Name (shift):", p1Name);
-  console.log("p2Name (pop):", p2Name);
-  
-  // Navigate to the game page
-  
+
+  if (p1Name && p2Name)
+    tSettings.currentMatch = { p1Name, p2Name };
+  else
+    tSettings.currentMatch = null;
+
   // 3. Inject Names into the DOM
   const p1NameEl = document.querySelector('.js-p1-name');
   const p2NameEl = document.querySelector('.js-p2-name');
@@ -56,21 +47,11 @@ export function initGameReadyPage(tSettings: TournamentSettings) {
 }
 
 export function handleStartTournament() {
-  console.log('handle start tournament called!!!')
 
-  const p1El = document.querySelector('.js-p1-name') as HTMLElement | null;
-  const p2El = document.querySelector('.js-p2-name') as HTMLElement | null;
-
-  const p1Name = p1El?.textContent?.trim() || '';
-  const p2Name = p2El?.textContent?.trim() || '';
-
-  if (!p1Name || !p2Name) {
+  if (!tSettings.currentMatch) {
     console.error('Missing player names for game start');
     return;
   }
 
-  console.log(`Starting match: ${p1Name} vs ${p2Name}`);
-
-  tSettings.currentMatch = { p1Name, p2Name };
   location.hash = '#game-page';
 }

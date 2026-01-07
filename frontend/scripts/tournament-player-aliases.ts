@@ -7,9 +7,6 @@ export function handleGoBackPlayerAliases() {
 
 export function addAliasesSection() {
 
-  console.log("--- STARTING ALIASES SECTION ---");
-  console.log("Number of Players received in addAliasesSection:", tSettings.numberOfPlayers);
-
   location.hash = '#tournament-page-player-aliases';
 
   const inputsContainer = document.querySelector('.aliase-inputs');
@@ -55,7 +52,7 @@ function generateInputsForAliases( tSettings: TournamentSettings) {
 
     let inputValue = '';
     let disabledAttribute = '';
-    let inputClass = 'js-player-alias-input';
+    let inputClass = 'player-alias-input js-player-alias-input';
     inputClass += `
       rounded-[5px] border-2 border-solid
       border-(--border-color) w-[270px] pl-[10px]
@@ -86,7 +83,7 @@ function generateInputsForAliases( tSettings: TournamentSettings) {
           class="${inputClass}"
           placeholder="Player ${i + 1}"
           value="${inputValue}" 
-          ${disabledAttribute}> 
+          ${disabledAttribute}>
       </div>
     `;
   }
@@ -175,11 +172,6 @@ export async function handleNextAfterAliases() {
     ];
 
     tSettings.playerAliases = finalTournamentAliases; 
-
-    console.log("--- FINAL TOURNAMENT ALIASES ---");
-    console.log("All players are registered (Humans + Bots):", tSettings.playerAliases);
-    console.log("Total Players:", tSettings.playerAliases.length);
-    console.log("---------------------------------");
 
     location.hash = '#game-ready-page';
   }

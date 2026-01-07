@@ -189,25 +189,25 @@ function handleWinOnce(
 
   if (tSettings.currentMatch) {
     tSettings.winnersAliases.push(winnerName);
-
-    console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
     if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
     {
       tSettings.secondPlaceAliases.push(loserName);
-      console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
     }
-    console.log(`Winner of this match: ${winnerName}`);
   }
 
   const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
 
   if (!gameState.statsSent && isPvP) {
-      updatePlayerStats(winnerName, loserName);
+      // updatePlayerStats(winnerName, loserName);
       gameState.statsSent = true; 
   }
 
-  const hasNamedPlayers = (p1Name !== "Player 1" && p2Name !== "Player 2");
-  const nextGameHash    = hasNamedPlayers ? '#game-ready-page' : '#game-page';
+  if (!tSettings.currentMatch) {
+    tSettings.winnersAliases = [];
+  }
+
+  const nextGameHash = tSettings.currentMatch ? '#game-ready-page' : '#game-page';
+  tSettings.currentMatch = null;
 
   const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
   bindButtonEvent(canvas, backBtnRect, () => {
@@ -218,7 +218,7 @@ function handleWinOnce(
   bindButtonEvent(canvas, nextBtnRect, () => {
     /** Reset hash first so hashchange fires
      * even when navigating to the same page */
-    location.hash = '';
+    if (nextGameHash === '#game-page') location.hash = '';
     location.hash = nextGameHash;
   });
 }

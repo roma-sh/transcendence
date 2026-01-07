@@ -15,7 +15,7 @@ import { initProfilePage, initAvatarUpload } from "./profile-page.js";
 import { initSettingsPage } from "./settings-page.js";
 
 export const tSettings : TournamentSettings = {
-  numberOfPlayers: 1,
+  numberOfPlayers: 2,
   numberOfBots: 0,
   playerAliases: [],
   winnersAliases: [],
@@ -50,7 +50,7 @@ function handleHashChange() {
   } else if (hash === '#game-page') {
     game();
   } else if (hash === '#game-ready-page') {
-	  initGameReadyPage(tSettings);
+	  initGameReadyPage();
   } else if (hash === '#tournament-page-player-aliases') {
     addAliasesSection();
   } else if (hash === '#user-profile') {

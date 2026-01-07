@@ -40,7 +40,7 @@ export function handleNextAfterCount(event?: MouseEvent): void {
   tSettings.numberOfPlayers = totalRequiredPlayers;
   
   const botAliases = generateBotAliases(tSettings); 
-  tSettings.playerAliases = botAliases.slice();
+  tSettings.playerAliases = tSettings.playerAliases.concat(botAliases);
 
   addAliasesSection();
 }

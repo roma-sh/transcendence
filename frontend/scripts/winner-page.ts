@@ -6,8 +6,6 @@ export function handleGoToWelcomePage() {
 
 export function initWinnerAnnouncementPage(tSettings: TournamentSettings): void {
 
-    console.log('initWinnerAnnouncementPage called');
-
     const firstPlaceEl = document.getElementById('first-place-winner') as HTMLElement | null;
     const secondPlaceEl = document.getElementById('second-place-winner') as HTMLElement | null;
 
