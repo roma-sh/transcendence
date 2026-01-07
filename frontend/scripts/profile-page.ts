@@ -346,7 +346,29 @@ async function updateEmail(newEmail: string): Promise<string> {
 	return msg;
 }
 
-export function handleRemoveAvatar() {
-	console.log(`use 'http://localhost:3000/api/profile/picture'
-		API with an empty request body to remove the user avatar`);
+export async function handleRemoveAvatar() {
+	try {
+		const formData = new FormData();
+		formData.append("file", "");
+
+		const res = await fetch("http://localhost:3000/api/profile/picture", {
+			method: "PUT",
+			credentials: "include",
+			body: formData,
+		});
+
+		if (!res.ok) {
+			console.error("Failed to remove avatar!");
+			return;
+		}
+
+		const avatar = document.querySelector(
+		".js-avatar") as HTMLElement | null;
+
+		let url = '/assets/default_user.jpg';
+		if (avatar) setImage(url, avatar);
+
+	} catch (err) {
+		console.error("Failed to remove avatar:", err);
+	}
 }
