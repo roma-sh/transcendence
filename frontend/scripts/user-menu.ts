@@ -38,6 +38,10 @@ export function handleToggleUserMenu(e: MouseEvent) {
 	menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
+export function handleGoogleLogin() {
+  window.location.href = 'https://localhost:8443/api/google';
+}
+
 export function handleOpenProfile() {
   storeUserMenuReturnHash();
 	location.hash = '#profile-page';

@@ -15,7 +15,7 @@ user_db.run(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
+    password TEXT,
     total_games INTEGER DEFAULT 0,
     wins INTEGER DEFAULT 0,
     is_online INTEGER DEFAULT 0,

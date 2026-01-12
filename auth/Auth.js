@@ -1,10 +1,10 @@
 const GoogleOAuthService = require('./GoogleOAuthService');
-const user_db = require('../backend/db');
+const user_db = require('../backend/src/db/db');
 
 const googleAuth = new GoogleOAuthService({
-  clientId: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  redirectUri: process.env.GOOGLE_REDIRECT_URI
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  redirectUri: process.env.GOOGLE_REDIRECT_URL
 });
 
 const dbGet = (sql, params) => new Promise((resolve, reject) => {
@@ -34,9 +34,10 @@ async function authRoutes(fastify, options) {
       }
 
       req.session.user = { id: user.id || user.rowid, username: user.username };
-      return reply.redirect('http://localhost:5173'); 
+      return reply.redirect('https://localhost:8443'); 
     } catch (err) {
-      return reply.code(500).send("OAuth Fehler");
+      console.error("OAUTH ERROR:", err);
+      return reply.code(500).send(`OAuth Error: ${err.message}`);
     }
   });
 
