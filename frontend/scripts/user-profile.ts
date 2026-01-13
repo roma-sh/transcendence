@@ -17,7 +17,7 @@ export async function initUserProfilePage(): Promise<void> {
 
   try {
     // Fetch user profile from server
-    const response = await fetch('http://localhost:3000/api/profile', {
+    const response = await fetch('/api/profile', {
       method: 'GET',
       credentials: 'include',
     });

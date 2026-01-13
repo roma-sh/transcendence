@@ -21,7 +21,7 @@ export function handleGoBackProfile() {
 export async function initProfilePage() {
 
 	try {
-		const res = await fetch("http://localhost:3000/api/profile", {
+		const res = await fetch("/api/profile", {
 			method: "GET",
 			credentials: "include",
 			headers: { "Content-Type": "application/json" }
@@ -106,7 +106,7 @@ export async function handleUpdatePassword() {
 	}
 
 	try {
-		const res = await fetch("http://localhost:3000/api/profile/password", {
+		const res = await fetch("/api/profile/password", {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -206,7 +206,7 @@ async function handleUploadProfileImage(file: File) : Promise<string> {
 	const fd = new FormData();
 	fd.append("file", file);
 
-	const res = await fetch("http://localhost:3000/api/profile/picture", {
+	const res = await fetch("/api/profile/picture", {
 		method: "PUT",
 		credentials: "include",
 		body: fd,
@@ -315,7 +315,7 @@ export function handleCancelProfileChange() {
 }
 
 async function updateFullname(newUsername: string): Promise<string> {
-	const res = await fetch("http://localhost:3000/api/profile/username", {
+	const res = await fetch("/api/profile/username", {
     method: "PUT",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -331,7 +331,7 @@ async function updateFullname(newUsername: string): Promise<string> {
 }
 
 async function updateEmail(newEmail: string): Promise<string> {
-	const res = await fetch("http://localhost:3000/api/profile/email", {
+	const res = await fetch("/api/profile/email", {
     method: "PUT",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -351,7 +351,7 @@ export async function handleRemoveAvatar() {
 		const formData = new FormData();
 		formData.append("file", "");
 
-		const res = await fetch("http://localhost:3000/api/profile/picture", {
+		const res = await fetch("/api/profile/picture", {
 			method: "PUT",
 			credentials: "include",
 			body: formData,

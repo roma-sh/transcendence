@@ -33,7 +33,7 @@ export function handleOpenLogIn() {
 
 export async function isUserOnline(): Promise<true | false> {
   try {
-    const res = await fetch('http://localhost:3000/api/useronline', {
+    const res = await fetch('/api/useronline', {
       method: 'GET',
       credentials: 'include',
       headers: {

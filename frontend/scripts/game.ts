@@ -225,8 +225,9 @@ function handleWinOnce(
 
 async function updatePlayerStats(winnerAlias: string, loserAlias: string) {
     try {
-        const response = await fetch('http://localhost:3000/api/updateStats', {
+        const response = await fetch('/api/updateStats', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ winner: winnerAlias, loser: loserAlias })
         });
