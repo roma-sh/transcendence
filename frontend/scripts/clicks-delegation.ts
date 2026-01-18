@@ -1,5 +1,6 @@
 import {
 	handleToggleUserMenu,
+	handleGoogleLogin,
 	handleOpenProfile,
 	handleOpenSettings,
 	handleLogOut,
@@ -89,6 +90,7 @@ export function setupGlobalClicksDelegation() {
 			"save-profile-change": handleSaveProfileChange,
 			"cancel-profile-change": handleCancelProfileChange,
 			"remove-avatar": handleRemoveAvatar,
+			"login-with-google": handleGoogleLogin,
 	};
 
 	document.addEventListener('click', (e) => {

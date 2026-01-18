@@ -7,6 +7,7 @@ const fastifyCookie = require('@fastify/cookie');
 const fastifySession = require('@fastify/session');
 const fastifyMultipart = require('@fastify/multipart');
 const fastifyRateLimit = require('@fastify/rate-limit');
+const authRoutes = require("../auth/Auth");
 
 const app = Fastify({ logger:
   {
@@ -26,9 +27,9 @@ app.register(fastifyCookie);
 app.register(fastifySession, {
     secret: process.env.SESSION_SECRET,
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000
     },
     saveUninitialized: false
@@ -65,6 +66,8 @@ app.register(require('./src/routes/auth.routes'), { prefix: '/api/auth' });
 app.register(require('./src/routes/alias.routes'), { prefix: '/api/alias' });
 app.register(require('./src/routes/profile.route'), { prefix: '/api' });
 app.register(require('./src/routes/game.route'), { prefix: '/api/game' });
+app.register(authRoutes, { prefix: '/api' });
+
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const HOST = process.env.HOST || '0.0.0.0';
