@@ -33,8 +33,7 @@ export function handleOpenLogIn() {
 
 export async function isUserOnline(): Promise<true | false> {
   try {
-    //check for oauth
-    const res = await fetch('/api/me', { 
+    const res = await fetch('/api/useronline', { 
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -42,11 +41,16 @@ export async function isUserOnline(): Promise<true | false> {
       },
     });
 
-    if (!res.ok) return false;
-
+    if (!res.ok)
+      return false;
+    
     const data = await res.json();
 
-    return data.loggedIn === true; 
+    if (data.online && data.username) {
+        localStorage.setItem('userName', data.username);
+    }
+
+    return data.online; 
   } catch (err) {
     console.error('Connection error(isUserOnline function):', err);
     return false;

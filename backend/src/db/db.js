@@ -19,6 +19,7 @@ user_db.run(`
     total_games INTEGER DEFAULT 0,
     wins INTEGER DEFAULT 0,
     is_online INTEGER DEFAULT 0,
+    is_oauth INTEGER DEFAULT 0,
     profile_picture TEXT DEFAULT NULL
   )
 `);

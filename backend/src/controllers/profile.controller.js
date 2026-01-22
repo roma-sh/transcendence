@@ -42,6 +42,7 @@ async function isUserOnlineController(request, reply) {
 
     return reply.send({
       userId,
+      username: request.session.username,
       online: online === 1 // convert 0/1 to boolean
     });
 

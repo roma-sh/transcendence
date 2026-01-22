@@ -37,7 +37,7 @@ fastify.get('/google/callback', async (req, reply) => {
       const dummyPass = "OAUTH_" + Math.random().toString(36).slice(-8);
 
       const result = await dbRun(
-        'INSERT INTO users (username, email, password, wins, total_games) VALUES (?, ?, ?, 0, 0)', 
+        'INSERT INTO users (username, email, password, wins, total_games, is_oauth) VALUES (?, ?, ?, 0, 0, 1)', 
         [tempName, gUser.email, dummyPass]
       );
       
@@ -47,12 +47,18 @@ fastify.get('/google/callback', async (req, reply) => {
       console.log("4. User found:", user.username);
     }
 
+    req.session.userId = user.id;
+    req.session.username = user.username;
+
     req.session.user = { 
       id: user.id, 
       username: user.username,
       email: user.email 
     };
     
+    //check for injection
+    await dbRun('UPDATE users SET is_online = 1 WHERE id = ?', [user.id]);
+
     console.log("6. Setting session for:", req.session.user.username);
 
     return reply.redirect('https://localhost:8443/'); 
