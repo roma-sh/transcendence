@@ -13,6 +13,7 @@ import { game } from './game.js';
 import { updateUIforUserMenu } from './user-menu.js';
 import { initProfilePage, initAvatarUpload } from "./profile-page.js";
 import { initSettingsPage } from "./settings-page.js";
+import { initTermsModal } from './auth-pages.js';
 
 export const tSettings : TournamentSettings = {
   numberOfPlayers: 2,
@@ -57,6 +58,9 @@ function handleHashChange() {
     initUserProfilePage();
   } else if (hash === '#winner-page') {
     initWinnerAnnouncementPage(tSettings);
+  }
+  else if (hash === '#sign-up-page') { // <--- Προσθήκη αυτής της περίπτωσης
+    initTermsModal();
   }
 }
 
