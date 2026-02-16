@@ -5,6 +5,7 @@ const {
   changeUsernameController,
   changeEmailController,
   updateProfilePictureController,
+  updateMatchStatsController
 } = require('../controllers/profile.controller');
 
 async function profileRoutes(fastify) {

@@ -234,5 +234,5 @@ module.exports = {
   changeUsernameController,
   changeEmailController,
   isUserOnlineController,
-  updateProfilePictureController
+  updateProfilePictureController,
 };

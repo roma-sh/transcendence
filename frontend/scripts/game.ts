@@ -181,45 +181,55 @@ function handleWinOnce(
   if (gameState.winHandled) return;
   gameState.winHandled = true;
 
+  console.log("--- handleWinOnce Triggered ---");
+
   const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
   const winnerName = winner === 'left' ? p1Name : p2Name;
   const loserName = winner === 'left' ? p2Name : p1Name;
 
   gameState.winnerSide = winner;
 
-  if (tSettings.currentMatch) {
+  const isTournamentMatch = tSettings.currentMatch !== null;
+
+  if (isTournamentMatch) {
+    console.log(`Tournament Match Won by: ${winnerName}`);
     tSettings.winnersAliases.push(winnerName);
-    if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
-    {
+    
+    if (tSettings.playerAliases.length === 2 || tSettings.playerAliases.length === 0) {
       tSettings.secondPlaceAliases.push(loserName);
     }
+  } else {
+    tSettings.winnersAliases = [];
+    tSettings.secondPlaceAliases = [];
   }
 
   const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
-
   if (!gameState.statsSent && isPvP) {
-      // updatePlayerStats(winnerName, loserName);
+      updatePlayerStats(winnerName, loserName);
       gameState.statsSent = true; 
+      console.log(`Stats update request sent for Winner: ${winnerName}, Loser: ${loserName}`);
   }
 
-  if (!tSettings.currentMatch) {
-    tSettings.winnersAliases = [];
-  }
-
-  const nextGameHash = tSettings.currentMatch ? '#game-ready-page' : '#game-page';
-  tSettings.currentMatch = null;
+  const nextGameHash = isTournamentMatch ? '#game-ready-page' : '#game-page';
 
   const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
   bindButtonEvent(canvas, backBtnRect, () => {
+    console.log("Back to Main clicked. Resetting match state.");
+    tSettings.currentMatch = null; 
+    tSettings.winnersAliases = [];
     location.hash = '#welcome-page';
   });
 
   const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
   bindButtonEvent(canvas, nextBtnRect, () => {
-    /** Reset hash first so hashchange fires
-     * even when navigating to the same page */
-    if (nextGameHash === '#game-page') location.hash = '';
-    location.hash = nextGameHash;
+    console.log(`Next Game clicked. Target Hash: ${nextGameHash}`);
+    
+    if (!isTournamentMatch) {
+      location.hash = '';
+      location.hash = '#game-page';
+    } else {
+      location.hash = nextGameHash;
+    }
   });
 }
 
