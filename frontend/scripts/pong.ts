@@ -26,6 +26,20 @@ export const tSettings : TournamentSettings = {
   currentMatch: null as null | { p1Name: string; p2Name: string },
 };
 
+export function resetTournamentSettings() {
+    tSettings.playerAliases = [];
+    tSettings.winnersAliases = [];
+    tSettings.secondPlaceAliases = [];
+    tSettings.firstPlaceAlias = "";
+    tSettings.secondPlaceAlias = "";
+    tSettings.currentMatch = null;
+    tSettings.numberOfBots = 0;
+    tSettings.numberOfPlayers = 0;
+    
+    // ΠΟΛΥ ΣΗΜΑΝΤΙΚΟ: Αν έχεις κάποια μεταβλητή που μετράει 
+    // σε ποιον γύρο είμαστε (π.χ. roundIndex), μηδένισέ την και αυτή.
+}
+
 setupGlobalClicksDelegation();
 
 // for the welcome page:
