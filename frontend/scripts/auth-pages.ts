@@ -208,6 +208,36 @@ export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
   }
 }
 
+// export function initTermsModal(): void {
+//   const openBtn = document.getElementById('open-terms');
+//   const closeBtn = document.getElementById('close-terms');
+//   const modal = document.getElementById('terms-modal');
+
+//   if (!openBtn || !closeBtn || !modal) return;
+
+//   // Άνοιγμα Modal
+//   openBtn.addEventListener('click', (e) => {
+//     e.preventDefault();
+//     modal.classList.remove('hidden');
+//     // Προαιρετικά: κλειδώνουμε το scroll της σελίδας όσο είναι ανοιχτό το modal
+//     document.body.style.overflow = 'hidden';
+//   });
+
+//   // Κλείσιμο Modal από το κουμπί
+//   closeBtn.addEventListener('click', () => {
+//     modal.classList.add('hidden');
+//     document.body.style.overflow = '';
+//   });
+
+//   // Κλείσιμο αν ο χρήστης κάνει κλικ έξω από το άσπρο πλαίσιο (στο γκρι background)
+//   modal.addEventListener('click', (e) => {
+//     if (e.target === modal) {
+//       modal.classList.add('hidden');
+//       document.body.style.overflow = '';
+//     }
+//   });
+// }
+
 export function initTermsModal(): void {
   const openBtn = document.getElementById('open-terms');
   const closeBtn = document.getElementById('close-terms');
@@ -215,25 +245,35 @@ export function initTermsModal(): void {
 
   if (!openBtn || !closeBtn || !modal) return;
 
-  // Άνοιγμα Modal
-  openBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.classList.remove('hidden');
-    // Προαιρετικά: κλειδώνουμε το scroll της σελίδας όσο είναι ανοιχτό το modal
-    document.body.style.overflow = 'hidden';
-  });
+  // Συνάρτηση για το Escape
+  const handleEsc = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  };
 
-  // Κλείσιμο Modal από το κουμπί
-  closeBtn.addEventListener('click', () => {
+  const closeModal = () => {
     modal.classList.add('hidden');
     document.body.style.overflow = '';
-  });
+    // Αφαιρούμε τον listener του πληκτρολογίου όταν κλείνει το modal
+    document.removeEventListener('keydown', handleEsc);
+  };
 
-  // Κλείσιμο αν ο χρήστης κάνει κλικ έξω από το άσπρο πλαίσιο (στο γκρι background)
+  const openModal = (e: MouseEvent) => {
+    e.preventDefault();
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    // Προσθέτουμε τον listener του πληκτρολογίου μόνο όταν ανοίγει το modal
+    document.addEventListener('keydown', handleEsc);
+  };
+
+  // Event Listeners
+  openBtn.addEventListener('click', openModal as EventListener);
+  closeBtn.addEventListener('click', closeModal);
+
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
-      modal.classList.add('hidden');
-      document.body.style.overflow = '';
+      closeModal();
     }
   });
 }
