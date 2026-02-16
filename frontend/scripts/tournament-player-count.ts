@@ -22,25 +22,66 @@ function generateBotAliases(tSettings: TournamentSettings) {
   return botAliases;
 }
 
+// export function handleNextAfterCount(event?: MouseEvent): void {
+//   const playerCountEl
+//       = document.querySelector('#player-count-input') as HTMLInputElement | null;
+
+//   if (!playerCountEl || !playerCountEl.checkValidity()) {
+//     return;
+//   }
+
+//   const humanPlayers = Number(playerCountEl.value);
+//   const exponent = Math.log2(humanPlayers);
+//   const nextExponent = Math.ceil(exponent);
+//   const totalRequiredPlayers = Math.pow(2, nextExponent);
+//   const numberOfBots = totalRequiredPlayers - humanPlayers;
+  
+//   tSettings.numberOfBots = numberOfBots; 
+//   tSettings.numberOfPlayers = totalRequiredPlayers;
+  
+//   const botAliases = generateBotAliases(tSettings); 
+//   tSettings.playerAliases = tSettings.playerAliases.concat(botAliases);
+
+//   addAliasesSection();
+// }
+
 export function handleNextAfterCount(event?: MouseEvent): void {
-  const playerCountEl
-      = document.querySelector('#player-count-input') as HTMLInputElement | null;
+  const playerCountEl = document.querySelector('#player-count-input') as HTMLInputElement | null;
 
   if (!playerCountEl || !playerCountEl.checkValidity()) {
     return;
   }
 
-  const humanPlayers = Number(playerCountEl.value);
-  const exponent = Math.log2(humanPlayers);
+  // 1. Βασικοί υπολογισμοί για Power of 2
+  const humanPlayersCount = Number(playerCountEl.value);
+  const exponent = Math.log2(humanPlayersCount);
   const nextExponent = Math.ceil(exponent);
   const totalRequiredPlayers = Math.pow(2, nextExponent);
-  const numberOfBots = totalRequiredPlayers - humanPlayers;
+  const numberOfBots = totalRequiredPlayers - humanPlayersCount;
   
+  // 2. Ενημέρωση των settings
   tSettings.numberOfBots = numberOfBots; 
   tSettings.numberOfPlayers = totalRequiredPlayers;
-  
-  const botAliases = generateBotAliases(tSettings); 
-  tSettings.playerAliases = tSettings.playerAliases.concat(botAliases);
 
+  // 3. Δημιουργία της λίστας Aliases από το μηδέν
+  // Παίρνουμε το όνομα του συνδεδεμένου χρήστη
+  const loggedInUser = localStorage.getItem('userName') || 'Player 1';
+
+  // Φτιάχνουμε τη λίστα των ανθρώπων (Πρώτος ο User, οι άλλοι κενοί)
+  const humanAliases: string[] = [loggedInUser];
+  for (let i = 1; i < humanPlayersCount; i++) {
+    humanAliases.push(""); 
+  }
+
+  // Δημιουργούμε τα Bot aliases
+  const botAliases: string[] = [];
+  for (let i = 1; i <= numberOfBots; i++) {
+    botAliases.push(`Bot ${i}`);
+  }
+
+  // 4. Ανάθεση της τελικής λίστας (Humans first, then Bots)
+  tSettings.playerAliases = [...humanAliases, ...botAliases];
+
+  // 5. Μετάβαση στην επόμενη σελίδα
   addAliasesSection();
 }
