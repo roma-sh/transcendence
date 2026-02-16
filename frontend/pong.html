@@ -520,7 +520,7 @@
       </div>
     </section>
 
-    <div id="terms-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-[20px]">
+    <!-- <div id="terms-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-[20px]">
       <div class="bg-white w-[min(500px,95vw)] max-h-[80vh] overflow-y-auto p-[30px] rounded-[15px] shadow-2xl relative">
         <h3 class="text-[24px] font-bold mb-[15px] text-(--main-color)">Terms & Policy</h3>
         <div class="text-[14px] text-gray-600 leading-relaxed mb-[20px]">
@@ -529,6 +529,24 @@
           <p>2. Πολιτική απορρήτου...</p>
         </div>
         <button id="close-terms" class="w-full py-[12px] bg-(--main-color) text-white font-bold rounded-[10px]">Close</button>
+      </div>
+    </div> -->
+
+    <div id="terms-modal" class="hidden fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-[20px]">
+      <div class="bg-white w-[min(600px,95vw)] max-h-[85vh] flex flex-col rounded-[20px] shadow-2xl overflow-hidden">
+        
+        <div class="p-[20px] border-b border-gray-100 font-bold text-lg text-(--main-color)">
+          Terms & Privacy Policy
+        </div>
+
+        <div class="js-modal-content p-[25px] overflow-y-auto text-[14px] leading-relaxed bg-gray-50 flex-1">
+          </div>
+
+        <div class="p-[20px] border-t border-gray-100">
+          <button id="close-terms" class="w-full py-[12px] bg-(--main-color) text-white font-bold rounded-[12px]">
+            Close
+          </button>
+        </div>
       </div>
     </div>
 

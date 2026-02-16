@@ -215,25 +215,35 @@ export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
 
 //   if (!openBtn || !closeBtn || !modal) return;
 
-//   // Άνοιγμα Modal
-//   openBtn.addEventListener('click', (e) => {
-//     e.preventDefault();
-//     modal.classList.remove('hidden');
-//     // Προαιρετικά: κλειδώνουμε το scroll της σελίδας όσο είναι ανοιχτό το modal
-//     document.body.style.overflow = 'hidden';
-//   });
+//   // Συνάρτηση για το Escape
+//   const handleEsc = (e: KeyboardEvent) => {
+//     if (e.key === 'Escape') {
+//       closeModal();
+//     }
+//   };
 
-//   // Κλείσιμο Modal από το κουμπί
-//   closeBtn.addEventListener('click', () => {
+//   const closeModal = () => {
 //     modal.classList.add('hidden');
 //     document.body.style.overflow = '';
-//   });
+//     // Αφαιρούμε τον listener του πληκτρολογίου όταν κλείνει το modal
+//     document.removeEventListener('keydown', handleEsc);
+//   };
 
-//   // Κλείσιμο αν ο χρήστης κάνει κλικ έξω από το άσπρο πλαίσιο (στο γκρι background)
+//   const openModal = (e: MouseEvent) => {
+//     e.preventDefault();
+//     modal.classList.remove('hidden');
+//     document.body.style.overflow = 'hidden';
+//     // Προσθέτουμε τον listener του πληκτρολογίου μόνο όταν ανοίγει το modal
+//     document.addEventListener('keydown', handleEsc);
+//   };
+
+//   // Event Listeners
+//   openBtn.addEventListener('click', openModal as EventListener);
+//   closeBtn.addEventListener('click', closeModal);
+
 //   modal.addEventListener('click', (e) => {
 //     if (e.target === modal) {
-//       modal.classList.add('hidden');
-//       document.body.style.overflow = '';
+//       closeModal();
 //     }
 //   });
 // }
@@ -242,38 +252,47 @@ export function initTermsModal(): void {
   const openBtn = document.getElementById('open-terms');
   const closeBtn = document.getElementById('close-terms');
   const modal = document.getElementById('terms-modal');
+  // Επιλέγουμε το div που θα φιλοξενήσει το κείμενο
+  const contentContainer = modal?.querySelector('.js-modal-content');
 
-  if (!openBtn || !closeBtn || !modal) return;
+  if (!openBtn || !closeBtn || !modal || !contentContainer) return;
 
-  // Συνάρτηση για το Escape
   const handleEsc = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      closeModal();
-    }
+    if (e.key === 'Escape') closeModal();
   };
 
   const closeModal = () => {
     modal.classList.add('hidden');
     document.body.style.overflow = '';
-    // Αφαιρούμε τον listener του πληκτρολογίου όταν κλείνει το modal
     document.removeEventListener('keydown', handleEsc);
   };
 
-  const openModal = (e: MouseEvent) => {
+  const openModal = async (e: MouseEvent) => {
     e.preventDefault();
+    
+    // Φόρτωση περιεχομένου αν είναι άδειο
+    if (contentContainer.innerHTML.trim() === "") {
+      contentContainer.innerHTML = '<p class="text-center py-4">Loading terms...</p>';
+      try {
+        // ΑΛΛΑΞΕ ΤΟ PATH ανάλογα με το πού έβαλες το αρχείο
+        const response = await fetch('../assets/terms.html'); 
+        if (!response.ok) throw new Error('Failed to load');
+        const html = await response.text();
+        contentContainer.innerHTML = html;
+      } catch (err) {
+        contentContainer.innerHTML = '<p class="text-red-500">Could not load terms. Please try again later.</p>';
+      }
+    }
+
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    // Προσθέτουμε τον listener του πληκτρολογίου μόνο όταν ανοίγει το modal
     document.addEventListener('keydown', handleEsc);
   };
 
-  // Event Listeners
   openBtn.addEventListener('click', openModal as EventListener);
   closeBtn.addEventListener('click', closeModal);
 
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
+    if (e.target === modal) closeModal();
   });
 }
