@@ -2,6 +2,7 @@ const { getUserById, updatePassword, updateUsername, updateEmail, updateProfileP
 const { isUserOnline } = require('../services/profile.service');
 const { isStrongPassword, isValidUsername, isValidEmail } = require('../utils/validators');
 const { getUser } = require('../services/auth.service');
+const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
@@ -82,7 +83,8 @@ async function changePasswordController(request, reply) {
       return reply.code(401).send({ message: 'Current password is incorrect' });
     }
 
-    await updatePassword(userId, newPassword);
+    const newHash = await bcrypt.hash(newPassword, 12);
+    await updatePassword(userId, newHash);
     return reply.send({ message: 'Password updated successfully' });
   } catch (err) {
     request.log.error(err);
