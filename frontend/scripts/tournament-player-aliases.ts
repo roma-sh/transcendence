@@ -1,5 +1,7 @@
 import { TournamentSettings } from "./types.js";
 import { tSettings } from "./pong.js";
+import { toggleOpacity, showMessage } from "./settings-page.js";
+import { updatePassMsgDot } from "./profile-page.js";
 
 export function handleGoBackPlayerAliases() {
   location.hash = '#tournament-page';
@@ -90,53 +92,107 @@ function generateInputsForAliases(tSettings: TournamentSettings) {
   return html;
 }
 
-// --- 3. Handler for the NEXT Button ---
+// export async function handleNextAfterAliases() {
+// 	const inputsList = document.querySelectorAll('.js-player-alias-input');
+// 	const errorContainer = document.querySelector('.js-error-message') as HTMLElement | null;
+  
+// 	// Καθαρισμός προηγούμενου μηνύματος
+// 	if (errorContainer) {
+// 	  errorContainer.textContent = "";
+// 	  errorContainer.classList.add('hidden');
+// 	}
+  
+// 	const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
+// 	const humanAliases = Array.from(inputsList)
+// 		.slice(0, humanPlayersCount)
+// 		.map((input) => (input as HTMLInputElement).value.trim());
+  
+// 	// 1. Έλεγχος για κενά πεδία
+// 	if (humanAliases.some(alias => !alias)) {
+// 	  showErrorMessage("Please fill in all player fields.", errorContainer);
+// 	  return;
+// 	}
+  
+// 	// 2. Έλεγχος για διπλότυπα
+// 	const lower = humanAliases.map(a => a.toLowerCase());
+// 	const hasDup = new Set(lower).size !== lower.length;
+// 	if (hasDup) {
+// 	  showErrorMessage("Player aliases must be unique.", errorContainer);
+// 	  return;
+// 	}
+  
+// 	// 3. Αν όλα είναι οκ, προχωράμε
+// 	if (humanAliases.length > 0 || tSettings.numberOfBots > 0) {
+// 	  const createdBotAliases: string[] = [];
+// 	  const totalBots = tSettings.numberOfBots;
+  
+// 	  for (let i = 0; i < totalBots; i++) {
+// 		  createdBotAliases.push(`Bot ${i + 1}`); 
+// 	  }
+  
+// 	  const finalTournamentAliases = [...humanAliases, ...createdBotAliases];
+// 	  tSettings.playerAliases = finalTournamentAliases; 
+  
+// 	  location.hash = '#game-ready-page';
+// 	}
+//   }
+  
+//   // Helper function για την εμφάνιση του μηνύματος
+//   function showErrorMessage(message: string, container: HTMLElement | null) {
+// 	if (container) {
+// 	  container.textContent = message;
+// 	  container.classList.remove('hidden');
+// 	  container.style.color = "rgb(239, 68, 68)"; // Κόκκινο χρώμα (Tailwind red-500)
+// 	  container.style.marginTop = "10px";
+// 	}
+//   }
+
 export async function handleNextAfterAliases() {
+    const inputsList = document.querySelectorAll('.js-player-alias-input');
+    
+    // Επιλογή των στοιχείων για τα μηνύματα (ίδια λογική με Sign-up)
+    const statusContainer = document.querySelector('.js-alias-status') as HTMLElement | null;
+    const statusText = document.querySelector('.js-alias-status-text') as HTMLElement | null;
+    const statusDot = document.querySelector('.js-alias-text-dot') as HTMLElement | null;
 
-  const inputsList = document.querySelectorAll('.js-player-alias-input');
+    const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
+    const humanAliases = Array.from(inputsList)
+        .slice(0, humanPlayersCount)
+        .map((input) => (input as HTMLInputElement).value.trim());
 
-  // Exclude Bot aliases from validation
-  const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
-
-  // We only get the aliases of the human players (the first humanPlayersCount inputs)
-  const humanAliases = Array.from(inputsList)
-      .slice(0, humanPlayersCount)
-      .map((input) => (input as HTMLInputElement).value.trim());
-
-  // Check for empty fields
-  if (humanAliases.some(alias => !alias)) {
-    alert("Please fill in all player fields.");
-    return;
-  }
-
-  // Validate: no duplicates
-  const lower = humanAliases.map(a => a.toLowerCase());
-  const hasDup = new Set(lower).size !== lower.length;
-  if (hasDup) {
-    alert("Player aliases must be unique.");
-    return;
-  }
-
-  if (humanAliases.length > 0 || tSettings.numberOfBots > 0) {
-      
-    // *****************************************************************
-    // ** Dynamically Create Bot Aliases **
-    // *****************************************************************
-    const createdBotAliases: string[] = [];
-    const totalBots = tSettings.numberOfBots;
-
-    for (let i = 0; i < totalBots; i++) {
-        createdBotAliases.push(`Bot ${i + 1}`); 
+    // 1. Έλεγχος για κενά πεδία
+    if (humanAliases.some(alias => !alias)) {
+        displayError("Please fill in all player fields.", statusContainer, statusText, statusDot);
+        return;
     }
 
-    // 6. COMBINATION of Human Players and Bots
-    const finalTournamentAliases: string[] = [
-        ...humanAliases,       // Confirmed humans
-        ...createdBotAliases   // Generated Bots
-    ];
+    // 2. Έλεγχος για διπλότυπα
+    const lower = humanAliases.map(a => a.toLowerCase());
+    const hasDup = new Set(lower).size !== lower.length;
+    if (hasDup) {
+        displayError("Player aliases must be unique.", statusContainer, statusText, statusDot);
+        return;
+    }
 
-    tSettings.playerAliases = finalTournamentAliases; 
+    // 3. Αν όλα είναι οκ, προχωράμε
+    if (humanAliases.length > 0 || tSettings.numberOfBots > 0) {
+        const createdBotAliases: string[] = [];
+        for (let i = 0; i < tSettings.numberOfBots; i++) {
+            createdBotAliases.push(`Bot ${i + 1}`); 
+        }
 
-    location.hash = '#game-ready-page';
-  }
+        tSettings.playerAliases = [...humanAliases, ...createdBotAliases]; 
+        location.hash = '#game-ready-page';
+    }
+}
+
+/**
+ * Helper function που χρησιμοποιεί το παγκόσμιο στυλ του app σου
+ */
+function displayError(msg: string, container: HTMLElement | null, textEl: HTMLElement | null, dotEl: HTMLElement | null) {
+    if (!container || !textEl || !dotEl) return;
+
+    updatePassMsgDot('red', dotEl); // Κάνει την τελεία κόκκινη
+    showMessage(textEl, msg);       // Βάζει το κείμενο
+    toggleOpacity(container);       // Κάνει το fade-in animation
 }

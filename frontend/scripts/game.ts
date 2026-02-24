@@ -199,24 +199,17 @@ async function handleWinOnce(
 		}
 	}
 
-	// 2. Ενημέρωση Βάσης (Νέα Λογική Backend)
-	// const isPvP = !isP1Bot && !isP2Bot; // Έλεγχος αν είναι παίκτης εναντίον παίκτη
-
 	if (!gameState.statsSent) {
 		try {
-		// Παίρνουμε το alias του χρήστη που είναι συνδεδεμένος στον browser
 		const response = await fetch('/api/profile', { method: 'GET', credentials: 'include' });
 		const data = await response.json();
 		const loggedInAlias = data.user.username;
 
-		// Έλεγχος αν ο συνδεδεμένος χρήστης συμμετείχε στο ματς
 		if (loggedInAlias === p1Name || loggedInAlias === p2Name) {
 			
-			// Όποιος και να είναι, αφού έπαιξε, αυξάνουμε τα συνολικά παιχνίδια
 			await fetch('/api/game/total-games', { method: 'POST', credentials: 'include' });
 			console.log("Total games incremented for logged-in user.");
 
-			// Αν ο συνδεδεμένος είναι ο νικητής, αυξάνουμε και τις νίκες
 			if (loggedInAlias === winnerName) {
 			await fetch('/api/game/wins', { method: 'POST', credentials: 'include' });
 			console.log("Win recorded for logged-in user.");
@@ -228,7 +221,6 @@ async function handleWinOnce(
 		gameState.statsSent = true; 
 	}
 
-	// 3. Σχεδίαση UI και Buttons
 	const nextGameHash = isTournamentMatch ? '#game-ready-page' : '#game-page';
 
 	const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
@@ -248,7 +240,6 @@ async function handleWinOnce(
 	});
 }
 
-// 1. Ενημέρωση Νίκης
 async function recordWin() {
     try {
         await fetch('/api/game/wins', { method: 'POST', credentials: 'include' });
@@ -258,7 +249,6 @@ async function recordWin() {
     }
 }
 
-// 2. Ενημέρωση Συνολικών Παιχνιδιών
 async function recordTotalGame() {
     try {
         await fetch('/api/game/total-games', { method: 'POST', credentials: 'include' });
@@ -268,13 +258,12 @@ async function recordTotalGame() {
     }
 }
 
-// 3. Λήψη του Alias του συνδεδεμένου χρήστη
 async function getLoggedInUserAlias(): Promise<string | null> {
     try {
         const response = await fetch('/api/profile', { method: 'GET', credentials: 'include' });
         if (response.ok) {
             const data = await response.json();
-            return data.user.username; // Προσαρμογή ανάλογα με το τι επιστρέφει το JSON (συνήθως data.user.username)
+            return data.user.username;
         }
     } catch (error) {
         console.error("Error fetching profile:", error);
