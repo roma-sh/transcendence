@@ -69,7 +69,6 @@ export function initGameReadyPage() {
     console.error("⛔ Failed to extract two players for the match. P1:", p1Name, "P2:", p2Name);
   }
 
-  // 3. Inject Names into the DOM
   const p1NameEl = document.querySelector('.js-p1-name');
   const p2NameEl = document.querySelector('.js-p2-name');
 

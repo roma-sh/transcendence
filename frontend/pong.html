@@ -144,7 +144,7 @@
       </div>
     </section>
 
-    <section id="winner-page"
+    <!-- <section id="winner-page"
       class="min-h-screen box-border flex flex-col
         justify-center items-center relative">
       <div class="banner flex items-center justify-center py-[5vh] px-[5vw]">
@@ -164,7 +164,43 @@
                 Back To Main Menu
           </button>
       </div>
-    </section>
+    </section> -->
+
+	<section id="winner-page" class="min-h-screen flex flex-col justify-center items-center relative bg-(--bg-color-main)">
+    
+		<div class="absolute top-0 left-0 right-0 p-[29.5px] px-[16px] flex justify-between items-center w-full">
+			<button
+				data-action="go-to-welcome-page"
+				class="inline-flex items-center gap-[6px] text-(--main-color) bg-transparent border-0 text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px] cursor-pointer hover:bg-(--hover-06)">
+				← Back
+			</button>
+			<div class="js-user-menu hidden px-6 py-2 border border-(--main-color) rounded-full font-medium text-(--main-color)">
+				<span class="js-user-menu-name"></span>
+			</div>
+		</div>
+	
+		<div class="flex flex-col items-center text-center animate-fade-in">
+			<h2 class="text-[clamp(32px,5vw,48px)] font-bold text-(--main-color) mb-12 tracking-widest">
+				🏆 TOURNAMENT RESULTS 🏆
+			</h2>
+	
+			<div class="flex flex-col gap-6 mb-16">
+				<div class="p-8 bg-[#f0eeee] border-2 border-yellow-400 rounded-[25px] shadow-lg transform scale-110">
+					<h3 id="first-place-winner" class="text-[32px] font-bold text-(--main-color) m-0"></h3>
+				</div>
+				
+				<div class="p-6 bg-[#f0eeee] border border-gray-300 rounded-[20px] opacity-90">
+					<h3 id="second-place-winner" class="text-[24px] font-semibold text-(--main-color) m-0"></h3>
+				</div>
+			</div>
+	
+			<button
+				data-action="go-to-welcome-page"
+				class="bg-(--main-color) px-[80px] py-[20px] border-0 rounded-[45px] text-(--bg-color-white-nine) cursor-pointer text-[24px] font-bold transition-all hover:scale-105 hover:opacity-90">
+				PLAY AGAIN
+			</button>
+		</div>
+	</section>
 
     <section id="wallet-info-page"
       class="min-h-screen box-border flex flex-col
@@ -376,44 +412,6 @@
       </div>
     </section>
 
-    <!-- <section id="tournament-page"
-      class="min-h-screen box-border flex flex-col
-        justify-center items-center relative">
-      <button
-        data-action="go-back-tournament"
-        class="back_btn js-tournament-page-back-btn
-          absolute top-[29.5px] left-[16px]
-          inline-flex items-center gap-[6px]
-          text-(--main-color) bg-transparent border-0
-          text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
-          cursor-pointer transition-[background] hover:bg-(--hover-06)">
-            ← Back
-      </button>
-      <div class="player-count
-        h-screen flex flex-col items-center justify-center">
-        <p class="m-0 text-[40px] text-(--main-color)">
-          Enter number of players
-        </p>
-        <input type="number"
-          id="player-count-input"
-          name="playerCount"
-          value="2" max="100" min="2"
-          class="px-[15px] py-[15px] w-[388px] mt-[20px]
-          border-2 border-solid border-(--border-color)
-          rounded-[4px] text-[20px] font-[Arial] text-(--main-color)
-          bg-(--bg-color-white-seven)">
-        <button
-          data-action="next-after-count"
-          class="next-btn-after-count js-next-btn-after-count
-          border-0 py-[10px] px-[50px] mt-[40px] rounded-[20px]
-          text-[20px] font-bold font-[Arial] text-center
-          text-white bg-(--main-color) cursor-pointer
-          transition-opacity hover:opacity-[0.7]">
-            NEXT
-        </button>
-      </div>
-    </section> -->
-
 	<section id="tournament-page" class="min-h-screen flex flex-col justify-center items-center relative">
 		<div class="absolute top-0 left-0 right-0 p-[29.5px] px-[16px] flex justify-between items-center w-full">
 			<button
@@ -451,44 +449,6 @@
 		</div>
 	</section>
 
-    <!-- <section id="tournament-page-player-aliases"
-      class="min-h-screen box-border flex flex-col
-        justify-center items-center relative">
-      <button
-        data-action="go-back-player-aliases"
-        class="back_btn js-tournament-player-aliases-back-btn
-          absolute top-[29.5px] left-[16px]
-          inline-flex items-center gap-[6px]
-          text-(--main-color) bg-transparent border-0
-          text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
-          cursor-pointer transition-[background] hover:bg-(--hover-06)">
-            ← Back
-      </button>
-      <div class="player-aliases js-player-aliases
-          flex flex-col items-center justify-center mb-0">
-        <p
-          id="enter-aliases-hint"
-          class="mx-0 mt-[20px] mb-[20px] text-[40px]
-          text-(--main-color) flex items-center justify-center">
-            Enter aliases
-        </p>
-        <div class="aliase-inputs"></div>
-		<div class="js-alias-status flex items-center justify-center space-x-2 opacity-0 transition-opacity duration-300">
-			<div class="js-alias-text-dot w-2 h-2 rounded-full"></div>
-			<span class="js-alias-status-text text-sm font-medium"></span>
-		</div>
-        <button
-          data-action="next-after-aliases"
-          class="next-btn-after-aliases js-next-btn-after-aliases
-          border-0 py-[10px] px-[50px] mt-[15px] rounded-[20px]
-          text-[20px] font-bold font-[Arial] text-center
-          text-(--bg-color-white-nine) bg-(--main-color)
-          cursor-pointer transition-opacity hover:opacity-[0.7]">
-            NEXT
-        </button>
-      </div>
-    </section> -->
-
 	<section id="tournament-page-player-aliases" class="min-h-screen flex flex-col justify-center items-center relative">
 		<div class="absolute top-0 left-0 right-0 p-[29.5px] px-[16px] flex justify-between items-center w-full">
 		  <button
@@ -511,7 +471,7 @@
 				<div class="js-alias-text-dot w-2.5 h-2.5 rounded-full"></div>
 				<span class="js-alias-status-text text-[18px] font-medium text-(--main-color)"></span>
 			</div>
-			
+
 		  <button
 			data-action="next-after-aliases"
 			class="bg-(--main-color) py-[20px] px-[100px] border-0 rounded-[45px] text-(--bg-color-white-nine) cursor-pointer text-[30px] font-bold mt-8 transition-opacity hover:opacity-[0.7]">

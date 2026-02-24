@@ -221,10 +221,8 @@ async function handleWinOnce(
 		gameState.statsSent = true; 
 	}
 
-	// Υπολογίζουμε αν αυτός ήταν ο τελευταίος αγώνας του τρέχοντος round
 	const isLastMatchOfRound = isTournamentMatch && tSettings.playerAliases.length === 0;
 		
-	// Αν είναι ο τελευταίος αγώνας ΚΑΙ έχουμε μόνο έναν νικητή πλέον (τον πρωταθλητή), είναι ο τελικός
 	const isFinalMatch = isLastMatchOfRound && (tSettings.winnersAliases.length === 1 && tSettings.numberOfPlayers === 2);
 
 	if (isFinalMatch) {

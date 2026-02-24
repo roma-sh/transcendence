@@ -99,61 +99,6 @@ function generateInputsForAliases(tSettings: TournamentSettings) {
   return html;
 }
 
-// export async function handleNextAfterAliases() {
-// 	const inputsList = document.querySelectorAll('.js-player-alias-input');
-// 	const errorContainer = document.querySelector('.js-error-message') as HTMLElement | null;
-  
-// 	// Καθαρισμός προηγούμενου μηνύματος
-// 	if (errorContainer) {
-// 	  errorContainer.textContent = "";
-// 	  errorContainer.classList.add('hidden');
-// 	}
-  
-// 	const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
-// 	const humanAliases = Array.from(inputsList)
-// 		.slice(0, humanPlayersCount)
-// 		.map((input) => (input as HTMLInputElement).value.trim());
-  
-// 	// 1. Έλεγχος για κενά πεδία
-// 	if (humanAliases.some(alias => !alias)) {
-// 	  showErrorMessage("Please fill in all player fields.", errorContainer);
-// 	  return;
-// 	}
-  
-// 	// 2. Έλεγχος για διπλότυπα
-// 	const lower = humanAliases.map(a => a.toLowerCase());
-// 	const hasDup = new Set(lower).size !== lower.length;
-// 	if (hasDup) {
-// 	  showErrorMessage("Player aliases must be unique.", errorContainer);
-// 	  return;
-// 	}
-  
-// 	// 3. Αν όλα είναι οκ, προχωράμε
-// 	if (humanAliases.length > 0 || tSettings.numberOfBots > 0) {
-// 	  const createdBotAliases: string[] = [];
-// 	  const totalBots = tSettings.numberOfBots;
-  
-// 	  for (let i = 0; i < totalBots; i++) {
-// 		  createdBotAliases.push(`Bot ${i + 1}`); 
-// 	  }
-  
-// 	  const finalTournamentAliases = [...humanAliases, ...createdBotAliases];
-// 	  tSettings.playerAliases = finalTournamentAliases; 
-  
-// 	  location.hash = '#game-ready-page';
-// 	}
-//   }
-  
-//   // Helper function για την εμφάνιση του μηνύματος
-//   function showErrorMessage(message: string, container: HTMLElement | null) {
-// 	if (container) {
-// 	  container.textContent = message;
-// 	  container.classList.remove('hidden');
-// 	  container.style.color = "rgb(239, 68, 68)"; // Κόκκινο χρώμα (Tailwind red-500)
-// 	  container.style.marginTop = "10px";
-// 	}
-//   }
-
 export async function handleNextAfterAliases() {
     const inputsList = document.querySelectorAll('.js-player-alias-input');
     
