@@ -221,6 +221,20 @@ async function handleWinOnce(
 		gameState.statsSent = true; 
 	}
 
+	// Υπολογίζουμε αν αυτός ήταν ο τελευταίος αγώνας του τρέχοντος round
+	const isLastMatchOfRound = isTournamentMatch && tSettings.playerAliases.length === 0;
+		
+	// Αν είναι ο τελευταίος αγώνας ΚΑΙ έχουμε μόνο έναν νικητή πλέον (τον πρωταθλητή), είναι ο τελικός
+	const isFinalMatch = isLastMatchOfRound && (tSettings.winnersAliases.length === 1 && tSettings.numberOfPlayers === 2);
+
+	if (isFinalMatch) {
+		console.log("🏁 Final match finished. Redirecting to winner page automatically...");
+		setTimeout(() => {
+			location.hash = '#game-ready-page'; 
+		}, 500);
+		return; 
+	}
+
 	const nextGameHash = isTournamentMatch ? '#game-ready-page' : '#game-page';
 
 	const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
