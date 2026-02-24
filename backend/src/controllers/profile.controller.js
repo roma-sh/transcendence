@@ -53,7 +53,6 @@ async function isUserOnlineController(request, reply) {
   }
 }
 
-
 async function changePasswordController(request, reply) {
   const userId = request.session.userId;
   const { currentPassword, newPassword } = request.body;

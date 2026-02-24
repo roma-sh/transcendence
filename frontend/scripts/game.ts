@@ -169,87 +169,117 @@ export function game(): void {
   gameLoop();
 }
 
-function handleWinOnce(
-  gameState: GameState,
-  p1Name: string,
-  p2Name: string,
-  isP1Bot: boolean,
-  isP2Bot: boolean,
-  canvas: HTMLCanvasElement,
-  ctx: CanvasRenderingContext2D
-) {
-  if (gameState.winHandled) return;
-  gameState.winHandled = true;
+async function handleWinOnce(
+	gameState: GameState,
+	p1Name: string,
+	p2Name: string,
+	isP1Bot: boolean,
+	isP2Bot: boolean,
+	canvas: HTMLCanvasElement,
+	ctx: CanvasRenderingContext2D
+) 
+{
+	if (gameState.winHandled) return;
+	gameState.winHandled = true;
 
-  console.log("--- handleWinOnce Triggered ---");
+	console.log("--- handleWinOnce Triggered ---");
 
-  const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
-  const winnerName = winner === 'left' ? p1Name : p2Name;
-  const loserName = winner === 'left' ? p2Name : p1Name;
+	const winnerSide = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
+	const winnerName = winnerSide === 'left' ? p1Name : p2Name;
+	const loserName = winnerSide === 'left' ? p2Name : p1Name;
 
-  gameState.winnerSide = winner;
+	gameState.winnerSide = winnerSide;
 
-  const isTournamentMatch = tSettings.currentMatch !== null;
+	// 1. Διαχείριση Τουρνουά
+	const isTournamentMatch = tSettings.currentMatch !== null;
+	if (isTournamentMatch) {
+		tSettings.winnersAliases.push(winnerName);
+		if (tSettings.playerAliases.length === 2 || tSettings.playerAliases.length === 0) {
+		tSettings.secondPlaceAliases.push(loserName);
+		}
+	}
 
-  if (isTournamentMatch) {
-    console.log(`Tournament Match Won by: ${winnerName}`);
-    tSettings.winnersAliases.push(winnerName);
-    
-    if (tSettings.playerAliases.length === 2 || tSettings.playerAliases.length === 0) {
-      tSettings.secondPlaceAliases.push(loserName);
-    }
-  } else {
-    tSettings.winnersAliases = [];
-    tSettings.secondPlaceAliases = [];
-  }
+	// 2. Ενημέρωση Βάσης (Νέα Λογική Backend)
+	// const isPvP = !isP1Bot && !isP2Bot; // Έλεγχος αν είναι παίκτης εναντίον παίκτη
 
-  const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
-  if (!gameState.statsSent && isPvP) {
-      updatePlayerStats(winnerName, loserName);
-      gameState.statsSent = true; 
-      console.log(`Stats update request sent for Winner: ${winnerName}, Loser: ${loserName}`);
-  }
+	if (!gameState.statsSent) {
+		try {
+		// Παίρνουμε το alias του χρήστη που είναι συνδεδεμένος στον browser
+		const response = await fetch('/api/profile', { method: 'GET', credentials: 'include' });
+		const data = await response.json();
+		const loggedInAlias = data.user.username;
 
-  const nextGameHash = isTournamentMatch ? '#game-ready-page' : '#game-page';
+		// Έλεγχος αν ο συνδεδεμένος χρήστης συμμετείχε στο ματς
+		if (loggedInAlias === p1Name || loggedInAlias === p2Name) {
+			
+			// Όποιος και να είναι, αφού έπαιξε, αυξάνουμε τα συνολικά παιχνίδια
+			await fetch('/api/game/total-games', { method: 'POST', credentials: 'include' });
+			console.log("Total games incremented for logged-in user.");
 
-  const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
-  bindButtonEvent(canvas, backBtnRect, () => {
-    console.log("Back to Main clicked. Resetting match state.");
-    tSettings.currentMatch = null; 
-    tSettings.winnersAliases = [];
-    location.hash = '#welcome-page';
-  });
+			// Αν ο συνδεδεμένος είναι ο νικητής, αυξάνουμε και τις νίκες
+			if (loggedInAlias === winnerName) {
+			await fetch('/api/game/wins', { method: 'POST', credentials: 'include' });
+			console.log("Win recorded for logged-in user.");
+			}
+		}
+		} catch (error) {
+		console.error("Failed to update stats with new API:", error);
+		}
+		gameState.statsSent = true; 
+	}
 
-  const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
-  bindButtonEvent(canvas, nextBtnRect, () => {
-    console.log(`Next Game clicked. Target Hash: ${nextGameHash}`);
-    
-    if (!isTournamentMatch) {
-      location.hash = '';
-      location.hash = '#game-page';
-    } else {
-      location.hash = nextGameHash;
-    }
-  });
+	// 3. Σχεδίαση UI και Buttons
+	const nextGameHash = isTournamentMatch ? '#game-ready-page' : '#game-page';
+
+	const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
+	bindButtonEvent(canvas, backBtnRect, () => {
+		tSettings.currentMatch = null; 
+		tSettings.winnersAliases = [];
+		location.hash = '#welcome-page';
+	});
+
+	const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
+	bindButtonEvent(canvas, nextBtnRect, () => {
+		if (!isTournamentMatch) {
+		location.hash = '#game-page';
+		} else {
+		location.hash = nextGameHash;
+		}
+	});
 }
 
-async function updatePlayerStats(winnerAlias: string, loserAlias: string) {
+// 1. Ενημέρωση Νίκης
+async function recordWin() {
     try {
-        const response = await fetch('/api/updateStats', {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ winner: winnerAlias, loser: loserAlias })
-        });
+        await fetch('/api/game/wins', { method: 'POST', credentials: 'include' });
+        console.log("Win recorded successfully.");
+    } catch (error) {
+        console.error("Error recording win:", error);
+    }
+}
 
+// 2. Ενημέρωση Συνολικών Παιχνιδιών
+async function recordTotalGame() {
+    try {
+        await fetch('/api/game/total-games', { method: 'POST', credentials: 'include' });
+        console.log("Total game recorded successfully.");
+    } catch (error) {
+        console.error("Error recording total game:", error);
+    }
+}
+
+// 3. Λήψη του Alias του συνδεδεμένου χρήστη
+async function getLoggedInUserAlias(): Promise<string | null> {
+    try {
+        const response = await fetch('/api/profile', { method: 'GET', credentials: 'include' });
         if (response.ok) {
-            console.log(`Stats updated successfully for ${winnerAlias} and ${loserAlias}.`);
-        } else {
-            console.error('Failed to update stats:', await response.text());
+            const data = await response.json();
+            return data.user.username; // Προσαρμογή ανάλογα με το τι επιστρέφει το JSON (συνήθως data.user.username)
         }
     } catch (error) {
-        console.error('Network error while updating stats:', error);
+        console.error("Error fetching profile:", error);
     }
+    return null;
 }
 
 function startCountdown(startGame: () => void) {
