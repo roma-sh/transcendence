@@ -376,7 +376,7 @@
       </div>
     </section>
 
-    <section id="tournament-page"
+    <!-- <section id="tournament-page"
       class="min-h-screen box-border flex flex-col
         justify-center items-center relative">
       <button
@@ -412,9 +412,46 @@
             NEXT
         </button>
       </div>
-    </section>
+    </section> -->
 
-    <section id="tournament-page-player-aliases"
+	<section id="tournament-page" class="min-h-screen flex flex-col justify-center items-center relative">
+		<div class="absolute top-0 left-0 right-0 p-[29.5px] px-[16px] flex justify-between items-center w-full">
+			<button
+				data-action="go-back-tournament"
+				class="js-tournament-page-back-btn inline-flex items-center gap-[6px] text-(--main-color) bg-transparent border-0 text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px] cursor-pointer transition-[background] hover:bg-(--hover-06)">
+				← Back
+			</button>
+			
+			<div class="js-user-menu hidden px-6 py-2 border border-(--main-color) rounded-full font-medium text-(--main-color)">
+				<span class="js-user-menu-name"></span>
+			</div>
+		</div>
+	
+		<div class="flex flex-col items-center">
+			<p class="m-0 text-[clamp(32px,5vw,48px)] text-(--main-color) mb-10">
+				Enter number of players
+			</p>
+			
+			<input type="number"
+				id="player-count-input"
+				name="playerCount"
+				value="2" max="100" min="2"
+				class="w-[min(300px,40vw)] py-8 text-center text-[40px] border-2 border-solid border-(--border-color) rounded-[20px] bg-(--bg-color-white-seven) text-(--main-color) focus:outline-none transition-colors hover:bg-[rgb(240,238,238)]">
+	
+			<div class="js-alias-status flex items-center justify-center space-x-2 opacity-0 transition-opacity duration-300 mt-6 h-6">
+				<div class="js-alias-text-dot w-2.5 h-2.5 rounded-full"></div>
+				<span class="js-alias-status-text text-[18px] font-medium text-(--main-color)"></span>
+			</div>
+	
+			<button
+				data-action="next-after-count"
+				class="bg-(--main-color) py-[20px] px-[100px] border-0 rounded-[45px] text-(--bg-color-white-nine) cursor-pointer text-[30px] font-bold font-[Arial] mt-12 transition-opacity hover:opacity-[0.7]">
+				NEXT
+			</button>
+		</div>
+	</section>
+
+    <!-- <section id="tournament-page-player-aliases"
       class="min-h-screen box-border flex flex-col
         justify-center items-center relative">
       <button
@@ -450,7 +487,38 @@
             NEXT
         </button>
       </div>
-    </section>
+    </section> -->
+
+	<section id="tournament-page-player-aliases" class="min-h-screen flex flex-col justify-center items-center relative">
+		<div class="absolute top-0 left-0 right-0 p-[29.5px] px-[16px] flex justify-between items-center w-full">
+		  <button
+			data-action="go-back-player-aliases"
+			class="js-player-aliases-back-btn inline-flex items-center gap-[6px] text-(--main-color) bg-transparent border-0 text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px] cursor-pointer hover:bg-(--hover-06)">
+			  ← Back
+		  </button>
+		  <div class="js-user-menu hidden px-6 py-2 border border-(--main-color) rounded-full font-medium text-(--main-color)">
+			<span class="js-user-menu-name"></span>
+		  </div>
+		</div>
+	  
+		<div class="flex flex-col items-center">
+		  <h2 class="text-[clamp(32px,5vw,48px)] text-(--main-color) mb-8">Enter aliases</h2>
+		  
+		  <div class="aliase-inputs flex flex-col items-center gap-4">
+			</div>
+
+			<div class="js-alias-status flex items-center justify-center space-x-2 opacity-0 transition-opacity duration-300 mt-6 h-6">
+				<div class="js-alias-text-dot w-2.5 h-2.5 rounded-full"></div>
+				<span class="js-alias-status-text text-[18px] font-medium text-(--main-color)"></span>
+			</div>
+			
+		  <button
+			data-action="next-after-aliases"
+			class="bg-(--main-color) py-[20px] px-[100px] border-0 rounded-[45px] text-(--bg-color-white-nine) cursor-pointer text-[30px] font-bold mt-8 transition-opacity hover:opacity-[0.7]">
+			  NEXT
+		  </button>
+		</div>
+	  </section>
 
     <section id="sign-up-page"
       class="min-h-screen box-border flex flex-col
