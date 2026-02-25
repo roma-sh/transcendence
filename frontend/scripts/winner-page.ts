@@ -13,19 +13,24 @@ export async function handleLoadBlockchainWinners(): Promise<void> {
 
     container.textContent = "Loading on-chain tournament data...";
 
-    const tournaments = await contractService.getRecentWinners(5);
+    try {
+        const tournaments = await contractService.getRecentWinners(5);
 
-    if (!tournaments.length) {
-        container.textContent = "No tournaments found on-chain yet or unable to read from blockchain.";
-        return;
+        if (!tournaments.length) {
+            container.textContent = "No tournaments found on-chain yet or unable to read from blockchain.";
+            return;
+        }
+
+        const lines = tournaments.map((t) => {
+            const status = t.finalized ? "finalized" : "not finalized";
+            return `ID ${t.id} | ${t.name} | Winner: ${t.winner} | ${status}`;
+        });
+
+        container.textContent = lines.join("\n");
+    } catch (err) {
+        console.error("[Blockchain] Unexpected error while loading winners:", err);
+        container.textContent = "Failed to load data from blockchain. Please check your wallet and network.";
     }
-
-    const lines = tournaments.map((t) => {
-        const status = t.finalized ? "finalized" : "not finalized";
-        return `ID ${t.id} | ${t.name} | Winner: ${t.winner} | ${status}`;
-    });
-
-    container.textContent = lines.join("\n");
 }
 
 export function initWinnerAnnouncementPage(tSettings: TournamentSettings): void {

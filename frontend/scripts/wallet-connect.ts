@@ -218,6 +218,11 @@ class WalletConnect {
         return this.currentWallet;
     }
 
+  // Expose the underlying EIP-1193 provider (MetaMask-only if available)
+  public getEthereumProvider(): any | null {
+    return this.ethereum;
+  }
+
     // Listen for account changes
     public setupEventListeners(): void {
         if (this.ethereum) {

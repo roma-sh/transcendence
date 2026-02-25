@@ -51,14 +51,17 @@ class ContractService {
     const meta = await this.loadMeta();
     const win: any = window;
 
-    if (!win.ethereum) {
+    // Prefer the MetaMask provider selected in wallet-connect (avoids Core/multi-wallet issues)
+    const ethProvider = wallet.getEthereumProvider() || win.ethereum;
+
+    if (!ethProvider) {
       throw new Error("No Ethereum provider found. Please connect a wallet first.");
     }
     if (typeof ethers === "undefined") {
       throw new Error("ethers.js is not loaded. Check script tag in pong.html.");
     }
 
-    const provider = new ethers.BrowserProvider(win.ethereum);
+    const provider = new ethers.BrowserProvider(ethProvider);
     const signer = await provider.getSigner();
     this.contract = new ethers.Contract(meta.address, meta.abi, signer);
     return this.contract;
