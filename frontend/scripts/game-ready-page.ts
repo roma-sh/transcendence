@@ -1,4 +1,5 @@
 import { tSettings } from "./pong.js";
+import { contractService } from "./contract-service.js";
 
 export function handleGoBackGameReadyPage() {
   location.hash = '#tournament-page-player-aliases';
@@ -30,6 +31,10 @@ export function initGameReadyPage() {
       tSettings.secondPlaceAlias = tSettings.secondPlaceAliases.pop() || "";
       
       console.log(`Results: 1st place: ${tSettings.firstPlaceAlias}, 2nd place: ${tSettings.secondPlaceAlias}`);
+
+      // Fire-and-forget blockchain recording of the final winner.
+      // This does NOT affect game flow; any error is logged only.
+      void contractService.recordTournamentWinner("Pong Tournament", tSettings.firstPlaceAlias);
 
       tSettings.playerAliases = [];
       tSettings.winnersAliases = [];

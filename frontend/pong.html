@@ -144,7 +144,7 @@
       </div>
     </section>
 
-	<section id="winner-page" class="min-h-screen flex flex-col justify-center items-center relative bg-(--bg-color-main)">
+    <section id="winner-page" class="min-h-screen flex flex-col justify-center items-center relative bg-(--bg-color-main)">
     
 		<div class="absolute top-0 left-0 right-0 p-[29.5px] px-[16px] flex justify-between items-center w-full">
 			<button
@@ -162,7 +162,7 @@
 				🏆 TOURNAMENT RESULTS 🏆
 			</h2>
 	
-			<div class="flex flex-col gap-6 mb-16">
+			<div class="flex flex-col gap-6 mb-10">
 				<div class="p-8 bg-[#f0eeee] border-2 border-yellow-400 rounded-[25px] shadow-lg transform scale-110">
 					<h3 id="first-place-winner" class="text-[32px] font-bold text-(--main-color) m-0"></h3>
 				</div>
@@ -171,10 +171,21 @@
 					<h3 id="second-place-winner" class="text-[24px] font-semibold text-(--main-color) m-0"></h3>
 				</div>
 			</div>
+
+      <button
+        data-action="load-chain-winners"
+        class="mb-6 bg-(--bg-color-white-seven) px-[60px] py-[14px] border border-(--main-color) rounded-[35px] text-(--main-color) cursor-pointer text-[18px] font-semibold transition-all hover:opacity-90">
+        VERIFY ON BLOCKCHAIN
+      </button>
+
+      <div
+        id="blockchain-winners"
+        class="mt-2 max-w-[640px] text-[14px] leading-relaxed text-(--main-color) whitespace-pre-wrap px-4">
+      </div>
 	
 			<button
 				data-action="go-to-welcome-page"
-				class="bg-(--main-color) px-[80px] py-[20px] border-0 rounded-[45px] text-(--bg-color-white-nine) cursor-pointer text-[24px] font-bold transition-all hover:scale-105 hover:opacity-90">
+				class="mt-6 bg-(--main-color) px-[80px] py-[20px] border-0 rounded-[45px] text-(--bg-color-white-nine) cursor-pointer text-[24px] font-bold transition-all hover:scale-105 hover:opacity-90">
 				PLAY AGAIN
 			</button>
 		</div>
@@ -1070,6 +1081,7 @@
       placeholder:text-(--main-color)">
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
     <script type="module" src="./scripts/js/pong.js"></script>
   </body>
 </html>

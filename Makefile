@@ -24,6 +24,11 @@ build:
 		echo "Please run 'make setup'"; \
 		exit 1; \
 	fi
+	echo "$(BLUE)Installing blockchain dependencies$(NC) . . ."
+	npm --prefix blockchain install
+	echo "$(BLUE)Compiling and deploying blockchain (Hardhat / Avalanche Fuji)...$(NC)"
+	npm run chain:compile
+	npm run chain:deploy:fuji
 	echo "$(BLUE)Building$(NC) . . ."
 	docker compose -f $(COMPOSE) build
 

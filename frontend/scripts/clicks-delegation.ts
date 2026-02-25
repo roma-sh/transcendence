@@ -32,7 +32,7 @@ import {
 	handleGoBackGameReadyPage
 } from "./game-ready-page.js";
 import { handleNextAfterCount } from "./tournament-player-count.js";
-import { handleGoToWelcomePage } from "./winner-page.js";
+import { handleGoToWelcomePage, handleLoadBlockchainWinners } from "./winner-page.js";
 import {
 	handleConnectWallet,
 	handleDisconnectWallet,
@@ -75,6 +75,7 @@ export function setupGlobalClicksDelegation() {
 			"go-back-tournament": handleGoBackTournament,
 			"go-back-game-ready-page": handleGoBackGameReadyPage,
 			"go-to-welcome-page": handleGoToWelcomePage,
+      "load-chain-winners": handleLoadBlockchainWinners,
 			"log-out": handleLogOut,
 			"connect-wallet": handleConnectWallet,
 			"disconnect-wallet": handleDisconnectWallet,

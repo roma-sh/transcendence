@@ -1,7 +1,31 @@
 import { TournamentSettings } from "./types.js";
+import { contractService } from "./contract-service.js";
 
 export function handleGoToWelcomePage() {
     location.hash = '#welcome-page';
+}
+
+export async function handleLoadBlockchainWinners(): Promise<void> {
+    const container = document.getElementById('blockchain-winners') as HTMLElement | null;
+    if (!container) {
+        return;
+    }
+
+    container.textContent = "Loading on-chain tournament data...";
+
+    const tournaments = await contractService.getRecentWinners(5);
+
+    if (!tournaments.length) {
+        container.textContent = "No tournaments found on-chain yet or unable to read from blockchain.";
+        return;
+    }
+
+    const lines = tournaments.map((t) => {
+        const status = t.finalized ? "finalized" : "not finalized";
+        return `ID ${t.id} | ${t.name} | Winner: ${t.winner} | ${status}`;
+    });
+
+    container.textContent = lines.join("\n");
 }
 
 export function initWinnerAnnouncementPage(tSettings: TournamentSettings): void {
