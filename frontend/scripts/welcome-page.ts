@@ -31,7 +31,7 @@ export function handleOpenLogIn() {
   location.hash = '#log-in-page';
 }
 
-export async function isUserOnline(): Promise<true | false> {
+export async function isUserOnline(): Promise<boolean> {
   try {
     const res = await fetch('/api/useronline', { 
       method: 'GET',
@@ -41,23 +41,22 @@ export async function isUserOnline(): Promise<true | false> {
       },
     });
 
-	if (res.status === 401) {
-		console.warn("User session expired or not logged in.");
-		return false;
-	}
-
-	if (!res.ok)
-    return false;
+	if (!res.ok) {
+      localStorage.removeItem('userName');
+      return false;
+    }
     
     const data = await res.json();
 
     if (data.online && data.username) {
         localStorage.setItem('userName', data.username);
+    } else {
+      localStorage.removeItem('userName');
     }
 
     return data.online; 
   } catch (err) {
-    console.error('Connection error(isUserOnline function):', err);
+    localStorage.removeItem('userName');
     return false;
   }
 }

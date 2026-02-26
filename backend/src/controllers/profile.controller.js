@@ -31,20 +31,31 @@ async function isUserOnlineController(request, reply) {
   const userId = request.session.userId; // get logged-in user ID
 
   if (!userId) {
-    return reply.code(401).send({ message: "Not logged in" });
+    return reply.send({
+      userId: null,
+      username: null,
+      online: false,
+      authenticated: false,
+    });
   }
 
   try {
     const online = await isUserOnline(userId);
 
     if (online === null) {
-      return reply.code(404).send({ message: "User not found" });
+      return reply.send({
+        userId,
+        username: request.session.username || null,
+        online: false,
+        authenticated: false,
+      });
     }
 
     return reply.send({
       userId,
-      username: request.session.username,
-      online: online === 1 // convert 0/1 to boolean
+      username: request.session.username || null,
+      online: online === 1, // convert 0/1 to boolean
+      authenticated: true,
     });
 
   } catch (err) {
