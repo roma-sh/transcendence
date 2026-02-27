@@ -1,4 +1,5 @@
 import { isUserOnline } from "./welcome-page.js";
+import { apiHeaders } from "./api-config.js";
 
 const USER_MENU_RETURN_KEY = "userMenuReturnHash";
 
@@ -118,6 +119,7 @@ export async function handleLogOut(): Promise<boolean> {
     const res = await fetch('/api/auth/logout', {
       method: 'POST',
       credentials: 'include',
+      headers: apiHeaders(),
     });
 
     if (!res.ok) {

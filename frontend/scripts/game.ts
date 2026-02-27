@@ -13,6 +13,7 @@ import {
 import { updateBotPaddle } from "./bot-ai.js";
 import { tSettings } from "./pong.js";
 import { loadGameSettings } from "./settings-page.js";
+import { apiHeaders } from "./api-config.js";
 
 let animationId: number | null = null;
 
@@ -201,17 +202,17 @@ async function handleWinOnce(
 
 	if (!gameState.statsSent) {
 		try {
-		const response = await fetch('/api/profile', { method: 'GET', credentials: 'include' });
+		const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
 		const data = await response.json();
 		const loggedInAlias = data.user.username;
 
 		if (loggedInAlias === p1Name || loggedInAlias === p2Name) {
 			
-			await fetch('/api/game/total-games', { method: 'POST', credentials: 'include' });
+			await fetch('/api/game/total-games', { method: 'POST', credentials: 'include', headers: apiHeaders() });
 			console.log("Total games incremented for logged-in user.");
 
 			if (loggedInAlias === winnerName) {
-			await fetch('/api/game/wins', { method: 'POST', credentials: 'include' });
+			await fetch('/api/game/wins', { method: 'POST', credentials: 'include', headers: apiHeaders() });
 			console.log("Win recorded for logged-in user.");
 			}
 		}
@@ -254,7 +255,7 @@ async function handleWinOnce(
 
 async function recordWin() {
     try {
-        await fetch('/api/game/wins', { method: 'POST', credentials: 'include' });
+        await fetch('/api/game/wins', { method: 'POST', credentials: 'include', headers: apiHeaders() });
         console.log("Win recorded successfully.");
     } catch (error) {
         console.error("Error recording win:", error);
@@ -263,7 +264,7 @@ async function recordWin() {
 
 async function recordTotalGame() {
     try {
-        await fetch('/api/game/total-games', { method: 'POST', credentials: 'include' });
+        await fetch('/api/game/total-games', { method: 'POST', credentials: 'include', headers: apiHeaders() });
         console.log("Total game recorded successfully.");
     } catch (error) {
         console.error("Error recording total game:", error);
@@ -272,7 +273,7 @@ async function recordTotalGame() {
 
 async function getLoggedInUserAlias(): Promise<string | null> {
     try {
-        const response = await fetch('/api/profile', { method: 'GET', credentials: 'include' });
+        const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
         if (response.ok) {
             const data = await response.json();
             return data.user.username;

@@ -5,6 +5,7 @@ import {
 import {
   updatePassMsgDot
 } from "./profile-page.js";
+import { apiHeaders } from "./api-config.js";
 
 export function handleGoBackSignUp() {
   location.hash = '#welcome-page';
@@ -52,7 +53,7 @@ export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
   try {
     const response = await fetch('/api/auth/signup', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+      headers: apiHeaders({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }),
       credentials: 'include',
       body: JSON.stringify({ username, email, password, acceptedTerms }),
     });
@@ -113,10 +114,10 @@ export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
   try {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
-      headers: {
+      headers: apiHeaders({
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache',
-      },
+      }),
       credentials: 'include',
       body: JSON.stringify({ username: identifier, password }),
     });
