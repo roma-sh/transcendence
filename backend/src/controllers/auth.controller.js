@@ -56,6 +56,7 @@ async function loginController(request, reply) {
   }
 
     request.session.userId = user.id;
+    request.session.username = user.username;
     await new Promise((resolve, reject) => {
       if (typeof request.session.save === 'function') {
         request.session.save((err) => (err ? reject(err) : resolve()));
