@@ -1,4 +1,5 @@
 #!/bin/bash
 set -e
 
-curl -b cookies.txt -X POST http://localhost:3000/api/game/wins
+curl -k -b cookies.txt -X POST https://localhost:8443/api/game/wins \
+  -H "x-api-key: PONG_APP_SECRET_KEY_2026"

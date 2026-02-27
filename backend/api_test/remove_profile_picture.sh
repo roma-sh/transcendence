@@ -2,5 +2,6 @@
 set -e
 
 # Remove profile picture by sending empty multipart PUT request
-curl -b cookies.txt -X PUT http://localhost:3000/api/profile/picture \
+curl -k -b cookies.txt -X PUT https://localhost:8443/api/profile/picture \
+  -H "x-api-key: PONG_APP_SECRET_KEY_2026" \
   -F "file="
