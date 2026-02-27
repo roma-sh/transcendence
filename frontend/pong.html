@@ -787,7 +787,47 @@
             border-(--border-soft-gray) hover:bg-(--bg-color-gray)">
               Log out
           </button>
+		  <button
+			data-action="toggle-delete-modal"
+			class="btn btn-danger
+			py-[10px] px-[14px] rounded-[999px] font-bold
+			text-[14px] cursor-pointer bg-red-50 text-red-600 border border-solid
+			border-red-200 hover:bg-red-100">
+			Delete account
+		  </button>
         </div>
+		<div class="js-delete-modal fixed inset-0 z-2000 hidden">
+			<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]" data-action="toggle-delete-modal"></div>
+			<div class="relative mx-auto mt-[150px] w-[min(400px,calc(100%-32px))]
+				rounded-[18px] bg-white shadow-xl p-[24px] text-center">
+				
+				<button 
+				  data-action="toggle-delete-modal"
+				  class="absolute top-[12px] right-[12px] text-[20px] text-gray-400 hover:text-black">
+				  ✕
+				</button>
+		  
+				<div class="mb-[20px]">
+				  <h3 class="text-[18px] font-bold text-red-600 mb-[8px]">Delete Account</h3>
+				  <p class="text-[14px] text-gray-600">Are you sure that you want to delete your account ?</p>
+				</div>
+		  
+				<div class="flex flex-col gap-[10px]">
+				  <button
+					data-action="confirm-delete-account"
+					class="w-full py-[12px] rounded-[999px] font-bold text-[14px]
+					  bg-red-600 text-white cursor-pointer hover:bg-red-700">
+					  Confirm Delete
+				  </button>
+				  <button
+					data-action="toggle-delete-modal"
+					class="w-full py-[12px] rounded-[999px] font-bold text-[14px]
+					  bg-white border border-solid border-gray-200 hover:bg-gray-50 cursor-pointer">
+					  Cancel
+				  </button>
+				</div>
+			</div>
+		  </div>
         <div class="js-pass-modal fixed inset-0 z-2000 hidden">
           <button
             data-action="close-pass-modal"

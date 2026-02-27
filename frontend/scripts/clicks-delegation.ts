@@ -45,7 +45,9 @@ import {
 	handleEditProfileData,
 	handleSaveProfileChange,
 	handleCancelProfileChange,
-	handleRemoveAvatar
+	handleRemoveAvatar,
+	handleToggleDeleteModal,      
+    handleConfirmDeleteAccount
 } from "./profile-page.js";
 import {
 	handleGoBackSettings,
@@ -75,7 +77,7 @@ export function setupGlobalClicksDelegation() {
 			"go-back-tournament": handleGoBackTournament,
 			"go-back-game-ready-page": handleGoBackGameReadyPage,
 			"go-to-welcome-page": handleGoToWelcomePage,
-      "load-chain-winners": handleLoadBlockchainWinners,
+      		"load-chain-winners": handleLoadBlockchainWinners,
 			"log-out": handleLogOut,
 			"connect-wallet": handleConnectWallet,
 			"disconnect-wallet": handleDisconnectWallet,
@@ -92,6 +94,8 @@ export function setupGlobalClicksDelegation() {
 			"cancel-profile-change": handleCancelProfileChange,
 			"remove-avatar": handleRemoveAvatar,
 			"login-with-google": handleGoogleLogin,
+			"toggle-delete-modal": handleToggleDeleteModal,
+    		"confirm-delete-account": handleConfirmDeleteAccount
 	};
 
 	document.addEventListener('click', (e) => {

@@ -37,7 +37,7 @@ export async function initProfilePage() {
 		const user = data.user;
     if (!user) return;
 
-		setText('.js-name', user.username);
+	setText('.js-name', user.username);
     setText('.js-fullname', user.username);
     setText('.js-username', "@" + user.username.toLowerCase());
     setText('.js-username2', "@" + user.username.toLowerCase());
@@ -371,4 +371,47 @@ export async function handleRemoveAvatar() {
 	} catch (err) {
 		console.error("Failed to remove avatar:", err);
 	}
+}
+
+// Ανοίγει και κλείνει το Modal
+export function handleToggleDeleteModal() {
+    const deleteModal = document.querySelector('.js-delete-modal') as HTMLElement | null;
+    if (deleteModal) {
+        deleteModal.classList.toggle('hidden');
+    }
+}
+
+export async function handleConfirmDeleteAccount(): Promise<boolean> {
+    const btn = document.querySelector('[data-action="confirm-delete-account"]') as HTMLButtonElement | null;
+    if (btn) btn.textContent = "Deleting...";
+
+    try {
+        // 1. Ακριβώς το ίδιο fetch με το user-menu.js
+        const res = await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        if (!res.ok) {
+            console.error('Delete-Logout failed:', res.status);
+            if (btn) btn.textContent = "Confirm Delete";
+            return false;
+        }
+
+        // 2. Καθαρισμός LocalStorage
+        localStorage.removeItem('userName');
+
+        // 3. Κλείσιμο του Modal
+        handleToggleDeleteModal();
+
+        // 4. Το "μαγικό" reset του hash για να πυροδοτηθεί το hashchange
+        location.hash = '';
+        location.hash = '#welcome-page';
+
+        return true;
+    } catch (error) {
+        console.error('Delete-Logout ERROR:', error);
+        location.hash = '#welcome-page'; // Αναγκαστική φυγή ακόμα και σε error
+        return false;
+    }
 }

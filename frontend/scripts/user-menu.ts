@@ -21,28 +21,6 @@ export async function updateUIforUserMenu() {
   setUserMenuName();
 }
 
-// export function updateUIforUserMenu(isLoggedIn: boolean | undefined) {
-//     const userMenu = document.querySelector('.js-user-menu');
-//     const loginBtn = document.querySelector('.js-login-nav-btn');
-
-//     if (!userMenu || !loginBtn) return;
-
-//     if (isLoggedIn) {
-//         // Αν ο χρήστης είναι συνδεδεμένος, δείξε το μενού και κρύψε το Login
-//         userMenu.classList.remove('hidden');
-//         loginBtn.classList.add('hidden');
-        
-//         // Μπορείς να προσθέσεις εδώ και το όνομα του χρήστη αν υπάρχει στο localStorage
-//         const userName = localStorage.getItem('userName');
-//         const nameEl = document.querySelector('.js-user-menu-name');
-//         if (nameEl && userName) nameEl.textContent = userName;
-//     } else {
-//         // Αν δεν είναι συνδεδεμένος, κρύψε το μενού και δείξε το Login
-//         userMenu.classList.add('hidden');
-//         loginBtn.classList.remove('hidden');
-//     }
-// }
-
 function setUserMenuName() {
 	const userName = localStorage.getItem('userName');
 
