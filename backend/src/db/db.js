@@ -20,9 +20,14 @@ user_db.run(`
     wins INTEGER DEFAULT 0,
     is_online INTEGER DEFAULT 0,
     is_oauth INTEGER DEFAULT 0,
-    profile_picture TEXT DEFAULT NULL
+    profile_picture TEXT DEFAULT NULL,
+    two_factor_secret TEXT DEFAULT NULL,
+    two_factor_enabled INTEGER DEFAULT 0
   )
 `);
+
+user_db.run(`ALTER TABLE users ADD COLUMN two_factor_secret TEXT DEFAULT NULL`, () => {});
+user_db.run(`ALTER TABLE users ADD COLUMN two_factor_enabled INTEGER DEFAULT 0`, () => {});
 
 const gracefulShutdown = () => {
   user_db.close((err) => {

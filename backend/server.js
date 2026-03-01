@@ -63,6 +63,7 @@ app.register(fastifyRateLimit, {
 });
 
 app.register(require('./src/routes/auth.routes'), { prefix: '/api/auth' });
+app.register(require('./src/routes/twoFactor.routes'), { prefix: '/api/2fa' });
 app.register(require('./src/routes/alias.routes'), { prefix: '/api/alias' });
 app.register(require('./src/routes/profile.route'), { prefix: '/api' });
 app.register(require('./src/routes/game.route'), { prefix: '/api/game' });
