@@ -52,6 +52,24 @@ export async function initProfilePage() {
 		if (user.profile_picture) url = `/uploads/profiles/${user.profile_picture}`;
 		if (avatar) setImage(url, avatar);
 
+		// Load 2FA status
+		try {
+			const twoFactorRes = await fetch("/api/2fa/status", {
+				method: "GET",
+				credentials: "include",
+				headers: { "Content-Type": "application/json" }
+			});
+			if (twoFactorRes.ok) {
+				const twoFactorData = await twoFactorRes.json();
+				const statusEl = document.querySelector('.js-2fa-status') as HTMLElement | null;
+				if (statusEl) {
+					statusEl.textContent = twoFactorData.enabled ? 'Enabled' : 'Not enabled';
+				}
+			}
+		} catch (err) {
+			console.log('Failed to load 2FA status:', err);
+		}
+
 	} catch (err) {
 		console.log(err);
 	}

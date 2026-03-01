@@ -124,6 +124,16 @@ export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
     let result = await response.json();
 
     if (response.ok) {
+      // Check if 2FA is required
+      if (result.requires2FA && result.userId) {
+        const { show2FALoginModal } = await import('./two-factor.js');
+        show2FALoginModal(result.userId);
+        return;
+      }
+
+      if (result.token) {
+        localStorage.setItem('jwt_token', result.token);
+      }
       localStorage.setItem('userName', result.user.username);
       location.hash = '#welcome-page';
     } else {

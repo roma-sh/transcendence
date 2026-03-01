@@ -50,6 +50,15 @@ import {
     handleConfirmDeleteAccount
 } from "./profile-page.js";
 import {
+	handleToggle2FAModal,
+	handleClose2FAModal,
+	handleSetup2FA,
+	handleVerifyEnable2FA,
+	handleDisable2FA,
+	handleVerify2FALogin,
+	handleCancel2FALogin
+} from "./two-factor.js";
+import {
 	handleGoBackSettings,
 	handleSettingsSave,
 	handleSettingsReset
@@ -95,8 +104,15 @@ export function setupGlobalClicksDelegation() {
 			"remove-avatar": handleRemoveAvatar,
 			"login-with-google": handleGoogleLogin,
 			"toggle-delete-modal": handleToggleDeleteModal,
-    		"confirm-delete-account": handleConfirmDeleteAccount
-	};
+    		"confirm-delete-account": handleConfirmDeleteAccount,
+			"toggle-2fa-modal": handleToggle2FAModal,
+			"close-2fa-modal": handleClose2FAModal,
+			"setup-2fa": handleSetup2FA,
+			"verify-enable-2fa": handleVerifyEnable2FA,
+			"disable-2fa": handleDisable2FA,
+			"verify-2fa-login": handleVerify2FALogin,
+			"cancel-2fa-login": handleCancel2FALogin
+		};
 
 	document.addEventListener('click', (e) => {
 		const target = e.target as HTMLElement | null;
