@@ -24,6 +24,8 @@ build:
 		echo "Please run 'make setup'"; \
 		exit 1; \
 	fi
+	echo "$(BLUE)Installing backend dependencies (includes 2FA/JWT packages)...$(NC)"
+	npm --prefix backend install
 	echo "$(BLUE)Installing blockchain dependencies$(NC) . . ."
 	npm --prefix blockchain install
 	echo "$(BLUE)Compiling and deploying blockchain (Hardhat / Avalanche Fuji)...$(NC)"

@@ -153,7 +153,8 @@ export async function handleDisable2FA(): Promise<void> {
     const response = await fetch('/api/2fa/disable', {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
     });
 
     const data = await response.json();

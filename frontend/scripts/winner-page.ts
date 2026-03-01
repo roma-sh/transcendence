@@ -11,25 +11,69 @@ export async function handleLoadBlockchainWinners(): Promise<void> {
         return;
     }
 
-    container.textContent = "Loading on-chain tournament data...";
+    container.innerHTML = '<p class="text-center">Loading on-chain tournament data...</p>';
 
     try {
         const tournaments = await contractService.getRecentWinners(5);
 
         if (!tournaments.length) {
-            container.textContent = "No tournaments found on-chain yet or unable to read from blockchain.";
+            container.innerHTML = '<p class="text-center">No tournaments found on-chain yet or unable to read from blockchain.</p>';
             return;
         }
 
-        const lines = tournaments.map((t) => {
-            const status = t.finalized ? "finalized" : "not finalized";
-            return `ID ${t.id} | ${t.name} | Winner: ${t.winner} | ${status}`;
+        // Extract winner name from tournament name (format: "Pong Tournament - Winner: <name>")
+        const extractWinnerName = (tournamentName: string): string => {
+            const match = tournamentName.match(/Winner:\s*(.+?)(?:\s*\|)?$/i);
+            if (match && match[1]) {
+                return match[1].trim();
+            }
+            const parts = tournamentName.split(' - ');
+            if (parts.length > 1) {
+                return parts[parts.length - 1].trim();
+            }
+            return 'Unknown';
+        };
+
+        //table
+        let tableHTML = `
+            <div class="overflow-x-auto w-full">
+                <table class="min-w-full border-collapse border border-(--border-soft-gray) rounded-[10px] overflow-hidden" style="table-layout: fixed; width: 100%;">
+                    <thead>
+                        <tr class="bg-(--main-color) text-white">
+                            <th class="border border-(--border-soft-gray) px-[16px] py-[12px] text-left font-bold text-[14px]" style="width: 33.33%;">Tournament ID</th>
+                            <th class="border border-(--border-soft-gray) px-[16px] py-[12px] text-left font-bold text-[14px]" style="width: 33.33%;">Winner</th>
+                            <th class="border border-(--border-soft-gray) px-[16px] py-[12px] text-left font-bold text-[14px]" style="width: 33.33%;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+
+        tournaments.forEach((t) => {
+            const winnerName = extractWinnerName(t.name);
+            const status = t.finalized ? "Finalized" : "Not Finalized";
+            const statusClass = t.finalized 
+                ? "text-green-600 font-semibold" 
+                : "text-gray-500";
+            
+            tableHTML += `
+                <tr class="bg-white hover:bg-gray-50">
+                    <td class="border border-(--border-soft-gray) px-[16px] py-[12px] text-[14px]">${t.id}</td>
+                    <td class="border border-(--border-soft-gray) px-[16px] py-[12px] text-[14px] font-medium">${winnerName}</td>
+                    <td class="border border-(--border-soft-gray) px-[16px] py-[12px] text-[14px] ${statusClass}">${status}</td>
+                </tr>
+            `;
         });
 
-        container.textContent = lines.join("\n");
+        tableHTML += `
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        container.innerHTML = tableHTML;
     } catch (err) {
         console.error("[Blockchain] Unexpected error while loading winners:", err);
-        container.textContent = "Failed to load data from blockchain. Please check your wallet and network.";
+        container.innerHTML = '<p class="text-center text-red-600">Failed to load data from blockchain. Please check your wallet and network.</p>';
     }
 }
 
