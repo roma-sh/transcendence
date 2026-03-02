@@ -63,13 +63,25 @@ logs-f:
 
 setup:
 	if [ ! -f $(ENV_FILE) ]; then \
+		echo "#APPLICATION" >> $(ENV_FILE); \
+		echo "NODE_ENV=" >> $(ENV_FILE); \
+		echo "PORT=" >> $(ENV_FILE); \
+		echo "HOST=" >> $(ENV_FILE); \
+		echo "DB_PATH=" >> $(ENV_FILE); \
+		echo "ALLOWED_ORIGINS=" >> $(ENV_FILE); \
+		echo "#SECURITY" >> $(ENV_FILE); \
+		echo "SESSION_SECRET=<put 32 chars here>" >> $(ENV_FILE); \
+		echo "API_KEY=" >> $(ENV_FILE); \
+		echo "#GRAFANA" >> $(ENV_FILE); \
 		echo "GF_SECURITY_ADMIN=" >> $(ENV_FILE); \
 		echo "GF_SECURITY_ADMIN_PASSWORD=" >> $(ENV_FILE); \
+		echo "#OAUTH" >> $(ENV_FILE); \
 		echo "CLIENT_ID=" >> $(ENV_FILE); \
 		echo "CLIENT_SECRET=" >> $(ENV_FILE); \
 		echo "GOOGLE_REDIRECT_URL=" >> $(ENV_FILE); \
-		echo "SESSION_SECRET=<put 32 chars here>" >> $(ENV_FILE); \
-		echo "API_KEY=" >> $(ENV_FILE); \
+		echo "#BLOCKCHAIN" >> $(ENV_FILE); \
+		echo "FUJI_RPC_URL=" >> $(ENV_FILE); \
+		echo "PRIVATE_KEY=" >> $(ENV_FILE); \
 		echo "Please fill out the env file :D"; \
 	fi
 	if [ ! -d $(SSL_DIR) ]; then \

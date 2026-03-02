@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const dbPath = path.join(__dirname, '../../../database/user_db.db');
+const dbPath = process.env.DB_PATH || "/usr/src/database/user_db.db";
 
 const user_db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -10,6 +10,9 @@ const user_db = new sqlite3.Database(dbPath, (err) => {
     console.log('✅ Connected to SQLite database at:', dbPath);
   }
 });
+
+user_db.exec("PRAGMA journal_mode = WAL;");
+
 user_db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,9 +28,6 @@ user_db.run(`
     two_factor_enabled INTEGER DEFAULT 0
   )
 `);
-
-user_db.run(`ALTER TABLE users ADD COLUMN two_factor_secret TEXT DEFAULT NULL`, () => {});
-user_db.run(`ALTER TABLE users ADD COLUMN two_factor_enabled INTEGER DEFAULT 0`, () => {});
 
 const gracefulShutdown = () => {
   user_db.close((err) => {
