@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-curl -b cookies.txt -X PUT http://localhost:3000/api/profile/email \
+curl -k -b cookies.txt -X PUT https://localhost:8443/api/profile/email \
   -H "Content-Type: application/json" \
+  -H "x-api-key: PONG_APP_SECRET_KEY_2026" \
   -d '{
     "newEmail": "newemail@gmail.com"
   }'

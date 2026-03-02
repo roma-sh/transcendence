@@ -2,6 +2,7 @@ import {
   updateUIForAuthState,
   updateUIforUserMenu,
 } from "./user-menu.js";
+import { apiHeaders } from "./api-config.js";
 
 export async function setInitHash() {
   const isLoggedIn = await isUserOnline();
@@ -36,9 +37,7 @@ export async function isUserOnline(): Promise<boolean> {
     const res = await fetch('/api/useronline', { 
       method: 'GET',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: apiHeaders({ 'Content-Type': 'application/json' }),
     });
 
 	if (!res.ok) {

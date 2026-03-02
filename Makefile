@@ -69,6 +69,7 @@ setup:
 		echo "CLIENT_SECRET=" >> $(ENV_FILE); \
 		echo "GOOGLE_REDIRECT_URL=" >> $(ENV_FILE); \
 		echo "SESSION_SECRET=<put 32 chars here>" >> $(ENV_FILE); \
+		echo "API_KEY=" >> $(ENV_FILE); \
 		echo "Please fill out the env file :D"; \
 	fi
 	if [ ! -d $(SSL_DIR) ]; then \

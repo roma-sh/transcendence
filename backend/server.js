@@ -8,6 +8,7 @@ const fastifySession = require('@fastify/session');
 const fastifyMultipart = require('@fastify/multipart');
 const fastifyRateLimit = require('@fastify/rate-limit');
 const authRoutes = require("../auth/Auth");
+const apiKeyHook = require('./src/utils/apiKey');
 
 const app = Fastify({ logger:
   {
@@ -19,7 +20,7 @@ const app = Fastify({ logger:
 app.register(fastifyCors, {
     origin: process.env.ALLOWED_ORIGINS?.split(',') || true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'x-api-key'],
     credentials: true // important for cookies
 });
 
@@ -60,6 +61,22 @@ app.register(fastifyStatic, {
 app.register(fastifyRateLimit, {
   max: 100,
   timeWindow: "1 minute",
+});
+
+app.addHook('onRequest', (request, reply, done) => {
+  if (request.url.startsWith('/api')) {
+    return apiKeyHook(request, reply, done);
+  }
+  done();
+});
+
+// Serve API key to the frontend at runtime (never committed to source)
+app.get('/config.js', (request, reply) => {
+  const apiKey = process.env.API_KEY || '';
+  reply
+    .header('Content-Type', 'application/javascript')
+    .header('Cache-Control', 'no-store')
+    .send(`window.__API_KEY__ = ${JSON.stringify(apiKey)};`);
 });
 
 app.register(require('./src/routes/auth.routes'), { prefix: '/api/auth' });

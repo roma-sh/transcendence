@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 
-curl -c cookies.txt -X POST http://localhost:3000/api/auth/login \
+curl -k -c cookies.txt -X POST https://localhost:8443/api/auth/login \
   -H "Content-Type: application/json" \
+  -H "x-api-key: PONG_APP_SECRET_KEY_2026" \
   -d '{
-    "username": "ramez",
-    "password": "Abcabc123#"
+    "username": "rami",
+    "password": "Ra1991mez1991!"
   }'

@@ -5,6 +5,7 @@ import {
 import {
 	toggleOpacity
 } from "./settings-page.js";
+import { apiHeaders } from "./api-config.js";
 
 export function handleGoBackProfile() {
 	const returnHash = getUserMenuReturnHash();
@@ -24,7 +25,7 @@ export async function initProfilePage() {
 		const res = await fetch("/api/profile", {
 			method: "GET",
 			credentials: "include",
-			headers: { "Content-Type": "application/json" }
+			headers: apiHeaders({ "Content-Type": "application/json" })
 		});
 
 		if (!res.ok) {
@@ -126,10 +127,10 @@ export async function handleUpdatePassword() {
 	try {
 		const res = await fetch("/api/profile/password", {
 			method: "PUT",
-			headers: {
+			headers: apiHeaders({
 				"Content-Type": "application/json",
 				"Cache-Control": "no-cache",
-			},
+			}),
 			credentials: "include",
 			body: JSON.stringify({
 				currentPassword: current_p.value,
@@ -227,6 +228,7 @@ async function handleUploadProfileImage(file: File) : Promise<string> {
 	const res = await fetch("/api/profile/picture", {
 		method: "PUT",
 		credentials: "include",
+		headers: apiHeaders(),
 		body: fd,
 	});
 
@@ -336,7 +338,7 @@ async function updateFullname(newUsername: string): Promise<string> {
 	const res = await fetch("/api/profile/username", {
     method: "PUT",
     credentials: "include",
-    headers: { "Content-Type": "application/json" },
+    headers: apiHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify({ newUsername }),
   });
 	let msg = '';
@@ -352,7 +354,7 @@ async function updateEmail(newEmail: string): Promise<string> {
 	const res = await fetch("/api/profile/email", {
     method: "PUT",
     credentials: "include",
-    headers: { "Content-Type": "application/json" },
+    headers: apiHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify({ newEmail }),
   });
 	let msg = '';
@@ -372,6 +374,7 @@ export async function handleRemoveAvatar() {
 		const res = await fetch("/api/profile/picture", {
 			method: "PUT",
 			credentials: "include",
+			headers: apiHeaders(),
 			body: formData,
 		});
 

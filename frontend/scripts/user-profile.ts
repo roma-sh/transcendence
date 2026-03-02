@@ -11,6 +11,8 @@
 //   `;
 // }
 
+import { apiHeaders } from "./api-config.js";
+
 export async function initUserProfilePage(): Promise<void> {
   const profileSection = document.querySelector('#user-profile') as HTMLElement;
   if (!profileSection) return;
@@ -20,6 +22,7 @@ export async function initUserProfilePage(): Promise<void> {
     const response = await fetch('/api/profile', {
       method: 'GET',
       credentials: 'include',
+      headers: apiHeaders(),
     });
 
     // If not logged in or request fails, show Guest
