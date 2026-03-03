@@ -4,7 +4,7 @@ const user_db = require(path.join(__dirname, '../db/db'));
 function getUserById(userId) {
   return new Promise((resolve, reject) => {
     user_db.get(
-      `SELECT id, username, email, is_online, total_games, wins, profile_picture FROM users WHERE id = ?`,
+      `SELECT id, username, email, is_online, total_games, wins, profile_picture, is_oauth FROM users WHERE id = ?`,
       [userId],
       (err, row) => {
         if (err) return reject(err);

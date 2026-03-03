@@ -36,6 +36,9 @@ async function signupController(request, reply) {
     return reply.code(201).send({ message: 'User created', id: newId });
   } catch (err) {
     request.log.error(err);
+    if (err.message && err.message.includes('UNIQUE constraint failed')) {
+      return reply.code(409).send({ error: 'Username or email already exists' });
+    }
     return reply.code(500).send({ error: 'Failed to create user' });
   }
 }
@@ -150,7 +153,7 @@ async function loginController(request, reply) {
 }
 
 async function logoutController(request, reply) {
-  const userId = request.session.userId;
+  const userId = request.session?.userId;
   if (userId) {
     try {
       await setUserOffline(userId);
@@ -158,7 +161,13 @@ async function logoutController(request, reply) {
       request.log.error('Error setting user offline:', err);
     }
   }
-  await request.session.destroy();
+  try {
+    if (request.session?.destroy) {
+      await request.session.destroy();
+    }
+  } catch (err) {
+    request.log.error('Error destroying session:', err);
+  }
   return reply.send({ message: 'Logged out successfully' });
 }
 

@@ -16,7 +16,7 @@ user_db.exec("PRAGMA journal_mode = WAL;");
 user_db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT,
     total_games INTEGER DEFAULT 0,
@@ -33,7 +33,7 @@ const gracefulShutdown = () => {
   user_db.close((err) => {
     if (err) console.error('Error closing database:', err);
     else console.log('Database connection closed');
-    process.exit(0);
+    process.exit(err ? 1 : 0);
   });
 };
 

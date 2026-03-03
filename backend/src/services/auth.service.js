@@ -28,6 +28,7 @@ async function getUser(identifier, password) {
     );
   });
   if (!row) return null;
+  if (row.is_oauth) return null; // OAuth users cannot login via password
   const match = await bcrypt.compare(password, row.password);
   return match ? row : null;
 }

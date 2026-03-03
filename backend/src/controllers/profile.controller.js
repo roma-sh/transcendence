@@ -88,6 +88,10 @@ async function changePasswordController(request, reply) {
       return reply.code(404).send({ message: 'User not found' });
     }
 
+    if (user.is_oauth) {
+      return reply.code(400).send({ message: 'OAuth users cannot change password' });
+    }
+
     const verifiedUser = await getUser(user.username, currentPassword);
     if (!verifiedUser) {
       return reply.code(401).send({ message: 'Current password is incorrect' });

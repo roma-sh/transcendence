@@ -17,7 +17,7 @@ function isValidEmail(email) {
   function isValidUsername(username) {
 	if (typeof username !== "string") return false;
 
-	const regex = /^[A-Za-z0-9_]{3,}$/;
+	const regex = /^[A-Za-z0-9_]{3,30}$/;
 	return regex.test(username);
   }
 
