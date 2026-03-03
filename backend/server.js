@@ -84,6 +84,7 @@ app.register(require('./src/routes/twoFactor.routes'), { prefix: '/api/2fa' });
 app.register(require('./src/routes/alias.routes'), { prefix: '/api/alias' });
 app.register(require('./src/routes/profile.route'), { prefix: '/api' });
 app.register(require('./src/routes/game.route'), { prefix: '/api/game' });
+app.register(require('./src/routes/account.route'), { prefix: '/api/account' });
 app.register(authRoutes, { prefix: '/api' });
 
 
