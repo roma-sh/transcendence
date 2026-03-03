@@ -9,23 +9,26 @@ async function signupController(request, reply) {
   const { username, email, password } = request.body;
 
   if (!username || !email || !password) {
-    return reply.code(400).send({ error: 'All fields are required' });
+    return reply.send({ success: false, error: 'All fields are required' });
   }
 
   if (!isValidUsername(username)) {
-    return reply.code(400).send({
+    return reply.send({
+      success: false,
       error: 'Invalid username. Must be at least 3 characters and contain only letters, numbers, or underscores.'
     });
   }
 
   if (!isValidEmail(email)) {
-    return reply.code(400).send({
+    return reply.send({
+      success: false,
       error: 'Invalid email format. Please enter a valid email.'
     });
   }
 
   if (!isStrongPassword(password)) {
-    return reply.code(400).send({
+    return reply.send({
+      success: false,
       error:
         'Weak password. Must be 8+ characters and include upper & lower case letters, a number, and a special character.'
     });
@@ -33,13 +36,13 @@ async function signupController(request, reply) {
 
   try {
     const newId = await insertUser(username, email, password);
-    return reply.code(201).send({ message: 'User created', id: newId });
+    return reply.send({ success: true, message: 'User created', id: newId });
   } catch (err) {
     request.log.error(err);
     if (err.message && err.message.includes('UNIQUE constraint failed')) {
-      return reply.code(409).send({ error: 'Username or email already exists' });
+      return reply.send({ success: false, error: 'Username or email already exists' });
     }
-    return reply.code(500).send({ error: 'Failed to create user' });
+    return reply.send({ success: false, error: 'Failed to create user' });
   }
 }
 

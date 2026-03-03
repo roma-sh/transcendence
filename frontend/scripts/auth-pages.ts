@@ -60,7 +60,7 @@ export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
 
     const result = await response.json();
 
-    if (response.ok) {
+    if (result.success) {
       updatePassMsgDot('green', signupTextDotEl);
       showMessage(signupStatusText, "Signed up successfully!");
       toggleOpacity(signupStatus);
