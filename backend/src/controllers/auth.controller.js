@@ -82,13 +82,14 @@ async function loginController(request, reply) {
 
       const jwtToken = generateToken(user);
       return reply.send({ 
+        success: true,
         message: 'Logged in', 
         token: jwtToken,
         user: { id: user.id, username: user.username, email: user.email } 
       });
     } catch (err) {
       request.log.error(err);
-      return reply.code(500).send({ message: 'Server error' });
+      return reply.code(500).send({ success: false, message: 'Server error' });
     }
   }
 
@@ -100,7 +101,7 @@ async function loginController(request, reply) {
   try {
     const user = await getUser(username, password);
     if (!user) {
-      return reply.code(401).send({ message: 'Invalid credentials' });
+      return reply.send({ success: false, message: `Username or/and password incorrect` });
     }
 
     const status = await get2FAStatus(user.id);
@@ -119,7 +120,7 @@ async function loginController(request, reply) {
       const isValid = verifyToken(status.two_factor_secret, twoFactorToken);
 
       if (!isValid) {
-        return reply.code(401).send({ message: 'Invalid 2FA token' });
+        return reply.send({ success: false, message: 'Invalid 2FA token' });
       }
     }
 
@@ -142,13 +143,14 @@ async function loginController(request, reply) {
     const jwtToken = generateToken(user);
 
     return reply.send({ 
+      success: true,
       message: 'Logged in', 
       token: jwtToken,
       user: { id: user.id, username: user.username, email: user.email } 
     });
   } catch (err) {
     request.log.error(err);
-    return reply.code(500).send({ message: 'Server error' });
+    return reply.code(500).send({ success: false, message: 'Server error' });
   }
 }
 

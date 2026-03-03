@@ -124,7 +124,7 @@ export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
 
     let result = await response.json();
 
-    if (response.ok) {
+    if (result.success) {
       // Check if 2FA is required
       if (result.requires2FA && result.userId) {
         const { show2FALoginModal } = await import('./two-factor.js');
