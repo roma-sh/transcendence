@@ -7,5 +7,5 @@ curl -k -c cookies.txt -X POST https://localhost:8443/api/auth/signup \
   -d '{
 	"email": "ram@gmail.com",
     "username": "ram",
-    "password": "Abcabc123!"
+    "password": "Asdfghj12345!"
   }'

@@ -88,3 +88,7 @@ Increament of total wins: http://localhost:3000/api/game/wins
 ```
 Request: Nothing
 ```
+User account deleting http://localhost:3000/api/account/delete
+```
+Request: Nothing
+```
