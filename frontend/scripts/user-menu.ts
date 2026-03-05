@@ -118,6 +118,7 @@ export async function handleLogOut(): Promise<boolean> {
      * even when navigating to the same page */
     location.hash = '';
     location.hash = '#welcome-page';
+	location.reload();
 
     return true;
   } catch (error) {

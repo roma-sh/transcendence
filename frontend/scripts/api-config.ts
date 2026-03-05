@@ -4,9 +4,17 @@ declare global {
   }
 }
 
+// export function apiHeaders(extra: Record<string, string> = {}): Record<string, string> {
+//   return {
+//     'x-api-key': window.__API_KEY__ || '',
+//     ...extra,
+//   };
+// }
+
 export function apiHeaders(extra: Record<string, string> = {}): Record<string, string> {
-  return {
-    'x-api-key': window.__API_KEY__ || '',
-    ...extra,
-  };
-}
+	const key = (typeof window !== 'undefined' && window.__API_KEY__) || '';
+	return {
+	  'x-api-key': key,
+	  ...extra,
+	};
+  }

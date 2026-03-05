@@ -6,6 +6,7 @@ import {
 	toggleOpacity
 } from "./settings-page.js";
 import { apiHeaders } from "./api-config.js";
+import { handleLogOut } from "./user-menu.js";
 
 export function handleGoBackProfile() {
 	const returnHash = getUserMenuReturnHash();
@@ -404,35 +405,87 @@ export function handleToggleDeleteModal() {
 
 export async function handleConfirmDeleteAccount(): Promise<boolean> {
     const btn = document.querySelector('[data-action="confirm-delete-account"]') as HTMLButtonElement | null;
-    if (btn) btn.textContent = "Deleting...";
+    
+    if (btn) {
+        btn.textContent = "Deleting...";
+        btn.disabled = true;
+    }
 
     try {
-        // 1. Ακριβώς το ίδιο fetch με το user-menu.js
-        const res = await fetch('/api/auth/logout', {
-            method: 'POST',
+        const res = await fetch('/api/account/delete', {
+            // ΠΡΟΣΟΧΗ: Πρέπει να είναι DELETE (όπως στο routes σου)
+            method: 'DELETE', 
+            headers: apiHeaders({ 
+                'Content-Type': 'application/json' 
+            }),
             credentials: 'include',
+            // ΠΡΟΣΟΧΗ: Πρέπει να έχει body (έστω άδειο {}) για να μην βγάλει 400 ο Fastify
+            body: JSON.stringify({}) 
         });
 
         if (!res.ok) {
-            console.error('Delete-Logout failed:', res.status);
-            if (btn) btn.textContent = "Confirm Delete";
+            // Αν σου βγάλει πάλι λάθος, ας δούμε τι λέει ο server στο console
+            const errorMsg = await res.json().catch(() => ({}));
+            console.error('Delete failed:', res.status, errorMsg);
+            
+            if (btn) {
+                btn.textContent = "Confirm Delete";
+                btn.disabled = false;
+            }
             return false;
         }
 
-        // 2. Καθαρισμός LocalStorage
-        localStorage.removeItem('userName');
-
-        // 3. Κλείσιμο του Modal
+        console.log("Account successfully deleted!");
+        
+        // 1. Κλείνουμε το modal
         handleToggleDeleteModal();
-
-        // 4. Το "μαγικό" reset του hash για να πυροδοτηθεί το hashchange
-        location.hash = '';
-        location.hash = '#welcome-page';
-
+        
+        // 2. Καλούμε το logout για να καθαρίσει τα πάντα και να μας πάει στο Welcome
+        await handleLogOut();
+        
         return true;
+
     } catch (error) {
-        console.error('Delete-Logout ERROR:', error);
-        location.hash = '#welcome-page'; // Αναγκαστική φυγή ακόμα και σε error
+        console.error('Fatal error during deletion:', error);
+        if (btn) {
+            btn.textContent = "Confirm Delete";
+            btn.disabled = false;
+        }
         return false;
     }
 }
+
+// export async function handleConfirmDeleteAccount(): Promise<boolean> {
+//     const btn = document.querySelector('[data-action="confirm-delete-account"]') as HTMLButtonElement | null;
+//     if (btn) btn.textContent = "Deleting...";
+
+//     try {
+//         // 1. Ακριβώς το ίδιο fetch με το user-menu.js
+//         const res = await fetch('/api/auth/logout', {
+//             method: 'POST',
+//             credentials: 'include',
+//         });
+
+//         if (!res.ok) {
+//             console.error('Delete-Logout failed:', res.status);
+//             if (btn) btn.textContent = "Confirm Delete";
+//             return false;
+//         }
+
+//         // 2. Καθαρισμός LocalStorage
+//         localStorage.removeItem('userName');
+
+//         // 3. Κλείσιμο του Modal
+//         handleToggleDeleteModal();
+
+//         // 4. Το "μαγικό" reset του hash για να πυροδοτηθεί το hashchange
+//         location.hash = '';
+//         location.hash = '#welcome-page';
+
+//         return true;
+//     } catch (error) {
+//         console.error('Delete-Logout ERROR:', error);
+//         location.hash = '#welcome-page'; // Αναγκαστική φυγή ακόμα και σε error
+//         return false;
+//     }
+// }
