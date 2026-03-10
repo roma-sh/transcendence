@@ -246,43 +246,49 @@ async function handleWinOnce(
 	const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
 	bindButtonEvent(canvas, nextBtnRect, () => {
 		if (!isTournamentMatch) {
-		location.hash = '#game-page';
+		// location.hash = '#game-page';
+    cleanupGame();
+    
+    // 2. Μερικές φορές το hash δεν αλλάζει αν είμαστε ήδη εκεί, 
+    // οπότε αναγκάζουμε το παιχνίδι να ξεκινήσει ξανά
+    location.hash = '#game-page'; 
+    game();
 		} else {
 		location.hash = nextGameHash;
 		}
 	});
 }
 
-async function recordWin() {
-    try {
-        await fetch('/api/game/wins', { method: 'POST', credentials: 'include', headers: apiHeaders() });
-        console.log("Win recorded successfully.");
-    } catch (error) {
-        console.error("Error recording win:", error);
-    }
-}
+// async function recordWin() {
+//     try {
+//         await fetch('/api/game/wins', { method: 'POST', credentials: 'include', headers: apiHeaders() });
+//         console.log("Win recorded successfully.");
+//     } catch (error) {
+//         console.error("Error recording win:", error);
+//     }
+// }
 
-async function recordTotalGame() {
-    try {
-        await fetch('/api/game/total-games', { method: 'POST', credentials: 'include', headers: apiHeaders() });
-        console.log("Total game recorded successfully.");
-    } catch (error) {
-        console.error("Error recording total game:", error);
-    }
-}
+// async function recordTotalGame() {
+//     try {
+//         await fetch('/api/game/total-games', { method: 'POST', credentials: 'include', headers: apiHeaders() });
+//         console.log("Total game recorded successfully.");
+//     } catch (error) {
+//         console.error("Error recording total game:", error);
+//     }
+// }
 
-async function getLoggedInUserAlias(): Promise<string | null> {
-    try {
-        const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
-        if (response.ok) {
-            const data = await response.json();
-            return data.user.username;
-        }
-    } catch (error) {
-        console.error("Error fetching profile:", error);
-    }
-    return null;
-}
+// async function getLoggedInUserAlias(): Promise<string | null> {
+//     try {
+//         const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
+//         if (response.ok) {
+//             const data = await response.json();
+//             return data.user.username;
+//         }
+//     } catch (error) {
+//         console.error("Error fetching profile:", error);
+//     }
+//     return null;
+// }
 
 function startCountdown(startGame: () => void) {
   const countdownEl = document.querySelector(
