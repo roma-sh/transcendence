@@ -204,6 +204,7 @@ async function handleWinOnce(
 		try {
 		const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
 		const data = await response.json();
+		if (!data.success || !data.user) throw new Error('Not logged in');
 		const loggedInAlias = data.user.username;
 
 		if (loggedInAlias === p1Name || loggedInAlias === p2Name) {

@@ -29,14 +29,9 @@ export async function initProfilePage() {
 			headers: apiHeaders({ "Content-Type": "application/json" })
 		});
 
-		if (!res.ok) {
-      console.warn("Failed to load profile from server", res.status);
-      return;
-    }
-
 	const data = await res.json();
 
-	const user = data.user;
+	const user = data.success ? data.user : null;
     if (!user) return;
 
 	const navUsernameEl = document.querySelector('.nav-user-id');
@@ -362,7 +357,7 @@ async function updateFullname(newUsername: string): Promise<string> {
 
     if (data && data.message) msg = data.message;
 
-    if (!res.ok) throw new Error(msg || "Failed to update username");
+    if (!data.success) throw new Error(msg || "Failed to update username");
 
     localStorage.setItem('userName', newUsername);
 
@@ -452,10 +447,10 @@ export async function handleConfirmDeleteAccount(): Promise<boolean> {
             body: JSON.stringify({}) 
         });
 
-        if (!res.ok) {
-            // Αν σου βγάλει πάλι λάθος, ας δούμε τι λέει ο server στο console
-            const errorMsg = await res.json().catch(() => ({}));
-            console.error('Delete failed:', res.status, errorMsg);
+        const data = await res.json();
+
+        if (!data.success) {
+            console.error('Delete failed:', data.message || 'Unknown error');
             
             if (btn) {
                 btn.textContent = "Confirm Delete";
