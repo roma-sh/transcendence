@@ -74,17 +74,17 @@
           absolute top-[16px] right-[16px] gap-[12px] hidden">
         <button
           data-action="open-sign-up"
-          class="auth-button sign-up-button js-sign-up-button
+          class="auth-button sign-up-button js-sign-up-button neon-button
             py-[15px] px-[60px] rounded-[45px]
             cursor-pointer text-[24px]
             font-bold font-[Arial] transition-opacity hover:opacity-[0.7]
-            bg-(--bg-color-white-seven) text-(--main-color)
+            bg-(--main-color) text-(--bg-color-white-nine)
             border-2 border-solid border-(--main-color)">
               SIGN UP
         </button>
         <button
           data-action="open-log-in"
-          class="auth-button log-in-button js-log-in-button
+          class="auth-button log-in-button js-log-in-button neon-button
             bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
             text-(--bg-color-white-nine) cursor-pointer text-[24px]
             font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
@@ -92,7 +92,7 @@
         </button>
         <button
         data-action="login-with-google"
-        class="auth-button py-[15px] px-[60px] border-0 rounded-[45px] font-bold cursor-pointer hover:opacity-[0.7] text-(--bg-color-white-nine) text-[24px] font-[Arial] transition-opacity"
+        class="auth-button neon-button py-[15px] px-[60px] border-0 rounded-[45px] font-bold cursor-pointer hover:opacity-[0.7] text-(--bg-color-white-nine) text-[24px] font-[Arial] transition-opacity"
         style="background-color: #002c74; margin-right: 10px;">
         GOOGLE LOGIN
       </button>
@@ -102,7 +102,7 @@
           w-[80px] h-[clamp(200px,45vh,400px)] bg-(--main-color)
           shadow-[0_10px_20px_var(--shadow-20)] rounded-[40px] mr-[70px]"></div>
         <div class="middle-section flex flex-col items-center">
-          <h1 id="game-name" class="text-[clamp(64px,12vw,150px)] font-[Arial] text-(--text-on-light) m-0">PONG</h1>
+          <h1 id="game-name" class="text-[clamp(64px,12vw,150px)] font-[Arial] text-(--neon-blue) m-0">PONG</h1>
           <div id="ball"
             class="mt-[30px] w-[75px] h-[75px] rounded-[50%] bg-(--main-color)
               shadow-[0_12px_26px_var(--shadow-35)] animate-bob
@@ -119,7 +119,7 @@
         <div class="play-button-container flex items-center justify-center">
           <button
             data-action="open-choose-mode"
-            class="play-button js-play-button
+            class="play-button js-play-button neon-button
             bg-(--main-color) px-[60px] py-[15px] border-0 rounded-[45px]
             text-(--text-on-dark) cursor-pointer text-[24px] font-bold
             font-[Arial] transition-opacity hover:opacity-[0.7]">
@@ -130,7 +130,7 @@
             flex items-center justify-center mt-[10px] mb-[10px] relative">
             <button
             data-action="connect-wallet"
-            class="auth-button connect-wallet-btn js-connect-wallet-button
+            class="auth-button connect-wallet-btn js-connect-wallet-button neon-button
               bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
               text-(--text-on-dark) cursor-pointer text-[24px]
               font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
@@ -250,7 +250,7 @@
             w-[min(300px,40vw)] h-[min(300px,40vh)] border-2 border-solid
             border-(--border-color) rounded-[20px] flex items-center
             justify-center cursor-pointer text-[clamp(24px,4vw,50px)]
-            font-[Arial] text-(--main-color) bg-(--bg-color-white-seven)
+            font-[Arial] text-(--neon-blue) bg-(--bg-color-white-seven)
             transition-[background-color] mr-[30px] hover:bg-[rgb(240,238,238)]">
               <p class="m-0">Quick Play</p>
         </div>
@@ -261,7 +261,7 @@
             w-[min(300px,40vw)] h-[min(300px,40vh)] border-2 border-solid
             border-(--border-color) rounded-[20px] flex items-center
             justify-center cursor-pointer text-[clamp(24px,4vw,50px)]
-            font-[Arial] text-(--main-color) bg-(--bg-color-white-seven)
+            font-[Arial] text-(--neon-blue) bg-(--bg-color-white-seven)
             transition-[background-color] hover:bg-[rgb(240,238,238)]">
               <p class="m-0">Tournament</p>
         </div>
@@ -270,7 +270,7 @@
           flex items-center justify-center">
         <button
           data-action="start-game-option"
-          class="start-button js-start-button
+          class="start-button js-start-button neon-button
             bg-(--main-color) py-[20px] px-[100px] border-0
             rounded-[45px] text-(--bg-color-white-nine)
             cursor-pointer text-[30px] font-bold font-[Arial]
@@ -370,7 +370,7 @@
         </div>
         <button
           data-action="start-tournament"
-          class="go-button js-start-game-btn
+          class="go-button js-start-game-btn neon-button
             inline-block mt-[8px] py-[14px] px-[70px]
             rounded-[45px] border-0 bg-(--main-color)
             text-(--bg-color-white-nine) text-[24px]
@@ -416,7 +416,7 @@
 		</div>
 	
 		<div class="flex flex-col items-center">
-			<p class="m-0 text-[clamp(32px,5vw,48px)] text-(--main-color) mb-10">
+			<p class="m-0 text-[clamp(32px,5vw,48px)] text-(--neon-blue) mb-10">
 				Enter number of players
 			</p>
 			
@@ -424,7 +424,7 @@
 				id="player-count-input"
 				name="playerCount"
 				value="2" max="100" min="2"
-				class="w-[min(300px,40vw)] py-8 text-center text-[40px] border-2 border-solid border-(--border-color) rounded-[20px] bg-(--bg-color-white-seven) text-(--main-color) focus:outline-none transition-colors hover:bg-[rgb(240,238,238)]">
+				class="w-[min(300px,40vw)] py-8 text-center text-[40px] border-2 border-solid border-(--border-color) rounded-[20px] bg-(--bg-color-white-seven) text-(--neon-blue) focus:outline-none transition-colors hover:bg-[rgb(240,238,238)]">
 	
 			<div class="js-alias-status flex items-center justify-center space-x-2 opacity-0 transition-opacity duration-300 mt-6 h-6">
 				<div class="js-alias-text-dot w-2.5 h-2.5 rounded-full"></div>
@@ -452,7 +452,7 @@
 		</div>
 	  
 		<div class="flex flex-col items-center">
-		  <h2 class="text-[clamp(32px,5vw,48px)] text-(--main-color) mb-8">Enter aliases</h2>
+		  <h2 class="text-[clamp(32px,5vw,48px)] text-(--neon-blue) mb-8">Enter aliases</h2>
 		  
 		  <div class="aliase-inputs flex flex-col items-center gap-4">
 			</div>
@@ -514,7 +514,7 @@
             focus:outline-none" />
         <div class="flex items-center gap-[10px] text-left mb-[10px]">
           <input type="checkbox" id="terms-checkbox" class="w-[18px] h-[18px] cursor-pointer" required>
-          <label for="terms-checkbox" class="text-[14px] text-(--main-color)">
+          <label for="terms-checkbox" class="text-[14px] text-(--neon-blue)">
             I agree to the 
             <a href="#" id="open-terms" class="underline font-bold hover:opacity-80">Terms & Conditions</a>
           </label>
@@ -660,7 +660,7 @@
             class="back_btn
               absolute left-0 top-[50%] transform-[translateY(-50%)]
               inline-flex items-center gap-[6px]
-              text-(--main-color) bg-transparent border-0
+              text-(--bg-color-white-nine) bg-transparent border-0
               text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px]
               cursor-pointer transition-[background] hover:bg-(--hover-06)">
                 ← Back
@@ -732,13 +732,13 @@
           <div class="stat
             text-center border border-solid border-(--border-soft-gray)
             rounded-[10px] bg-(--bg-color-gray) px-[10px] py-[10px]">
-            <div class="num js-wins font-bold"></div>
+            <div class="num js-wins font-bold text-(--bg-color-white-nine)"></div>
             <div class="label text-(--text-secondary) text-[12px]">Wins</div>
           </div>
           <div class="stat
             text-center border border-solid border-(--border-soft-gray)
             rounded-[10px] bg-(--bg-color-gray) px-[10px] py-[10px]">
-            <div class="num js-total-games font-bold"></div>
+            <div class="num js-total-games font-bold text-(--bg-color-white-nine)"></div>
             <div class="label text-(--text-secondary) text-[12px]">Total games</div>
           </div>
         </div>

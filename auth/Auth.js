@@ -33,7 +33,7 @@ fastify.get('/google/callback', async (req, reply) => {
     
     if (!user) {
       console.log("4. User doesnt exist, creating...");
-      const tempName = gUser.name.replace(/\s/g, '') + Math.floor(Math.random() * 100);
+      const tempName = gUser.name.replace(/\s/g, '');
       const dummyPass = "OAUTH_" + Math.random().toString(36).slice(-8);
 
       const result = await dbRun(
