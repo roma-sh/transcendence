@@ -12,8 +12,11 @@ export async function initUserProfilePage(): Promise<void> {
       headers: apiHeaders(),
     });
 
+    // Parse JSON
+    const data = await response.json();
+
     // If not logged in or request fails, show Guest
-    if (!response.ok) {
+    if (!data.success || !data.user) {
       profileSection.innerHTML = `
         <div class="profile-container">
           <h2>did not get the data first error .. Welcome Guest</h2>
@@ -22,9 +25,7 @@ export async function initUserProfilePage(): Promise<void> {
       return;
     }
 
-    // Parse JSON
-    const data = await response.json();
-    const userName = data.user?.username || 'Guest from or';
+    const userName = data.user.username || 'Guest from or';
 
     // Update HTML with username + green online dot
     profileSection.innerHTML = `

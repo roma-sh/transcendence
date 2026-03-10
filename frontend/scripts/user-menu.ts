@@ -99,15 +99,15 @@ export async function handleLogOut(): Promise<boolean> {
       headers: apiHeaders(),
     });
 
-    if (!res.ok) {
-      console.error(' failed:', res.status);
-      return false;
-    }
-
     let data: any = null;
     try {
       data = await res.json();
     } catch {
+    }
+
+    if (!data || !data.success) {
+      console.error('Logout failed');
+      return false;
     }
 
     localStorage.removeItem('userName');

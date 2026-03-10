@@ -11,19 +11,19 @@ async function profileController(request, reply) {
   const userId = request.session.userId;
 
   if (!userId) {
-    return reply.code(401).send({ user: null, message: 'Not logged in' });
+    return reply.send({ success: false, user: null, message: 'Not logged in' });
   }
 
   try {
     const user = await getUserById(userId);
     if (!user) {
-      return reply.code(404).send({ user: null, message: 'User not found' });
+      return reply.send({ success: false, user: null, message: 'User not found' });
     }
 
-    return reply.send({ user });
+    return reply.send({ success: true, user });
   } catch (err) {
     console.error('Profile error:', err);
-    return reply.code(500).send({ user: null, message: 'Server error' });
+    return reply.send({ success: false, user: null, message: 'Server error' });
   }
 }
 
@@ -60,7 +60,7 @@ async function isUserOnlineController(request, reply) {
 
   } catch (err) {
     request.log.error(err);
-    return reply.code(500).send({ message: "Server error" });
+    return reply.send({ success: false, message: "Server error" });
   }
 }
 
@@ -69,15 +69,16 @@ async function changePasswordController(request, reply) {
   const { currentPassword, newPassword } = request.body;
 
   if (!userId) {
-    return reply.code(401).send({ message: 'Not logged in' });
+    return reply.send({ success: false, message: 'Not logged in' });
   }
 
   if (!currentPassword || !newPassword) {
-    return reply.code(400).send({ message: 'Current password and new password are required' });
+    return reply.send({ success: false, message: 'Current password and new password are required' });
   }
 
   if (!isStrongPassword(newPassword)) {
-    return reply.code(400).send({
+    return reply.send({
+      success: false,
       message: 'Weak password. Must be 8+ characters and include upper & lower case letters, a number, and a special character.'
     });
   }
@@ -85,24 +86,24 @@ async function changePasswordController(request, reply) {
   try {
     const user = await getUserById(userId);
     if (!user) {
-      return reply.code(404).send({ message: 'User not found' });
+      return reply.send({ success: false, message: 'User not found' });
     }
 
     if (user.is_oauth) {
-      return reply.code(400).send({ message: 'OAuth users cannot change password' });
+      return reply.send({ success: false, message: 'OAuth users cannot change password' });
     }
 
     const verifiedUser = await getUser(user.username, currentPassword);
     if (!verifiedUser) {
-      return reply.code(401).send({ message: 'Current password is incorrect' });
+      return reply.send({ success: false, message: 'Current password is incorrect' });
     }
 
     const newHash = await bcrypt.hash(newPassword, 12);
     await updatePassword(userId, newHash);
-    return reply.send({ message: 'Password updated successfully' });
+    return reply.send({ success: true, message: 'Password updated successfully' });
   } catch (err) {
     request.log.error(err);
-    return reply.code(500).send({ message: 'Server error' });
+    return reply.send({ success: false, message: 'Server error' });
   }
 }
 
@@ -112,15 +113,16 @@ async function changeUsernameController(request, reply) {
   const { newUsername } = request.body;
 
   if (!userId) {
-    return reply.code(401).send({ message: 'Not logged in' });
+    return reply.send({ success: false, message: 'Not logged in' });
   }
 
   if (!newUsername) {
-    return reply.code(400).send({ message: 'New username is required' });
+    return reply.send({ success: false, message: 'New username is required' });
   }
 
   if (!isValidUsername(newUsername)) {
-    return reply.code(400).send({
+    return reply.send({
+      success: false,
       message: 'Invalid username. Must be at least 3 characters and contain only letters, numbers, or underscores.'
     });
   }
@@ -128,17 +130,17 @@ async function changeUsernameController(request, reply) {
   try {
     const user = await getUserById(userId);
     if (!user) {
-      return reply.code(404).send({ message: 'User not found' });
+      return reply.send({ success: false, message: 'User not found' });
     }
 
     await updateUsername(userId, newUsername);
-    return reply.send({ message: 'Username updated successfully', username: newUsername });
+    return reply.send({ success: true, message: 'Username updated successfully', username: newUsername });
   } catch (err) {
     request.log.error(err);
     if (err.message && err.message.includes('UNIQUE constraint failed')) {
-      return reply.code(409).send({ message: 'Username already exists' });
+      return reply.send({ success: false, message: 'Username already exists' });
     }
-    return reply.code(500).send({ message: 'Server error' });
+    return reply.send({ success: false, message: 'Server error' });
   }
 }
 
@@ -147,31 +149,31 @@ async function changeEmailController(request, reply) {
   const { newEmail } = request.body;
 
   if (!userId) {
-    return reply.code(401).send({ message: 'Not logged in' });
+    return reply.send({ success: false, message: 'Not logged in' });
   }
 
   if (!newEmail) {
-    return reply.code(400).send({ message: 'New email is required' });
+    return reply.send({ success: false, message: 'New email is required' });
   }
 
   if (!isValidEmail(newEmail)) {
-    return reply.code(400).send({ message: 'Invalid email format' });
+    return reply.send({ success: false, message: 'Invalid email format' });
   }
 
   try {
     const user = await getUserById(userId);
     if (!user) {
-      return reply.code(404).send({ message: 'User not found' });
+      return reply.send({ success: false, message: 'User not found' });
     }
 
     await updateEmail(userId, newEmail);
-    return reply.send({ message: 'Email updated successfully', email: newEmail });
+    return reply.send({ success: true, message: 'Email updated successfully', email: newEmail });
   } catch (err) {
     request.log.error(err);
     if (err.message && err.message.includes('UNIQUE constraint failed')) {
-      return reply.code(409).send({ message: 'Email already exists' });
+      return reply.send({ success: false, message: 'Email already exists' });
     }
-    return reply.code(500).send({ message: 'Server error' });
+    return reply.send({ success: false, message: 'Server error' });
   }
 }
 
@@ -179,7 +181,7 @@ async function updateProfilePictureController(request, reply) {
   const userId = request.session.userId;
 
   if (!userId) {
-    return reply.code(401).send({ message: 'Not logged in' });
+    return reply.send({ success: false, message: 'Not logged in' });
   }
 
   try {
@@ -196,18 +198,18 @@ async function updateProfilePictureController(request, reply) {
       }
 
       await updateProfilePicture(userId, null);
-      return reply.send({ message: 'Profile picture removed', profile_picture: null });
+      return reply.send({ success: true, message: 'Profile picture removed', profile_picture: null });
     }
 
     const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
     if (!allowedMimeTypes.includes(data.mimetype)) {
-      return reply.code(400).send({ message: 'Invalid file type. Only JPEG, PNG, and WebP are allowed' });
+      return reply.send({ success: false, message: 'Invalid file type. Only JPEG, PNG, and WebP are allowed' });
     }
 
     const maxSize = 5 * 1024 * 1024;
     const fileBuffer = await data.toBuffer();
     if (fileBuffer.length > maxSize) {
-      return reply.code(400).send({ message: 'File too large. Maximum size is 5MB' });
+      return reply.send({ success: false, message: 'File too large. Maximum size is 5MB' });
     }
 
     const fileExtension = path.extname(data.filename);
@@ -234,13 +236,14 @@ async function updateProfilePictureController(request, reply) {
     await updateProfilePicture(userId, uniqueFilename);
 
     return reply.send({
+      success: true,
       message: 'Profile picture updated successfully',
       profile_picture: uniqueFilename,
       url: `/uploads/profiles/${uniqueFilename}`
     });
   } catch (err) {
     request.log.error(err);
-    return reply.code(500).send({ message: 'Server error' });
+    return reply.send({ success: false, message: 'Server error' });
   }
 }
 

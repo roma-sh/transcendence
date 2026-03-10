@@ -145,12 +145,14 @@ export async function handleUpdatePassword() {
 		});
 
 		let msg = '';
+		let isSuccess = false;
 		try {
 			const data = await res.json();
 			if (data && data.message) msg = data.message;
+			isSuccess = data.success === true;
 		} catch {}
 
-		if (!res.ok) {
+		if (!isSuccess) {
 			if (msg === '') msg = "Failed to update password";
 			msg = msg.split(".")[0];
 			updatePassMsg(msg, 'red');
@@ -239,12 +241,14 @@ async function handleUploadProfileImage(file: File) : Promise<string> {
 	});
 
 	let url = '';
+	let isSuccess = false;
 	try {
 		const data = await res.json();
 		if (data && data.url) url = data.url;
+		isSuccess = data.success === true;
 	} catch {}
 
-	return res.ok ? url : "";
+	return isSuccess ? url : "";
 }
 
 function toggleProfileEditUI() {
@@ -387,7 +391,7 @@ async function updateEmail(newEmail: string): Promise<string> {
 
 	if (data && data.message) msg = data.message;
 
-	if (!res.ok) throw new Error(msg || "Failed to update email");
+	if (!data.success) throw new Error(msg || "Failed to update email");
 	return msg;
 }
 
@@ -403,7 +407,8 @@ export async function handleRemoveAvatar() {
 			body: formData,
 		});
 
-		if (!res.ok) {
+		const data = await res.json();
+		if (!data.success) {
 			console.error("Failed to remove avatar!");
 			return;
 		}

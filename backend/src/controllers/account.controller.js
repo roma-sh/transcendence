@@ -7,13 +7,13 @@ async function deleteAccountController(request, reply) {
   const userId = request.session.userId;
 
   if (!userId) {
-    return reply.code(401).send({ message: 'Not logged in' });
+    return reply.send({ success: false, message: 'Not logged in' });
   }
 
   try {
     const user = await getUserById(userId);
     if (!user) {
-      return reply.code(404).send({ message: 'User not found' });
+      return reply.send({ success: false, message: 'User not found' });
     }
 
     if (user.profile_picture) {
@@ -27,15 +27,15 @@ async function deleteAccountController(request, reply) {
 
     const changes = await deleteUserById(userId);
     if (changes === 0) {
-      return reply.code(404).send({ message: 'User not found' });
+      return reply.send({ success: false, message: 'User not found' });
     }
 
     await request.session.destroy();
 
-    return reply.send({ message: 'Account deleted successfully' });
+    return reply.send({ success: true, message: 'Account deleted successfully' });
   } catch (err) {
     request.log.error(err);
-    return reply.code(500).send({ message: 'Server error' });
+    return reply.send({ success: false, message: 'Server error' });
   }
 }
 

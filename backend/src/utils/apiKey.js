@@ -10,12 +10,12 @@ function apiKeyHook(request, reply, done) {
 
   if (!serverKey) {
     request.log.error('API_KEY is not set in environment variables');
-    reply.code(500).send({ error: 'Server misconfiguration' });
+    reply.send({ success: false, error: 'Server misconfiguration' });
     return;
   }
 
   if (!clientKey || clientKey !== serverKey) {
-    reply.code(403).send({ error: 'Forbidden: invalid API key' });
+    reply.send({ success: false, error: 'Forbidden: invalid API key' });
     return;
   }
 

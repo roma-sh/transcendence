@@ -9,23 +9,26 @@ async function signupController(request, reply) {
   const { username, email, password } = request.body;
 
   if (!username || !email || !password) {
-    return reply.code(400).send({ error: 'All fields are required' });
+    return reply.send({ success: false, error: 'All fields are required' });
   }
 
   if (!isValidUsername(username)) {
-    return reply.code(400).send({
+    return reply.send({
+      success: false,
       error: 'Invalid username. Must be at least 3 characters and contain only letters, numbers, or underscores.'
     });
   }
 
   if (!isValidEmail(email)) {
-    return reply.code(400).send({
+    return reply.send({
+      success: false,
       error: 'Invalid email format. Please enter a valid email.'
     });
   }
 
   if (!isStrongPassword(password)) {
-    return reply.code(400).send({
+    return reply.send({
+      success: false,
       error:
         'Weak password. Must be 8+ characters and include upper & lower case letters, a number, and a special character.'
     });
@@ -33,13 +36,13 @@ async function signupController(request, reply) {
 
   try {
     const newId = await insertUser(username, email, password);
-    return reply.code(201).send({ message: 'User created', id: newId });
+    return reply.send({ success: true, message: 'User created', id: newId });
   } catch (err) {
     request.log.error(err);
     if (err.message && err.message.includes('UNIQUE constraint failed')) {
-      return reply.code(409).send({ error: 'Username or email already exists' });
+      return reply.send({ success: false, error: 'Username or email already exists' });
     }
-    return reply.code(500).send({ error: 'Failed to create user' });
+    return reply.send({ success: false, error: 'Failed to create user' });
   }
 }
 
@@ -52,17 +55,17 @@ async function loginController(request, reply) {
       const user = await getUserById(userId);
       
       if (!user) {
-        return reply.code(404).send({ message: 'User not found' });
+        return reply.send({ success: false, message: 'User not found' });
       }
 
       const status = await get2FAStatus(user.id);
       if (!status || !status.two_factor_enabled || !status.two_factor_secret) {
-        return reply.code(400).send({ message: '2FA not enabled for this user' });
+        return reply.send({ success: false, message: '2FA not enabled for this user' });
       }
 
       const isValid = verifyToken(status.two_factor_secret, twoFactorToken);
       if (!isValid) {
-        return reply.code(401).send({ message: 'Invalid 2FA token' });
+        return reply.send({ success: false, message: 'Invalid 2FA token' });
       }
 
       const updated = await setUserOnline(user.id);
@@ -82,25 +85,26 @@ async function loginController(request, reply) {
 
       const jwtToken = generateToken(user);
       return reply.send({ 
+        success: true,
         message: 'Logged in', 
         token: jwtToken,
         user: { id: user.id, username: user.username, email: user.email } 
       });
     } catch (err) {
       request.log.error(err);
-      return reply.code(500).send({ message: 'Server error' });
+      return reply.send({ success: false, message: 'Server error' });
     }
   }
 
   // Normal login flow
   if (!username || !password) {
-    return reply.code(400).send({ message: 'Missing credentials' });
+    return reply.send({ success: false, message: 'Missing credentials' });
   }
 
   try {
     const user = await getUser(username, password);
     if (!user) {
-      return reply.code(401).send({ message: 'Invalid credentials' });
+      return reply.send({ success: false, message: `Username or/and password incorrect` });
     }
 
     const status = await get2FAStatus(user.id);
@@ -108,7 +112,8 @@ async function loginController(request, reply) {
 
     if (is2FAEnabled) {
       if (!twoFactorToken) {
-        return reply.code(200).send({ 
+        return reply.send({ 
+          success: true,
           requires2FA: true, 
           userId: user.id,
           message: '2FA token required' 
@@ -119,7 +124,7 @@ async function loginController(request, reply) {
       const isValid = verifyToken(status.two_factor_secret, twoFactorToken);
 
       if (!isValid) {
-        return reply.code(401).send({ message: 'Invalid 2FA token' });
+        return reply.send({ success: false, message: 'Invalid 2FA token' });
       }
     }
 
@@ -142,13 +147,14 @@ async function loginController(request, reply) {
     const jwtToken = generateToken(user);
 
     return reply.send({ 
+      success: true,
       message: 'Logged in', 
       token: jwtToken,
       user: { id: user.id, username: user.username, email: user.email } 
     });
   } catch (err) {
     request.log.error(err);
-    return reply.code(500).send({ message: 'Server error' });
+    return reply.send({ success: false, message: 'Server error' });
   }
 }
 
@@ -168,7 +174,7 @@ async function logoutController(request, reply) {
   } catch (err) {
     request.log.error('Error destroying session:', err);
   }
-  return reply.send({ message: 'Logged out successfully' });
+  return reply.send({ success: true, message: 'Logged out successfully' });
 }
 
 module.exports = { signupController, loginController, logoutController };

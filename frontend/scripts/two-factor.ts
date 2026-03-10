@@ -251,7 +251,7 @@ export async function handleVerify2FALogin(): Promise<Promise<void>> {
 
     const data = await response.json();
 
-    if (!response.ok) {
+    if (!data.success) {
       if (msgEl) {
         msgEl.textContent = data.message || 'Invalid code';
         msgEl.classList.remove('hidden');

@@ -13,7 +13,7 @@ async function jwtAuth(request, reply) {
   }
 
   if (!token) {
-    return reply.code(401).send({ message: 'No token provided' });
+    return reply.send({ success: false, message: 'No token provided' });
   }
 
   try {
@@ -21,7 +21,7 @@ async function jwtAuth(request, reply) {
     request.user = decoded;
     request.userId = decoded.id;
   } catch (err) {
-    return reply.code(401).send({ message: 'Invalid or expired token' });
+    return reply.send({ success: false, message: 'Invalid or expired token' });
   }
 }
 
