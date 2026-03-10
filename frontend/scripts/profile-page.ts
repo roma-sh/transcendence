@@ -52,7 +52,8 @@ export async function initProfilePage() {
 		setText('.js-total-games', user.total_games);
 
 		const avatar = document.querySelector(
-		".js-avatar") as HTMLElement | null;
+		".js-avatar") as HTMLElement | null;    // 1. Ενημέρωση Fullname
+
 
 		let url = '/assets/default_user.jpg';
 		if (user.profile_picture) url = `/uploads/profiles/${user.profile_picture}`;
@@ -318,52 +319,26 @@ export async function handleSaveProfileChange() {
   const emailChanged = newEmail !== currentEmail;
 
   try {
-    // 1. Ενημέρωση Fullname
     if (fullnameChanged) {
-        // Η updateFullname τώρα αναλαμβάνει να αλλάξει το LocalStorage 
-        // και το κείμενο στο Header (Nav) και στο Profile Header.
         const msg = await updateFullname(newFullname);
         console.log("Fullname update:", msg);
     }
 
-    // 2. Ενημέρωση Email
     if (emailChanged) {
         const msg = await updateEmail(newEmail);
         console.log("Email update:", msg);
     }
 
-    // 3. Επαναφορά του UI στην κατάσταση προβολής (View Mode)
     toggleProfileEditUI();
 
-    // 4. Ανανέωση των δεδομένων στη σελίδα
-    // Το καλούμε στο τέλος για να φρεσκάρει όλα τα πεδία από τον server
     await initProfilePage();
 
-    // Προαιρετικά: Μπορείς να προσθέσεις ένα visual feedback εδώ
     console.log("Profile updated successfully!");
 
 } catch (err) {
-    // Καλό είναι να δείχνεις το σφάλμα στον χρήστη, όχι μόνο στο console
     console.error("Update error:", err);
     alert(err instanceof Error ? err.message : "An error occurred during update");
 }
-
-	// try {
-	// 	if (fullnameChanged) {
-	// 		const s = await updateFullname(newFullname);
-	// 		console.log(s);
-	// 	}
-	// 	if (emailChanged) {
-	// 		const s = await updateEmail(newEmail);
-	// 		console.log(s);
-	// 	}
-
-	// 	await initProfilePage();
-
-	// 	toggleProfileEditUI();
-	// } catch (err) {
-	// 	console.log(err);
-	// }
 }
 
 export function handleCancelProfileChange() {
@@ -385,19 +360,13 @@ async function updateFullname(newUsername: string): Promise<string> {
 
     if (!res.ok) throw new Error(msg || "Failed to update username");
 
-    // --- ΕΝΗΜΕΡΩΣΗ UI ΣΕ ΠΡΑΓΜΑΤΙΚΟ ΧΡΟΝΟ ---
-
-    // 1. Ενημέρωσε το localStorage για να παραμείνει η αλλαγή μετά από refresh
     localStorage.setItem('userName', newUsername);
 
-    // 2. Ενημέρωσε το όνομα πάνω δεξιά στο Header (Nav)
-    // Στην εικόνα σου το κουμπί έχει το όνομα, οπότε στοχεύουμε το σωστό class
     const navUsernameEl = document.querySelector('.nav-user-id'); 
     if (navUsernameEl) {
         navUsernameEl.textContent = newUsername;
     }
 
-    // 3. Ενημέρωσε το μεγάλο όνομα που φαίνεται πάνω από το @username στο Profile
     const profileNameHeader = document.querySelector('.profile-header-info h2');
     if (profileNameHeader) {
         profileNameHeader.textContent = newUsername;
@@ -405,22 +374,6 @@ async function updateFullname(newUsername: string): Promise<string> {
 
     return msg;
 }
-
-// async function updateFullname(newUsername: string): Promise<string> {
-// 	const res = await fetch("/api/profile/username", {
-//     method: "PUT",
-//     credentials: "include",
-//     headers: apiHeaders({ "Content-Type": "application/json" }),
-//     body: JSON.stringify({ newUsername }),
-//   });
-// 	let msg = '';
-// 	const data = await res.json();
-
-// 	if (data && data.message) msg = data.message;
-
-// 	if (!res.ok) throw new Error(msg || "Failed to update username");
-// 	return msg;
-// }
 
 async function updateEmail(newEmail: string): Promise<string> {
 	const res = await fetch("/api/profile/email", {

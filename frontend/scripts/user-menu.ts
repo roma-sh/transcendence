@@ -22,21 +22,10 @@ export async function updateUIforUserMenu() {
   setUserMenuName();
 }
 
-// function setUserMenuName() {
-// 	const userName = localStorage.getItem('userName');
-
-// 	const userMenuBtn = document.querySelector(
-// 			'.js-user-menu-button'
-// 		) as HTMLButtonElement | null;
-
-// 	if (userMenuBtn) userMenuBtn.textContent = userName;
-// }
-
 function setUserMenuName() {
   const userName = localStorage.getItem('userName');
-  console.log("Current userName in localStorage:", userName); // Δες τι γράφει εδώ!
+  console.log("Current userName in localStorage:", userName);
 
-  // Στοχεύουμε την κλάση που βάλαμε στο HTML
   const navLabel = document.querySelector('.nav-user-id') as HTMLElement | null;
 
   if (navLabel && userName) {
@@ -82,8 +71,6 @@ function storeUserMenuReturnHash(): void {
   sessionStorage.setItem(USER_MENU_RETURN_KEY, currentHash);
 }
 
-/** Toggles auth buttons and game buttons (play and connect wallet)
- * depending on whether the user is logged in. */
 export async function updateUIForAuthState() {
 
   const isLoggedIn = await isUserOnline();
@@ -121,13 +108,9 @@ export async function handleLogOut(): Promise<boolean> {
     try {
       data = await res.json();
     } catch {
-      // backend might return empty response
     }
 
     localStorage.removeItem('userName');
-
-    /** Reset hash first so hashchange fires
-     * even when navigating to the same page */
     location.hash = '';
     location.hash = '#welcome-page';
 	location.reload();

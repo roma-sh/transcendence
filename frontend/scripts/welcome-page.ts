@@ -32,34 +32,6 @@ export function handleOpenLogIn() {
   location.hash = '#log-in-page';
 }
 
-// export async function isUserOnline(): Promise<boolean> {
-//   try {
-//     const res = await fetch('/api/useronline', { 
-//       method: 'GET',
-//       credentials: 'include',
-//       headers: apiHeaders({ 'Content-Type': 'application/json' }),
-//     });
-
-// 	if (!res.ok) {
-//       localStorage.removeItem('userName');
-//       return false;
-//     }
-    
-//     const data = await res.json();
-
-//     if (data.online && data.username) {
-//         localStorage.setItem('userName', data.username);
-//     } else {
-//       localStorage.removeItem('userName');
-//     }
-
-//     return data.online; 
-//   } catch (err) {
-//     localStorage.removeItem('userName');
-//     return false;
-//   }
-// }
-
 export async function isUserOnline(): Promise<boolean> {
   try {
     const res = await fetch('/api/useronline', { 
@@ -77,9 +49,6 @@ export async function isUserOnline(): Promise<boolean> {
 
     if (data.online && data.username) {
         const localName = localStorage.getItem('userName');
-        
-        // Ενημερώνουμε το localStorage ΜΟΝΟ αν δεν υπάρχει ήδη όνομα
-        // Αυτό εμποδίζει τον server να επαναφέρει το παλιό όνομα μετά την αλλαγή στο Profile
         if (!localName) {
             console.log("Setting initial userName from server:", data.username);
             localStorage.setItem('userName', data.username);

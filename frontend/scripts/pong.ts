@@ -35,24 +35,18 @@ export function resetTournamentSettings() {
     tSettings.currentMatch = null;
     tSettings.numberOfBots = 0;
     tSettings.numberOfPlayers = 0;
-    
-    // ΠΟΛΥ ΣΗΜΑΝΤΙΚΟ: Αν έχεις κάποια μεταβλητή που μετράει 
-    // σε ποιον γύρο είμαστε (π.χ. roundIndex), μηδένισέ την και αυτή.
 }
 
 setupGlobalClicksDelegation();
 
-// for the welcome page:
 setInitHash();
 
-// Initialize wallet connection - add this after the other initializations
 initWalletConnect();
 
 updateUIforUserMenu();
 
 initAvatarUpload();
 
-// Function to handle hash-based navigation
 function handleHashChange() {
   const hash = location.hash;
 
@@ -73,13 +67,11 @@ function handleHashChange() {
   } else if (hash === '#winner-page') {
     initWinnerAnnouncementPage(tSettings);
   }
-  else if (hash === '#sign-up-page') { // <--- Προσθήκη αυτής της περίπτωσης
+  else if (hash === '#sign-up-page') {
     initTermsModal();
   }
 }
 
-// Run on initial load
 handleHashChange();
 
-// Listen for hash changes
 window.addEventListener('hashchange', handleHashChange);

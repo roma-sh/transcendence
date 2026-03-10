@@ -259,37 +259,6 @@ async function handleWinOnce(
 	});
 }
 
-// async function recordWin() {
-//     try {
-//         await fetch('/api/game/wins', { method: 'POST', credentials: 'include', headers: apiHeaders() });
-//         console.log("Win recorded successfully.");
-//     } catch (error) {
-//         console.error("Error recording win:", error);
-//     }
-// }
-
-// async function recordTotalGame() {
-//     try {
-//         await fetch('/api/game/total-games', { method: 'POST', credentials: 'include', headers: apiHeaders() });
-//         console.log("Total game recorded successfully.");
-//     } catch (error) {
-//         console.error("Error recording total game:", error);
-//     }
-// }
-
-// async function getLoggedInUserAlias(): Promise<string | null> {
-//     try {
-//         const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
-//         if (response.ok) {
-//             const data = await response.json();
-//             return data.user.username;
-//         }
-//     } catch (error) {
-//         console.error("Error fetching profile:", error);
-//     }
-//     return null;
-// }
-
 function startCountdown(startGame: () => void) {
   const countdownEl = document.querySelector(
     '.countdown-overlay') as HTMLElement | null;

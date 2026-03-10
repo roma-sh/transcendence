@@ -15,24 +15,10 @@ export function addAliasesSection() {
 
   if (!inputsContainer) return; 
 
-  // ******************************************************
-  // 1. FIX: Clearing Aliases 
-  // We must remove Bot aliases or any old strings
-  // before creating the inputs.
   const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
-
-  // We ensure that the tSettings.playerAliases list contains ONLY
-  // the human aliases (or is empty).
-  // We use slice to keep only the first N players,
-  // who must be the humans.
   if (tSettings.playerAliases.length > 0) {
       tSettings.playerAliases = tSettings.playerAliases.slice(0, humanPlayersCount);
   }
-
-  // ******************************************************
-
-  // 3. GENERATE/ASSIGN HTML (Restore fields)
-  // Now generateInputsForAliases will use the correct, cleaned list.
   const aliasesHtml = generateInputsForAliases(tSettings);
   inputsContainer.innerHTML = aliasesHtml;
 }
@@ -56,15 +42,6 @@ function generateInputsForAliases(tSettings: TournamentSettings) {
 	px-[20px] py-[25px] text-[24px] text-center
 	mb-[15px] bg-[#f0eeee] focus:outline-none
 	`;
-    // let inputClass = 'player-alias-input js-player-alias-input';
-    
-    // inputClass += `
-    //   rounded-[5px] border-2 border-solid
-    //   border-(--border-color) w-[270px] pl-[10px]
-    //   py-[15px] text-[18px] text-(--main-color)
-    //   mb-[10px] bg-(--bg-color-white-seven)
-    //   placeholder:text-(--main-color) placeholder:text-[18px]
-    // `;
 
     if (isBotInput) {
       inputValue = `Bot ${botCounter}`;
@@ -72,12 +49,10 @@ function generateInputsForAliases(tSettings: TournamentSettings) {
       disabledAttribute = 'disabled';
       inputClass += ' bot-alias-input opacity-70 cursor-not-allowed';
     } else {
-      // HUMAN LOGIC
       if (i === 0) {
-        // ΚΛΕΙΔΩΜΑ Player 1: Βάζουμε το όνομα ΚΑΙ το κάνουμε disabled
         inputValue = tSettings.playerAliases[i] || loggedInUser;
-        disabledAttribute = 'disabled'; // Αυτή η γραμμή το κλειδώνει
-        inputClass += ' opacity-80 cursor-not-allowed bg-gray-100'; // Οπτική ένδειξη ότι είναι κλειδωμένο
+        disabledAttribute = 'disabled'; 
+        inputClass += ' opacity-80 cursor-not-allowed bg-gray-100'; 
       } else {
         inputValue = tSettings.playerAliases[i] || '';
       }
@@ -102,15 +77,12 @@ function generateInputsForAliases(tSettings: TournamentSettings) {
 export async function handleNextAfterAliases() {
     const inputsList = document.querySelectorAll('.js-player-alias-input');
     
-    // 1. Πρώτα βρίσκουμε το συγκεκριμένο section της σελίδας Aliases
     const section = document.querySelector('#tournament-page-player-aliases');
     
-    // 2. Ψάχνουμε τα status στοιχεία ΜΟΝΟ μέσα σε αυτό το section
     const statusContainer = section?.querySelector('.js-alias-status') as HTMLElement | null;
     const statusText = section?.querySelector('.js-alias-status-text') as HTMLElement | null;
     const statusDot = section?.querySelector('.js-alias-text-dot') as HTMLElement | null;
 
-    // Reset του opacity (όπως και πριν)
     if (statusContainer) {
         statusContainer.classList.remove('opacity-100');
         statusContainer.classList.add('opacity-0');
@@ -121,13 +93,11 @@ export async function handleNextAfterAliases() {
         .slice(0, humanPlayersCount)
         .map((input) => (input as HTMLInputElement).value.trim());
 
-    // Έλεγχος για κενά
     if (humanAliases.some(alias => !alias)) {
         displayError("Please fill in all player fields.", statusContainer, statusText, statusDot);
         return;
     }
 
-    // Έλεγχος για διπλότυπα
     const lower = humanAliases.map(a => a.toLowerCase());
     const hasDup = new Set(lower).size !== lower.length;
     if (hasDup) {
@@ -135,7 +105,6 @@ export async function handleNextAfterAliases() {
         return;
     }
 
-    // Αν είναι OK, προχωράμε
     if (humanAliases.length > 0 || tSettings.numberOfBots > 0) {
         const createdBotAliases = [];
         for (let i = 0; i < tSettings.numberOfBots; i++) {
@@ -152,20 +121,15 @@ function displayError(msg: string, container: HTMLElement | null, textEl: HTMLEl
         return;
     }
 
-    // 1. Καθαρισμός κειμένου και χρώματος
     updatePassMsgDot('red', dotEl);
     showMessage(textEl, msg);
     
-    // 2. Εξαναγκασμένο Reset του opacity
-    container.style.transition = 'none'; // Κλείνουμε στιγμιαία το transition
+    container.style.transition = 'none'; 
     container.classList.remove('opacity-100');
     container.classList.add('opacity-0');
 
-    // 3. Trigger του animation
-    // Το διπλό requestAnimationFrame είναι το "μαγικό" κόλπο για να καταλάβει 
-    // ο browser ότι πρέπει να ξαναξεκινήσει το animation από το μηδέν.
     requestAnimationFrame(() => {
-        container.style.transition = ''; // Επαναφέρουμε το transition
+        container.style.transition = '';
         requestAnimationFrame(() => {
             toggleOpacity(container);
         });
