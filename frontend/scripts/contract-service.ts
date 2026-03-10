@@ -102,9 +102,6 @@ class ContractService {
       const newId = countNum - 1;
 
       if (newId < 0) {
-        console.warn(
-          "[Blockchain] Unexpected tournamentCount value, skipping participant/winner record."
-        );
         return;
       }
 
@@ -120,7 +117,6 @@ class ContractService {
         `[Blockchain] Tournament stored on-chain. ID=${newId}, winner=${info.address}`
       );
     } catch (err) {
-      console.error("[Blockchain] Failed to store tournament winner on chain:", err);
     }
   }
 
@@ -156,7 +152,6 @@ class ContractService {
 
       return result;
     } catch (err) {
-      console.error("[Blockchain] Failed to read tournaments from chain:", err);
       return [];
     }
   }

@@ -204,7 +204,7 @@ async function handleWinOnce(
 		try {
 		const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
 		const data = await response.json();
-		if (!data.success || !data.user) throw new Error('Not logged in');
+		if (!data.success || !data.user) return;
 		const loggedInAlias = data.user.username;
 
 		if (loggedInAlias === p1Name || loggedInAlias === p2Name) {
@@ -218,7 +218,6 @@ async function handleWinOnce(
 			}
 		}
 		} catch (error) {
-		console.error("Failed to update stats with new API:", error);
 		}
 		gameState.statsSent = true; 
 	}

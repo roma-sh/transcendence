@@ -78,7 +78,6 @@ function initSettingsDOM(): SettingsDOM | null {
 		!dom.paddleColorInput ||
 		!dom.bgColorInput
 	) {
-		console.warn("Settings inputs not found");
 		return null;
 	}
 

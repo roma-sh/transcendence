@@ -8,7 +8,6 @@ export function handleGoBackGameReadyPage() {
 export function handleStartTournament() {
 
   if (!tSettings.currentMatch) {
-    console.error('Missing player names for game start');
     return;
   }
 
@@ -68,7 +67,6 @@ export function initGameReadyPage() {
     console.log("Match object stored in tSettings:", tSettings.currentMatch);
   } else {
     tSettings.currentMatch = null;
-    console.error("⛔ Failed to extract two players for the match. P1:", p1Name, "P2:", p2Name);
   }
 
   const p1NameEl = document.querySelector('.js-p1-name');

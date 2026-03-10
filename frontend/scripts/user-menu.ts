@@ -26,11 +26,11 @@ function setUserMenuName() {
   const userName = localStorage.getItem('userName');
   console.log("Current userName in localStorage:", userName);
 
-  const navLabel = document.querySelector('.nav-user-id') as HTMLElement | null;
+	const userMenuBtn = document.querySelector(
+			'.js-user-menu-button'
+		) as HTMLButtonElement | null;
 
-  if (navLabel && userName) {
-    navLabel.textContent = userName;
-  }
+	if (userMenuBtn) userMenuBtn.textContent = userName;
 }
 
 export function handleToggleUserMenu(e: MouseEvent) {
@@ -106,7 +106,6 @@ export async function handleLogOut(): Promise<boolean> {
     }
 
     if (!data || !data.success) {
-      console.error('Logout failed');
       return false;
     }
 
@@ -117,7 +116,6 @@ export async function handleLogOut(): Promise<boolean> {
 
     return true;
   } catch (error) {
-    console.error('Logout ERROR:', error);
     return false;
   }
 }

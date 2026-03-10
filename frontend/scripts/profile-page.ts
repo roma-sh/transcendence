@@ -69,11 +69,9 @@ export async function initProfilePage() {
 				}
 			}
 		} catch (err) {
-			console.log('Failed to load 2FA status:', err);
 		}
 
 	} catch (err) {
-		console.log(err);
 	}
 }
 
@@ -195,12 +193,14 @@ export function initAvatarUpload() {
 
 		try {
 			const url = await handleUploadProfileImage(file);
-			if (url === '') throw new Error('Failed to upload an image.');
+			if (url === '') {
+				setImage('/assets/default_user.jpg', avatar);
+				return;
+			}
 
 			const finalUrl = `${url}?t=${Date.now()}`;
 			setImage(finalUrl, avatar);
 		} catch (err) {
-			console.error(err);
 			setImage('/assets/default_user.jpg', avatar);
 		} finally {
       input.value = "";
@@ -317,77 +317,80 @@ export async function handleSaveProfileChange() {
 	const fullnameChanged = newFullname !== currentFullname;
   const emailChanged = newEmail !== currentEmail;
 
-  try {
-    if (fullnameChanged) {
-        const msg = await updateFullname(newFullname);
-        console.log("Fullname update:", msg);
-    }
+  if (fullnameChanged) {
+      const result = await updateFullname(newFullname);
+      if (!result.ok) {
+          alert(result.msg || "Failed to update username");
+          return;
+      }
+  }
 
-    if (emailChanged) {
-        const msg = await updateEmail(newEmail);
-        console.log("Email update:", msg);
-    }
+  if (emailChanged) {
+      const result = await updateEmail(newEmail);
+      if (!result.ok) {
+          alert(result.msg || "Failed to update email");
+          return;
+      }
+  }
 
-    toggleProfileEditUI();
+  toggleProfileEditUI();
 
-    await initProfilePage();
-
-    console.log("Profile updated successfully!");
-
-} catch (err) {
-    console.error("Update error:", err);
-    alert(err instanceof Error ? err.message : "An error occurred during update");
-}
+  await initProfilePage();
 }
 
 export function handleCancelProfileChange() {
 	toggleProfileEditUI();
 }
 
-async function updateFullname(newUsername: string): Promise<string> {
-    const res = await fetch("/api/profile/username", {
-        method: "PUT",
-        credentials: "include",
-        headers: apiHeaders({ "Content-Type": "application/json" }),
-        body: JSON.stringify({ newUsername }),
-    });
+async function updateFullname(newUsername: string): Promise<{ ok: boolean; msg: string }> {
+    try {
+        const res = await fetch("/api/profile/username", {
+            method: "PUT",
+            credentials: "include",
+            headers: apiHeaders({ "Content-Type": "application/json" }),
+            body: JSON.stringify({ newUsername }),
+        });
 
-    let msg = '';
-    const data = await res.json();
+        const data = await res.json();
+        const msg = data?.message || '';
 
-    if (data && data.message) msg = data.message;
+        if (!data.success) return { ok: false, msg: msg || "Failed to update username" };
 
-    if (!data.success) throw new Error(msg || "Failed to update username");
+        localStorage.setItem('userName', newUsername);
 
-    localStorage.setItem('userName', newUsername);
+        const navUsernameEl = document.querySelector('.nav-user-id'); 
+        if (navUsernameEl) {
+            navUsernameEl.textContent = newUsername;
+        }
 
-    const navUsernameEl = document.querySelector('.nav-user-id'); 
-    if (navUsernameEl) {
-        navUsernameEl.textContent = newUsername;
+        const profileNameHeader = document.querySelector('.profile-header-info h2');
+        if (profileNameHeader) {
+            profileNameHeader.textContent = newUsername;
+        }
+
+        return { ok: true, msg };
+    } catch {
+        return { ok: false, msg: "Failed to update username" };
     }
-
-    const profileNameHeader = document.querySelector('.profile-header-info h2');
-    if (profileNameHeader) {
-        profileNameHeader.textContent = newUsername;
-    }
-
-    return msg;
 }
 
-async function updateEmail(newEmail: string): Promise<string> {
-	const res = await fetch("/api/profile/email", {
-    method: "PUT",
-    credentials: "include",
-    headers: apiHeaders({ "Content-Type": "application/json" }),
-    body: JSON.stringify({ newEmail }),
-  });
-	let msg = '';
-	const data = await res.json();
+async function updateEmail(newEmail: string): Promise<{ ok: boolean; msg: string }> {
+    try {
+        const res = await fetch("/api/profile/email", {
+            method: "PUT",
+            credentials: "include",
+            headers: apiHeaders({ "Content-Type": "application/json" }),
+            body: JSON.stringify({ newEmail }),
+        });
 
-	if (data && data.message) msg = data.message;
+        const data = await res.json();
+        const msg = data?.message || '';
 
-	if (!data.success) throw new Error(msg || "Failed to update email");
-	return msg;
+        if (!data.success) return { ok: false, msg: msg || "Failed to update email" };
+        return { ok: true, msg };
+    } catch {
+        return { ok: false, msg: "Failed to update email" };
+    }
 }
 
 export async function handleRemoveAvatar() {
@@ -404,7 +407,6 @@ export async function handleRemoveAvatar() {
 
 		const data = await res.json();
 		if (!data.success) {
-			console.error("Failed to remove avatar!");
 			return;
 		}
 
@@ -415,7 +417,6 @@ export async function handleRemoveAvatar() {
 		if (avatar) setImage(url, avatar);
 
 	} catch (err) {
-		console.error("Failed to remove avatar:", err);
 	}
 }
 
@@ -450,7 +451,6 @@ export async function handleConfirmDeleteAccount(): Promise<boolean> {
         const data = await res.json();
 
         if (!data.success) {
-            console.error('Delete failed:', data.message || 'Unknown error');
             
             if (btn) {
                 btn.textContent = "Confirm Delete";
@@ -459,8 +459,6 @@ export async function handleConfirmDeleteAccount(): Promise<boolean> {
             return false;
         }
 
-        console.log("Account successfully deleted!");
-        
         // 1. Κλείνουμε το modal
         handleToggleDeleteModal();
         
@@ -470,7 +468,6 @@ export async function handleConfirmDeleteAccount(): Promise<boolean> {
         return true;
 
     } catch (error) {
-        console.error('Fatal error during deletion:', error);
         if (btn) {
             btn.textContent = "Confirm Delete";
             btn.disabled = false;

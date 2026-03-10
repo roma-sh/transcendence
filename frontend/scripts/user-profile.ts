@@ -35,7 +35,6 @@ export async function initUserProfilePage(): Promise<void> {
       </div>
     `;
   } catch (err) {
-    console.error('Error fetching profile:', err);
     profileSection.innerHTML = `
       <div class="profile-container">
         <h2>Error: Welcome Guest</h2>

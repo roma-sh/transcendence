@@ -102,7 +102,6 @@ class WalletConnect {
             return true;
 
         } catch (error) {
-            console.error('Error connecting wallet:', error);
             alert('Failed to connect wallet: ' + (error as Error).message);
             return false;
         }

@@ -117,7 +117,6 @@ export async function handleNextAfterAliases() {
 
 function displayError(msg: string, container: HTMLElement | null, textEl: HTMLElement | null, dotEl: HTMLElement | null) {
     if (!container || !textEl || !dotEl) {
-        console.error("Missing error elements in Aliases page");
         return;
     }
 

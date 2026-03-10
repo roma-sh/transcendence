@@ -72,7 +72,6 @@ export async function handleLoadBlockchainWinners(): Promise<void> {
 
         container.innerHTML = tableHTML;
     } catch (err) {
-        console.error("[Blockchain] Unexpected error while loading winners:", err);
         container.innerHTML = '<p class="text-center text-red-600">Failed to load data from blockchain. Please check your wallet and network.</p>';
     }
 }
