@@ -34,10 +34,14 @@ export async function initProfilePage() {
       return;
     }
 
-		const data = await res.json();
+	const data = await res.json();
 
-		const user = data.user;
+	const user = data.user;
     if (!user) return;
+
+	const navUsernameEl = document.querySelector('.nav-user-id');
+	if (navUsernameEl) navUsernameEl.textContent = user.username;
+	localStorage.setItem('userName', user.username);
 
 	setText('.js-name', user.username);
     setText('.js-fullname', user.username);
@@ -59,7 +63,7 @@ export async function initProfilePage() {
 			const twoFactorRes = await fetch("/api/2fa/status", {
 				method: "GET",
 				credentials: "include",
-				headers: { "Content-Type": "application/json" }
+				headers: apiHeaders({ "Content-Type": "application/json" })
 			});
 			if (twoFactorRes.ok) {
 				const twoFactorData = await twoFactorRes.json();
@@ -313,22 +317,53 @@ export async function handleSaveProfileChange() {
 	const fullnameChanged = newFullname !== currentFullname;
   const emailChanged = newEmail !== currentEmail;
 
-	try {
-		if (fullnameChanged) {
-			const s = await updateFullname(newFullname);
-			console.log(s);
-		}
-		if (emailChanged) {
-			const s = await updateEmail(newEmail);
-			console.log(s);
-		}
+  try {
+    // 1. Ενημέρωση Fullname
+    if (fullnameChanged) {
+        // Η updateFullname τώρα αναλαμβάνει να αλλάξει το LocalStorage 
+        // και το κείμενο στο Header (Nav) και στο Profile Header.
+        const msg = await updateFullname(newFullname);
+        console.log("Fullname update:", msg);
+    }
 
-		await initProfilePage();
+    // 2. Ενημέρωση Email
+    if (emailChanged) {
+        const msg = await updateEmail(newEmail);
+        console.log("Email update:", msg);
+    }
 
-		toggleProfileEditUI();
-	} catch (err) {
-		console.log(err);
-	}
+    // 3. Επαναφορά του UI στην κατάσταση προβολής (View Mode)
+    toggleProfileEditUI();
+
+    // 4. Ανανέωση των δεδομένων στη σελίδα
+    // Το καλούμε στο τέλος για να φρεσκάρει όλα τα πεδία από τον server
+    await initProfilePage();
+
+    // Προαιρετικά: Μπορείς να προσθέσεις ένα visual feedback εδώ
+    console.log("Profile updated successfully!");
+
+} catch (err) {
+    // Καλό είναι να δείχνεις το σφάλμα στον χρήστη, όχι μόνο στο console
+    console.error("Update error:", err);
+    alert(err instanceof Error ? err.message : "An error occurred during update");
+}
+
+	// try {
+	// 	if (fullnameChanged) {
+	// 		const s = await updateFullname(newFullname);
+	// 		console.log(s);
+	// 	}
+	// 	if (emailChanged) {
+	// 		const s = await updateEmail(newEmail);
+	// 		console.log(s);
+	// 	}
+
+	// 	await initProfilePage();
+
+	// 	toggleProfileEditUI();
+	// } catch (err) {
+	// 	console.log(err);
+	// }
 }
 
 export function handleCancelProfileChange() {
@@ -336,20 +371,56 @@ export function handleCancelProfileChange() {
 }
 
 async function updateFullname(newUsername: string): Promise<string> {
-	const res = await fetch("/api/profile/username", {
-    method: "PUT",
-    credentials: "include",
-    headers: apiHeaders({ "Content-Type": "application/json" }),
-    body: JSON.stringify({ newUsername }),
-  });
-	let msg = '';
-	const data = await res.json();
+    const res = await fetch("/api/profile/username", {
+        method: "PUT",
+        credentials: "include",
+        headers: apiHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ newUsername }),
+    });
 
-	if (data && data.message) msg = data.message;
+    let msg = '';
+    const data = await res.json();
 
-	if (!res.ok) throw new Error(msg || "Failed to update username");
-	return msg;
+    if (data && data.message) msg = data.message;
+
+    if (!res.ok) throw new Error(msg || "Failed to update username");
+
+    // --- ΕΝΗΜΕΡΩΣΗ UI ΣΕ ΠΡΑΓΜΑΤΙΚΟ ΧΡΟΝΟ ---
+
+    // 1. Ενημέρωσε το localStorage για να παραμείνει η αλλαγή μετά από refresh
+    localStorage.setItem('userName', newUsername);
+
+    // 2. Ενημέρωσε το όνομα πάνω δεξιά στο Header (Nav)
+    // Στην εικόνα σου το κουμπί έχει το όνομα, οπότε στοχεύουμε το σωστό class
+    const navUsernameEl = document.querySelector('.nav-user-id'); 
+    if (navUsernameEl) {
+        navUsernameEl.textContent = newUsername;
+    }
+
+    // 3. Ενημέρωσε το μεγάλο όνομα που φαίνεται πάνω από το @username στο Profile
+    const profileNameHeader = document.querySelector('.profile-header-info h2');
+    if (profileNameHeader) {
+        profileNameHeader.textContent = newUsername;
+    }
+
+    return msg;
 }
+
+// async function updateFullname(newUsername: string): Promise<string> {
+// 	const res = await fetch("/api/profile/username", {
+//     method: "PUT",
+//     credentials: "include",
+//     headers: apiHeaders({ "Content-Type": "application/json" }),
+//     body: JSON.stringify({ newUsername }),
+//   });
+// 	let msg = '';
+// 	const data = await res.json();
+
+// 	if (data && data.message) msg = data.message;
+
+// 	if (!res.ok) throw new Error(msg || "Failed to update username");
+// 	return msg;
+// }
 
 async function updateEmail(newEmail: string): Promise<string> {
 	const res = await fetch("/api/profile/email", {
@@ -454,38 +525,3 @@ export async function handleConfirmDeleteAccount(): Promise<boolean> {
         return false;
     }
 }
-
-// export async function handleConfirmDeleteAccount(): Promise<boolean> {
-//     const btn = document.querySelector('[data-action="confirm-delete-account"]') as HTMLButtonElement | null;
-//     if (btn) btn.textContent = "Deleting...";
-
-//     try {
-//         // 1. Ακριβώς το ίδιο fetch με το user-menu.js
-//         const res = await fetch('/api/auth/logout', {
-//             method: 'POST',
-//             credentials: 'include',
-//         });
-
-//         if (!res.ok) {
-//             console.error('Delete-Logout failed:', res.status);
-//             if (btn) btn.textContent = "Confirm Delete";
-//             return false;
-//         }
-
-//         // 2. Καθαρισμός LocalStorage
-//         localStorage.removeItem('userName');
-
-//         // 3. Κλείσιμο του Modal
-//         handleToggleDeleteModal();
-
-//         // 4. Το "μαγικό" reset του hash για να πυροδοτηθεί το hashchange
-//         location.hash = '';
-//         location.hash = '#welcome-page';
-
-//         return true;
-//     } catch (error) {
-//         console.error('Delete-Logout ERROR:', error);
-//         location.hash = '#welcome-page'; // Αναγκαστική φυγή ακόμα και σε error
-//         return false;
-//     }
-// }

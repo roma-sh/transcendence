@@ -22,14 +22,26 @@ export async function updateUIforUserMenu() {
   setUserMenuName();
 }
 
+// function setUserMenuName() {
+// 	const userName = localStorage.getItem('userName');
+
+// 	const userMenuBtn = document.querySelector(
+// 			'.js-user-menu-button'
+// 		) as HTMLButtonElement | null;
+
+// 	if (userMenuBtn) userMenuBtn.textContent = userName;
+// }
+
 function setUserMenuName() {
-	const userName = localStorage.getItem('userName');
+  const userName = localStorage.getItem('userName');
+  console.log("Current userName in localStorage:", userName); // Δες τι γράφει εδώ!
 
-	const userMenuBtn = document.querySelector(
-			'.js-user-menu-button'
-		) as HTMLButtonElement | null;
+  // Στοχεύουμε την κλάση που βάλαμε στο HTML
+  const navLabel = document.querySelector('.nav-user-id') as HTMLElement | null;
 
-	if (userMenuBtn) userMenuBtn.textContent = userName;
+  if (navLabel && userName) {
+    navLabel.textContent = userName;
+  }
 }
 
 export function handleToggleUserMenu(e: MouseEvent) {
