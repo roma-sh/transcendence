@@ -55,17 +55,17 @@ async function loginController(request, reply) {
       const user = await getUserById(userId);
       
       if (!user) {
-        return reply.code(404).send({ message: 'User not found' });
+        return reply.send({ success: false, message: 'User not found' });
       }
 
       const status = await get2FAStatus(user.id);
       if (!status || !status.two_factor_enabled || !status.two_factor_secret) {
-        return reply.code(400).send({ message: '2FA not enabled for this user' });
+        return reply.send({ success: false, message: '2FA not enabled for this user' });
       }
 
       const isValid = verifyToken(status.two_factor_secret, twoFactorToken);
       if (!isValid) {
-        return reply.code(401).send({ message: 'Invalid 2FA token' });
+        return reply.send({ success: false, message: 'Invalid 2FA token' });
       }
 
       const updated = await setUserOnline(user.id);
@@ -92,13 +92,13 @@ async function loginController(request, reply) {
       });
     } catch (err) {
       request.log.error(err);
-      return reply.code(500).send({ success: false, message: 'Server error' });
+      return reply.send({ success: false, message: 'Server error' });
     }
   }
 
   // Normal login flow
   if (!username || !password) {
-    return reply.code(400).send({ message: 'Missing credentials' });
+    return reply.send({ success: false, message: 'Missing credentials' });
   }
 
   try {
@@ -112,7 +112,8 @@ async function loginController(request, reply) {
 
     if (is2FAEnabled) {
       if (!twoFactorToken) {
-        return reply.code(200).send({ 
+        return reply.send({ 
+          success: true,
           requires2FA: true, 
           userId: user.id,
           message: '2FA token required' 
@@ -153,7 +154,7 @@ async function loginController(request, reply) {
     });
   } catch (err) {
     request.log.error(err);
-    return reply.code(500).send({ success: false, message: 'Server error' });
+    return reply.send({ success: false, message: 'Server error' });
   }
 }
 
@@ -173,7 +174,7 @@ async function logoutController(request, reply) {
   } catch (err) {
     request.log.error('Error destroying session:', err);
   }
-  return reply.send({ message: 'Logged out successfully' });
+  return reply.send({ success: true, message: 'Logged out successfully' });
 }
 
 module.exports = { signupController, loginController, logoutController };

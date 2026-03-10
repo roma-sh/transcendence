@@ -274,8 +274,8 @@ async function recordTotalGame() {
 async function getLoggedInUserAlias(): Promise<string | null> {
     try {
         const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
-        if (response.ok) {
-            const data = await response.json();
+        const data = await response.json();
+        if (data.success && data.user) {
             return data.user.username;
         }
     } catch (error) {

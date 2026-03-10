@@ -65,15 +65,15 @@ fastify.get('/google/callback', async (req, reply) => {
     
   } catch (err) {
     console.error("Critical error in Callback:", err);
-    return reply.code(500).send("Login Error: " + err.message);
+    return reply.redirect('https://localhost:8443/');
   }
 });
 
 fastify.get('/me', async (req, reply) => {
   if (!req.session || !req.session.user) {
-    return reply.code(401).send({ loggedIn: false });
+    return reply.send({ success: false, loggedIn: false });
   }
-  return { loggedIn: true, user: req.session.user };
+  return { success: true, loggedIn: true, user: req.session.user };
 });
 
   fastify.post('/logout', async (req, reply) => {

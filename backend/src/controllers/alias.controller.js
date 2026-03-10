@@ -4,9 +4,9 @@ async function checkAlias(request, reply) {
   try {
     const alias = request.params.alias;
     const exists = await AliasService.checkAliasExists(alias);
-    reply.send({ exists });
+    reply.send({ success: true, exists });
   } catch (err) {
-    reply.code(500).send({ error: 'Database error' });
+    reply.send({ success: false, error: 'Database error' });
   }
 }
 

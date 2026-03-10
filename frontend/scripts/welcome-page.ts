@@ -40,11 +40,6 @@ export async function isUserOnline(): Promise<boolean> {
       headers: apiHeaders({ 'Content-Type': 'application/json' }),
     });
 
-	if (!res.ok) {
-      localStorage.removeItem('userName');
-      return false;
-    }
-    
     const data = await res.json();
 
     if (data.online && data.username) {
