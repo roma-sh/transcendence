@@ -15,24 +15,15 @@
         js-user-menu-button-container
         user-menu-button-container-hidden
         flex justify-end fixed top-[16px] right-[16px] z-1000">
-      <!-- <button
-        data-action="toggle-user-menu"
-        class="nav-user-id user-menu-button js-user-menu-button
-          bg-(--bg-color-white-seven) py-[15px] px-[60px]
-          border-2 border-solid border-(--mainF-color)
-          rounded-[45px] text-(--text-on-light) cursor-pointer
-          text-[24px] font-bold font-[Arial] transition-opacity
-          hover:opacity-[0.7]">
-      </button> -->
       <button
           data-action="toggle-user-menu"
           class="nav-user-id user-menu-button js-user-menu-button
             bg-(--bg-color-white-seven) 
-            py-[8px] px-[16px]          /* Πολύ πιο μαζεμένο padding */
-            sm:py-[15px] sm:px-[40px]    /* Κανονικό στο PC */
+            py-[8px] px-[16px]         
+            sm:py-[15px] sm:px-[40px]  
             border-2 border-solid border-(--main-color)
             rounded-[45px] text-(--text-on-light) cursor-pointer
-            text-[14px] sm:text-[20px]  /* Μικρότερο font για να χωράει */
+            text-[14px] sm:text-[20px] 
             font-bold font-[Arial] transition-opacity truncate max-w-[150px] sm:max-w-none
             hover:opacity-[0.7]">
       </button>
@@ -78,85 +69,6 @@
         </button>
       </div>
     </div>
-
-    <!-- <section  id="welcome-page"
-      class="min-h-screen box-border flex flex-col
-        justify-center items-center relative">
-      <div class="signup-login-btns js-signup-login-btns
-          absolute top-[16px] right-[16px] gap-[12px] hidden">
-        <button
-          data-action="open-sign-up"
-          class="auth-button sign-up-button js-sign-up-button neon-button
-            py-[15px] px-[60px] rounded-[45px]
-            cursor-pointer text-[24px]
-            font-bold font-[Arial] transition-opacity hover:opacity-[0.7]
-            bg-(--main-color) text-(--bg-color-white-nine)
-            border-2 border-solid border-(--main-color)">
-              SIGN UP
-        </button>
-        <button
-          data-action="open-log-in"
-          class="auth-button log-in-button js-log-in-button neon-button
-            bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
-            text-(--bg-color-white-nine) cursor-pointer text-[24px]
-            font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
-              LOG IN
-        </button>
-        <button
-        data-action="login-with-google"
-        class="auth-button neon-button py-[15px] px-[60px] border-0 rounded-[45px] font-bold cursor-pointer hover:opacity-[0.7] text-(--bg-color-white-nine) text-[24px] font-[Arial] transition-opacity"
-        style="background-color: #002c74; margin-right: 10px;">
-        GOOGLE LOGIN
-      </button>
-      </div>
-      <div class="banner flex items-center justify-center pb-[4vh] pt-[9.7vh] px-[5vw]">
-        <div class="paddle paddle-left
-          w-[80px] h-[clamp(200px,45vh,400px)] bg-(--main-color)
-          shadow-[0_10px_20px_var(--shadow-20)] rounded-[40px] mr-[70px]"></div>
-        <div class="middle-section flex flex-col items-center">
-          <h1 id="game-name" class="text-[clamp(64px,12vw,150px)] font-[Arial] text-(--neon-blue) m-0">PONG</h1>
-          <div id="ball"
-            class="mt-[30px] w-[75px] h-[75px] rounded-[50%] bg-(--main-color)
-              shadow-[0_12px_26px_var(--shadow-35)] animate-bob
-              after:absolute after:w-[140%] after:h-[140%]
-              after:top-[-40%] after:left-[-10%] after:opacity-[0.9]
-              bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.45),transparent_45%)]">
-          </div>
-        </div>
-        <div class="paddle paddle-right
-          w-[80px] h-[clamp(200px,45vh,400px)] bg-(--main-color)
-          shadow-[0_10px_20px_var(--shadow-20)] rounded-[40px] ml-[70px]"></div>
-      </div>
-      <div class="js-play-connect-wallet-btns hidden">
-        <div class="play-button-container flex items-center justify-center">
-          <button
-            data-action="open-choose-mode"
-            class="play-button js-play-button neon-button
-            bg-(--main-color) px-[60px] py-[15px] border-0 rounded-[45px]
-            text-(--text-on-dark) cursor-pointer text-[24px] font-bold
-            font-[Arial] transition-opacity hover:opacity-[0.7]">
-              PLAY
-          </button>
-        </div>
-        <div class="auth-button-container
-            flex items-center justify-center mt-[10px] mb-[10px] relative">
-            <button
-            data-action="connect-wallet"
-            class="auth-button connect-wallet-btn js-connect-wallet-button neon-button
-              bg-(--main-color) py-[15px] px-[60px] border-0 rounded-[45px]
-              text-(--text-on-dark) cursor-pointer text-[24px]
-              font-bold font-[Arial] transition-opacity hover:opacity-[0.7]">
-                CONNECT WALLET
-          </button>
-          <span
-            id="js-wallet-dot"
-            class="inline-block w-[10px] h-[10px] rounded-[50%]
-              bg-transparent absolute top-[28px] left-[41px]">
-          </span>
-        </div>
-      </div>
-    </section> -->
-
     <section id="welcome-page"
     class="min-h-screen box-border flex flex-col justify-center items-center relative overflow-x-hidden">
     
@@ -389,6 +301,7 @@
       <button
         data-action="go-back-game-ready-page"
         class="back_btn
+          hidden
           absolute top-[29.5px] left-[16px]
           inline-flex items-center gap-[6px]
           text-(--main-color) bg-transparent border-0

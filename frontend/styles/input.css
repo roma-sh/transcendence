@@ -78,38 +78,31 @@ body {
   transform: scale(1.05);
 }
 
-/* Επιτρέπει στα στοιχεία να μην ξεχειλίζουν */
 * {
     max-width: 100%;
     box-sizing: border-box;
 }
 
-/* Κάνει το background να προσαρμόζεται */
 body {
     background-attachment: fixed;
 }
 
-/* Media Query για κινητά */
 @media (max-width: 768px) {
-    /* Μειώνουμε τα τεράστια κουμπιά */
     .neon-button, .auth-button, .play-button {
         padding-left: 30px !important;
         padding-right: 30px !important;
         font-size: 18px !important;
     }
 
-    /* Το "PONG" τίτλος μικραίνει κι άλλο */
     #game-name {
         font-size: 18vw;
     }
 
-    /* Οι ρακέτες στο banner κρύβονται στα πολύ μικρά κινητά */
     .paddle {
         display: none;
     }
 }
 
-/* Προσθήκη για Responsive Canvas */
 #game-page {
     display: flex;
     flex-direction: column;
@@ -120,17 +113,17 @@ body {
 }
 
 #gameCanvas {
-    width: 95% !important;   /* Πιάνει σχεδόν όλο το πλάτος στο κινητό */
-    max-width: 800px;        /* Αλλά δεν ξεπερνάει τα 800px στο PC */
-    height: auto !important; /* Διατηρεί το ύψος αναλογικά */
-    aspect-ratio: 800 / 500; /* Η αναλογία που έχεις ορίσει στο HTML */
-    touch-action: none;      /* Κρίσιμο: Εμποδίζει το scroll για να πιάνει τα κλικ */
+    width: 95% !important;   
+    max-width: 800px;       
+    height: auto !important; 
+    aspect-ratio: 800 / 500;
+    touch-action: none;      
 }
 
 @media (max-width: 640px) {
     .auth-button {
-        width: 100% !important; /* Τα κουμπιά πιάνουν όλο το πλάτος της στήλης */
-        margin-right: 0 !important; /* Καθαρίζουμε τα margins που είχες inline */
+        width: 100% !important; 
+        margin-right: 0 !important; 
         margin-bottom: 5px;
         min-height: 45px;
         padding: 8px 15px !important;
@@ -138,6 +131,6 @@ body {
     }
     
     .signup-login-btns {
-        width: calc(100% - 20px); /* Δίνει λίγο αέρα δεξιά-αριστερά */
+        width: calc(100% - 20px); 
     }
 }
