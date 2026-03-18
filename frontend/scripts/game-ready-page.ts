@@ -1,9 +1,6 @@
 import { tSettings } from "./pong.js";
 import { contractService } from "./contract-service.js";
-
-export function handleGoBackGameReadyPage() {
-  location.hash = '#tournament-page-player-aliases';
-}
+import { resetTournamentState } from "./choose-mode.js"
 
 export function handleStartTournament() {
 
@@ -11,7 +8,17 @@ export function handleStartTournament() {
     return;
   }
 
+  window.onpopstate = null;
+
   location.hash = '#game-page';
+}
+
+export function handleGoBackGameReadyPage() {
+  // Πριν φύγουμε, καθαρίζουμε τα πάντα για να μην "μολυνθεί" το Quick Play
+  window.onpopstate = null;
+  resetTournamentState(); 
+  location.hash = '#welcome-page';
+  window.location.reload();
 }
 
 export function initGameReadyPage() {
@@ -19,6 +26,14 @@ export function initGameReadyPage() {
   console.log("Current Aliases in queue:", [...tSettings.playerAliases]);
   console.log("Current Winners list:", [...tSettings.winnersAliases]);
   console.log("Number of players for this round context:", tSettings.numberOfPlayers);
+
+  window.onpopstate = null; 
+    
+  // Μετά βάλε το δικό σου lock
+  window.history.pushState(null, "", window.location.href);
+  window.onpopstate = function() {
+      handleGoBackGameReadyPage();
+  };
 
   if (tSettings.playerAliases.length === 0) {
     console.log("⚠️ Player queue is empty. Checking for tournament progression...");
@@ -32,6 +47,8 @@ export function initGameReadyPage() {
       console.log(`Results: 1st place: ${tSettings.firstPlaceAlias}, 2nd place: ${tSettings.secondPlaceAlias}`);
       void contractService.recordTournamentWinner("Pong Tournament", tSettings.firstPlaceAlias);
 
+      window.onpopstate = null;
+      
       tSettings.playerAliases = [];
       tSettings.winnersAliases = [];
       tSettings.secondPlaceAliases = [];

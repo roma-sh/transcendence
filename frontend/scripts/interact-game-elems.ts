@@ -16,7 +16,7 @@ export function bindButtonEvent(
     const mx = (e.clientX - rect.left) * scaleX;
     const my = (e.clientY - rect.top) * scaleY;
 
-    console.log(`Click at: ${mx}, ${my} | Target: ${btnRect.x}, ${btnRect.y}`);
+    // console.log(`Click at: ${mx}, ${my} | Target: ${btnRect.x}, ${btnRect.y}`);
 
     if (
       mx >= btnRect.x &&

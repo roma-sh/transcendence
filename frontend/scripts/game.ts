@@ -21,6 +21,7 @@ let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
 let keyupHandler: ((e: KeyboardEvent) => void) | null = null;
 
 function cleanupGame() {
+  window.onpopstate = null; // Απελευθέρωση του Back button
   if (animationId !== null) {
     cancelAnimationFrame(animationId);
     animationId = null;

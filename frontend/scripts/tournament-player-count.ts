@@ -7,20 +7,20 @@ import { updatePassMsgDot } from "./profile-page.js";
 
 export function handleNextAfterCount(event?: MouseEvent): void {
 	const playerCountEl = document.querySelector('#player-count-input') as HTMLInputElement | null;
-  const statusContainer = document.querySelector('.js-alias-status') as HTMLElement | null;
-  const statusText = document.querySelector('.js-alias-status-text') as HTMLElement | null;
-  const statusDot = document.querySelector('.js-alias-text-dot') as HTMLElement | null;
+	const statusContainer = document.querySelector('.js-alias-status') as HTMLElement | null;
+	const statusText = document.querySelector('.js-alias-status-text') as HTMLElement | null;
+	const statusDot = document.querySelector('.js-alias-text-dot') as HTMLElement | null;
 
-  if (!playerCountEl) return;
+	if (!playerCountEl) return;
 
-  const humanPlayersCount = Number(playerCountEl.value);
+	const humanPlayersCount = Number(playerCountEl.value);
 
-  if (isNaN(humanPlayersCount) || humanPlayersCount < 2 || humanPlayersCount > 100) {
-    updatePassMsgDot('red', statusDot); 
-    showMessage(statusText, "Please enter a number between 2 and 100."); 
-    toggleOpacity(statusContainer); 
-    return;
-  }
+	if (isNaN(humanPlayersCount) || humanPlayersCount < 2 || humanPlayersCount > 100) {
+		updatePassMsgDot('red', statusDot); 
+		showMessage(statusText, "Please enter a number between 2 and 100."); 
+		toggleOpacity(statusContainer); 
+		return;
+	}
 	resetTournamentSettings();
   
 	const exponent = Math.log2(humanPlayersCount);

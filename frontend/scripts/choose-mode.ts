@@ -37,7 +37,7 @@ export function handleGoBackTournament() {
 }
 
 export function resetTournamentState(): void {
-  tSettings.numberOfPlayers = 2;
+  tSettings.numberOfPlayers = 0;
   tSettings.numberOfBots = 0;
   tSettings.playerAliases = [];
   tSettings.winnersAliases = [];
