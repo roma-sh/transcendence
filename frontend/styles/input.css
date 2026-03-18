@@ -78,27 +78,66 @@ body {
   transform: scale(1.05);
 }
 
-/* .dark-theme {
-	--main-color: rgb(40, 38, 44);
-	--text-secondary: rgb(110, 110, 130);
+/* Επιτρέπει στα στοιχεία να μην ξεχειλίζουν */
+* {
+    max-width: 100%;
+    box-sizing: border-box;
+}
 
-	--border-color: rgb(60, 60, 70);
-	--border-soft-gray: rgb(50, 50, 60);
+/* Κάνει το background να προσαρμόζεται */
+body {
+    background-attachment: fixed;
+}
 
-	--bg-color: rgb(18, 18, 22);
-	--bg-color-gray: rgb(26, 26, 32);
-	--bg-color-white-seven: rgba(26, 26, 34, 0.7);
-	--bg-color-white-nine: rgba(150, 150, 170, 0.9);
+/* Media Query για κινητά */
+@media (max-width: 768px) {
+    /* Μειώνουμε τα τεράστια κουμπιά */
+    .neon-button, .auth-button, .play-button {
+        padding-left: 30px !important;
+        padding-right: 30px !important;
+        font-size: 18px !important;
+    }
 
-	--bg-wallet-status: rgb(22, 30, 24);
-	--text-wallet-status: rgb(34, 197, 94);
+    /* Το "PONG" τίτλος μικραίνει κι άλλο */
+    #game-name {
+        font-size: 18vw;
+    }
 
-	--shadow-10: rgba(0, 0, 0, 0.35);
-	--shadow-20: rgba(0, 0, 0, 0.5);
-	--shadow-35: rgba(0, 0, 0, 0.7);
+    /* Οι ρακέτες στο banner κρύβονται στα πολύ μικρά κινητά */
+    .paddle {
+        display: none;
+    }
+}
 
-	--hover-06: rgba(255, 255, 255, 0.05);
+/* Προσθήκη για Responsive Canvas */
+#game-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
 
-	--text-on-dark: rgba(150, 150, 170, 0.9);
-	--text-on-light: rgba(150, 150, 170, 0.9);
-} */
+#gameCanvas {
+    width: 95% !important;   /* Πιάνει σχεδόν όλο το πλάτος στο κινητό */
+    max-width: 800px;        /* Αλλά δεν ξεπερνάει τα 800px στο PC */
+    height: auto !important; /* Διατηρεί το ύψος αναλογικά */
+    aspect-ratio: 800 / 500; /* Η αναλογία που έχεις ορίσει στο HTML */
+    touch-action: none;      /* Κρίσιμο: Εμποδίζει το scroll για να πιάνει τα κλικ */
+}
+
+@media (max-width: 640px) {
+    .auth-button {
+        width: 100% !important; /* Τα κουμπιά πιάνουν όλο το πλάτος της στήλης */
+        margin-right: 0 !important; /* Καθαρίζουμε τα margins που είχες inline */
+        margin-bottom: 5px;
+        min-height: 45px;
+        padding: 8px 15px !important;
+        font-size: 14px !important;
+    }
+    
+    .signup-login-btns {
+        width: calc(100% - 20px); /* Δίνει λίγο αέρα δεξιά-αριστερά */
+    }
+}
