@@ -102,7 +102,6 @@ class WalletConnect {
             return true;
 
         } catch (error) {
-            console.error('Error connecting wallet:', error);
             alert('Failed to connect wallet: ' + (error as Error).message);
             return false;
         }
@@ -186,13 +185,13 @@ class WalletConnect {
         const walletAddressSpan = document.getElementById('wallet-address');
         const walletNetworkSpan = document.getElementById('wallet-network');
         const walletBalanceSpan = document.getElementById('wallet-balance');
+        const walletDot = document.getElementById('js-wallet-dot') as HTMLElement | null;
 
         if (this.currentWallet.isConnected) {
             // Update connect button text
             if (connectButton) {
                 connectButton.textContent = 'CONNECTED';
-                connectButton.classList.remove('disconnected');
-                connectButton.classList.add('connected');
+                if(walletDot) walletDot.style.backgroundColor = '#4CAF50';
             }
 
             // Update wallet info page
@@ -203,8 +202,7 @@ class WalletConnect {
             // Reset connect button
             if (connectButton) {
                 connectButton.textContent = 'CONNECT WALLET';
-                connectButton.classList.remove('connected');
-                connectButton.classList.add('disconnected');
+                if(walletDot) walletDot.style.backgroundColor = '#d9534f';
             }
         }
     }
@@ -218,6 +216,11 @@ class WalletConnect {
     public getWalletInfo(): WalletInfo {
         return this.currentWallet;
     }
+
+  // Expose the underlying EIP-1193 provider (MetaMask-only if available)
+  public getEthereumProvider(): any | null {
+    return this.ethereum;
+  }
 
     // Listen for account changes
     public setupEventListeners(): void {
@@ -270,15 +273,15 @@ function updateWalletConnectBtn() {
     const btn = document.querySelector(
         '.js-connect-wallet-button'
     ) as HTMLButtonElement | null;
+    const walletDot = document.getElementById(
+        'js-wallet-dot') as HTMLElement | null;
 
-    if (!btn) return;
+    if (!btn || !walletDot) return;
 
     const text = btn.textContent?.trim().toUpperCase() || '';
     if (text === 'CONNECT WALLET') {
-        btn.classList.add('disconnected');
-        btn.classList.remove('connected');
+        walletDot.style.backgroundColor = '#d9534f';
     } else {
-        btn.classList.add('connected');
-        btn.classList.remove('disconnected');
+        walletDot.style.backgroundColor = '#4CAF50';
     }
 }

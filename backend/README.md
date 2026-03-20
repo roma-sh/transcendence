@@ -39,10 +39,56 @@ backend/src/
 ## APIs:
 
 login: http://localhost:3000/api/auth/login
+
 sign up: http://localhost:3000/api/auth/signup
+
 log out: http://localhost:3000/api/auth/logout
+
 user data: http://localhost:3000/api/profile
+
 user online status: http://localhost:3000/api/useronline
 
+change user password: http://localhost:3000/api/profile/password
 
-more API routes will be added
+Request Body:
+
+```
+{
+  "currentPassword": "OldPass123!",
+  "newPassword": "NewPass456!"
+}
+```
+change user name: http://localhost:3000/api/profile/username
+```
+{
+  "newUsername": "newusername",
+}
+```
+change user email: http://localhost:3000/api/profile/email
+```
+{
+  "newEmail": "newemail@example.com",
+}
+```
+change user profile picture: http://localhost:3000/api/profile/picture
+```
+Request Type: multipart/form-data
+Form Data:
+file: Image file (JPEG, PNG, WebP) - Max 5MB
+```
+ Still need fixing : remove user profile picture: http://localhost:3000/api/profile/picture
+```
+Request: no file
+```
+Increament of the total games: http://localhost:3000/api/game/total-games
+```
+Request: Nothing
+```
+Increament of total wins: http://localhost:3000/api/game/wins
+```
+Request: Nothing
+```
+User account deleting http://localhost:3000/api/account/delete
+```
+Request: Nothing
+```

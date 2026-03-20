@@ -1,8 +1,10 @@
 import {
 	handleToggleUserMenu,
+	handleGoogleLogin,
 	handleOpenProfile,
 	handleOpenSettings,
-	handleLogOut
+	handleLogOut,
+	handleOpenWelcomePage
 } from "./user-menu.js";
 import {
 	handleOpenChooseMode,
@@ -30,16 +32,42 @@ import {
 	handleGoBackGameReadyPage
 } from "./game-ready-page.js";
 import { handleNextAfterCount } from "./tournament-player-count.js";
-import { handleGoToWelcomePage } from "./winner-page.js";
+import { handleGoToWelcomePage, handleLoadBlockchainWinners } from "./winner-page.js";
 import {
 	handleConnectWallet,
 	handleDisconnectWallet,
 	handleWalletBackToMenu
 } from "./wallet-connect.js";
+import {
+	handleGoBackProfile,
+	handleTogglePasswordModal,
+	handleUpdatePassword,
+	handleEditProfileData,
+	handleSaveProfileChange,
+	handleCancelProfileChange,
+	handleRemoveAvatar,
+	handleToggleDeleteModal,      
+    handleConfirmDeleteAccount
+} from "./profile-page.js";
+import {
+	handleToggle2FAModal,
+	handleClose2FAModal,
+	handleSetup2FA,
+	handleVerifyEnable2FA,
+	handleDisable2FA,
+	handleVerify2FALogin,
+	handleCancel2FALogin
+} from "./two-factor.js";
+import {
+	handleGoBackSettings,
+	handleSettingsSave,
+	handleSettingsReset
+} from "./settings-page.js";
 
 export function setupGlobalClicksDelegation() {
 	const actions: Record<string, (event?: MouseEvent) => void> = {
 			"toggle-user-menu": handleToggleUserMenu,
+			"open-welcome-page": handleOpenWelcomePage,
 			"open-profile": handleOpenProfile,
 			"open-settings": handleOpenSettings,
 			"open-choose-mode": handleOpenChooseMode,
@@ -58,12 +86,33 @@ export function setupGlobalClicksDelegation() {
 			"go-back-tournament": handleGoBackTournament,
 			"go-back-game-ready-page": handleGoBackGameReadyPage,
 			"go-to-welcome-page": handleGoToWelcomePage,
+      		"load-chain-winners": handleLoadBlockchainWinners,
 			"log-out": handleLogOut,
 			"connect-wallet": handleConnectWallet,
 			"disconnect-wallet": handleDisconnectWallet,
 			"wallet-back-to-menu": handleWalletBackToMenu,
-			"start-game-option": handleStartGameOption
-	};
+			"start-game-option": handleStartGameOption,
+			"go-back-profile": handleGoBackProfile,
+			"go-back-settings": handleGoBackSettings,
+			"settings-save": handleSettingsSave,
+			"settings-reset": handleSettingsReset,
+			"toggle-password-modal": handleTogglePasswordModal,
+			"update-password": handleUpdatePassword,
+			"edit-profile-data": handleEditProfileData,
+			"save-profile-change": handleSaveProfileChange,
+			"cancel-profile-change": handleCancelProfileChange,
+			"remove-avatar": handleRemoveAvatar,
+			"login-with-google": handleGoogleLogin,
+			"toggle-delete-modal": handleToggleDeleteModal,
+    		"confirm-delete-account": handleConfirmDeleteAccount,
+			"toggle-2fa-modal": handleToggle2FAModal,
+			"close-2fa-modal": handleClose2FAModal,
+			"setup-2fa": handleSetup2FA,
+			"verify-enable-2fa": handleVerifyEnable2FA,
+			"disable-2fa": handleDisable2FA,
+			"verify-2fa-login": handleVerify2FALogin,
+			"cancel-2fa-login": handleCancel2FALogin
+		};
 
 	document.addEventListener('click', (e) => {
 		const target = e.target as HTMLElement | null;

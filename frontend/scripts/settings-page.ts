@@ -1,7 +1,11 @@
 import { GameSettings } from "./types.js";
+import {
+	clearUserMenuReturnHash,
+	getUserMenuReturnHash
+} from "./user-menu.js";
 
 const DEFAULT_SETTINGS: GameSettings = {
-	ballSpeed: 9,
+	ballSpeed: 4,
 	paddleSpeed: 7,
 	ballColor: "#FFA500",
 	paddleColor: "#463D3D",
@@ -11,127 +15,185 @@ const DEFAULT_SETTINGS: GameSettings = {
 
 const SETTINGS_KEY = "pongSettings";
 
-export function initSettingsPage() {
+let currentSettings: GameSettings = { ...DEFAULT_SETTINGS };
 
-	const settingsBackLink = document.querySelector('.js-settings__back_btn');
-	settingsBackLink?.addEventListener("click", () => {
-		location.hash = '#welcome-page';
-	});
+let settingsPageInitialized = false;
 
-	const scoreToWinInput = document.querySelector(".js-score-to-win") as HTMLInputElement | null;
-	const ballSpeedInput = document.querySelector(".js-ball-speed") as HTMLInputElement | null;
-	const paddleSpeedInput = document.querySelector(".js-paddle-speed") as HTMLInputElement | null;
-	const ballColorInput = document.querySelector(".js-ball-color") as HTMLInputElement | null;
-	const paddleColorInput = document.querySelector(".js-paddle-color") as HTMLInputElement | null;
-	const bgColorInput = document.querySelector(".js-bg-color") as HTMLInputElement | null;
+type SettingsDOM = {
+	scoreToWinInput: HTMLInputElement | null;
+	ballSpeedInput: HTMLInputElement | null;
+	paddleSpeedInput: HTMLInputElement | null;
+	ballColorInput: HTMLInputElement | null;
+	paddleColorInput: HTMLInputElement | null;
+	bgColorInput: HTMLInputElement | null;
 
-	const ballSpeedValue = document.querySelector(".js-ball-speed-value") as HTMLElement | null;
-	const paddleSpeedValue = document.querySelector(".js-paddle-speed-value") as HTMLElement | null;
+	ballSpeedValue: HTMLElement | null;
+	paddleSpeedValue: HTMLElement | null;
 
-	const ballColorText = document.querySelector(".js-ball-color-text") as HTMLElement | null;
-	const paddleColorText = document.querySelector(".js-paddle-color-text") as HTMLElement | null;
-	const bgColorText = document.querySelector(".js-bg-color-text") as HTMLElement | null;
+	ballColorText: HTMLElement | null;
+	paddleColorText: HTMLElement | null;
+	bgColorText: HTMLElement | null;
 
-	const saveBtn = document.querySelector(".js-settings-save") as HTMLButtonElement | null;
-	const resetBtn = document.querySelector(".js-settings-reset") as HTMLButtonElement | null;
-	const messageEl = document.querySelector(".js-settings-message") as HTMLElement | null;
+	messageEl: HTMLElement | null;
+};
 
-	if (
-		!ballSpeedInput ||
-		!paddleSpeedInput ||
-		!ballColorInput ||
-		!paddleColorInput ||
-		!bgColorInput ||
-		!scoreToWinInput ||
-		!saveBtn ||
-		!resetBtn
-	) {
-		console.warn("Settings inputs/buttons not found");
+let settingsDOM: SettingsDOM | null = null;
+
+export function handleGoBackSettings() {
+	const returnHash = getUserMenuReturnHash();
+	clearUserMenuReturnHash();
+
+	if (returnHash && returnHash !== location.hash) {
+		location.hash = returnHash;
 		return;
 	}
 
-	let settings = loadGameSettings();
+	location.hash = '#welcome-page';
+}
 
-	// helper to update all UI spots
-	function render() {
-		// main form values
-		ballSpeedInput!.value = settings.ballSpeed.toString();
-		paddleSpeedInput!.value = settings.paddleSpeed.toString();
-		ballColorInput!.value = settings.ballColor;
-		paddleColorInput!.value = settings.paddleColor;
-		bgColorInput!.value = settings.bgColor;
-		scoreToWinInput!.value = settings.scoreToWin.toString();
+function initSettingsDOM(): SettingsDOM | null {
+	const dom: SettingsDOM = {
+		scoreToWinInput: document.querySelector(".js-score-to-win"),
+		ballSpeedInput: document.querySelector(".js-ball-speed"),
+		paddleSpeedInput: document.querySelector(".js-paddle-speed"),
+		ballColorInput: document.querySelector(".js-ball-color"),
+		paddleColorInput: document.querySelector(".js-paddle-color"),
+		bgColorInput: document.querySelector(".js-bg-color"),
 
-		if (ballSpeedValue) ballSpeedValue.textContent = settings.ballSpeed.toString();
-		if (paddleSpeedValue) paddleSpeedValue.textContent = settings.paddleSpeed.toString();
+		ballSpeedValue: document.querySelector(".js-ball-speed-value"),
+		paddleSpeedValue: document.querySelector(".js-paddle-speed-value"),
 
-		if (ballColorText) ballColorText.textContent = settings.ballColor;
-		if (paddleColorText) paddleColorText.textContent = settings.paddleColor;
-		if (bgColorText) bgColorText.textContent = settings.bgColor;
+		ballColorText: document.querySelector(".js-ball-color-text"),
+		paddleColorText: document.querySelector(".js-paddle-color-text"),
+		bgColorText: document.querySelector(".js-bg-color-text"),
+
+		messageEl: document.querySelector(".js-settings-message"),
+	};
+
+	if (
+		!dom.scoreToWinInput ||
+		!dom.ballSpeedInput ||
+		!dom.paddleSpeedInput ||
+		!dom.ballColorInput ||
+		!dom.paddleColorInput ||
+		!dom.bgColorInput
+	) {
+		return null;
 	}
 
-	render();
+	return dom;
+}
+
+
+export function initSettingsPage() {
+	if (!settingsDOM) {
+		settingsDOM = initSettingsDOM();
+		if (!settingsDOM) return;
+	}
+
+	currentSettings = loadGameSettings();
+	render(currentSettings);
+
+	if (settingsPageInitialized) {
+		return;
+	}
+	settingsPageInitialized = true;
+
+	const d = settingsDOM;
 
 	// listeners
-	ballSpeedInput.addEventListener("input", () => {
-		settings.ballSpeed = Number(ballSpeedInput.value);
-		saveSettings(settings);
-		render();
-		clearMessage(messageEl);
+	d.ballSpeedInput!.addEventListener("input", () => {
+		currentSettings.ballSpeed = Number(d.ballSpeedInput!.value);
+		render(currentSettings);
+		clearMessage(d.messageEl);
 	});
 
-	paddleSpeedInput.addEventListener("input", () => {
-		settings.paddleSpeed = Number(paddleSpeedInput.value);
-		saveSettings(settings);
-		render();
-		clearMessage(messageEl);
+	d.paddleSpeedInput!.addEventListener("input", () => {
+		currentSettings.paddleSpeed = Number(d.paddleSpeedInput!.value);
+		render(currentSettings);
+		clearMessage(d.messageEl);
 	});
 
-	ballColorInput.addEventListener("input", () => {
-		settings.ballColor = ballColorInput.value;
-		saveSettings(settings);
-		render();
-		clearMessage(messageEl);
+	d.ballColorInput!.addEventListener("input", () => {
+		currentSettings.ballColor = d.ballColorInput!.value;
+		render(currentSettings);
+		clearMessage(d.messageEl);
 	});
 
-	paddleColorInput.addEventListener("input", () => {
-		settings.paddleColor = paddleColorInput.value;
-		saveSettings(settings);
-		render();
-		clearMessage(messageEl);
+	d.paddleColorInput!.addEventListener("input", () => {
+		currentSettings.paddleColor = d.paddleColorInput!.value;
+		render(currentSettings);
+		clearMessage(d.messageEl);
 	});
 
-	bgColorInput.addEventListener("input", () => {
-		settings.bgColor = bgColorInput.value;
-		saveSettings(settings);
-		render();
-		clearMessage(messageEl);
+	d.bgColorInput!.addEventListener("input", () => {
+		currentSettings.bgColor = d.bgColorInput!.value;
+		render(currentSettings);
+		clearMessage(d.messageEl);
 	});
 
-	scoreToWinInput.addEventListener("input", () => {
-		let value = Number(scoreToWinInput.value);
+	d.scoreToWinInput!.addEventListener("input", () => {
+		let value = Number(d.scoreToWinInput!.value);
 		if (!Number.isFinite(value) || value < 1) value = 1;
 
-		settings.scoreToWin = value;
-		saveSettings(settings);
-		render();
-		clearMessage(messageEl);
-	});
-
-
-	resetBtn.addEventListener("click", () => {
-		settings = { ...DEFAULT_SETTINGS };
-		saveSettings(settings);
-		render();
-		showMessage(messageEl, "Reset to default values");
-	});
-
-	saveBtn.addEventListener("click", async () => {
-		showMessage(messageEl, "Settings saved");
+		currentSettings.scoreToWin = value;
+		render(currentSettings);
+		clearMessage(d.messageEl);
 	});
 }
 
-/* -------- helpers -------- */
+function render(settings: GameSettings) {
+
+	if (!settingsDOM) return;
+
+	const d = settingsDOM;
+
+	// main form values
+	d.ballSpeedInput!.value = settings.ballSpeed.toString();
+	d.paddleSpeedInput!.value = settings.paddleSpeed.toString();
+	d.ballColorInput!.value = settings.ballColor;
+	d.paddleColorInput!.value = settings.paddleColor;
+	d.bgColorInput!.value = settings.bgColor;
+	d.scoreToWinInput!.value = settings.scoreToWin.toString();
+
+	if (d.ballSpeedValue) d.ballSpeedValue.textContent = settings.ballSpeed.toString();
+	if (d.paddleSpeedValue) d.paddleSpeedValue.textContent = settings.paddleSpeed.toString();
+
+	if (d.ballColorText) d.ballColorText.textContent = settings.ballColor;
+	if (d.paddleColorText) d.paddleColorText.textContent = settings.paddleColor;
+	if (d.bgColorText) d.bgColorText.textContent = settings.bgColor;
+}
+
+export function handleSettingsSave() {
+	if (!settingsDOM) return;
+	saveSettings(currentSettings);
+	showMessage(settingsDOM.messageEl, "Settings saved");
+	toggleOpacity(document.querySelector('.js-settings-msg-container'));
+}
+
+let opacityTimer: number | null = null;
+export function toggleOpacity(el : HTMLElement | null) {
+	if (!el) return;
+
+	if (opacityTimer) clearTimeout(opacityTimer);
+
+	el.classList.remove('opacity-0');
+	el.classList.add('opacity-100');
+
+	opacityTimer = window.setTimeout(() => {
+    el.classList.add("opacity-0");
+    el.classList.remove("opacity-100");
+		opacityTimer = null;
+  }, 1800);
+}
+
+export function handleSettingsReset() {
+	if (!settingsDOM) return;
+	currentSettings = { ...DEFAULT_SETTINGS };
+	render(currentSettings);
+	showMessage(settingsDOM.messageEl, "Reset to default values");
+	toggleOpacity(document.querySelector('.js-settings-msg-container'));
+}
 
 export function loadGameSettings(): GameSettings {
 	const raw = localStorage.getItem(SETTINGS_KEY);
@@ -152,6 +214,6 @@ function clearMessage(el: HTMLElement | null) {
 	if (el) el.textContent = "";
 }
 
-function showMessage(el: HTMLElement | null, text: string) {
+export function showMessage(el: HTMLElement | null, text: string) {
 	if (el) el.textContent = text;
 }

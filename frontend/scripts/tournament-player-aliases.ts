@@ -1,5 +1,7 @@
 import { TournamentSettings } from "./types.js";
 import { tSettings } from "./pong.js";
+import { toggleOpacity, showMessage } from "./settings-page.js";
+import { updatePassMsgDot } from "./profile-page.js";
 
 export function handleGoBackPlayerAliases() {
   location.hash = '#tournament-page';
@@ -7,70 +9,55 @@ export function handleGoBackPlayerAliases() {
 
 export function addAliasesSection() {
 
-  console.log("--- STARTING ALIASES SECTION ---");
-  console.log("Number of Players received in addAliasesSection:", tSettings.numberOfPlayers);
-
   location.hash = '#tournament-page-player-aliases';
 
   const inputsContainer = document.querySelector('.aliase-inputs');
 
   if (!inputsContainer) return; 
 
-  // ******************************************************
-  // 1. FIX: Clearing Aliases 
-  // We must remove Bot aliases or any old strings
-  // before creating the inputs.
   const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
-
-  // We ensure that the tSettings.playerAliases list contains ONLY
-  // the human aliases (or is empty).
-  // We use slice to keep only the first N players,
-  // who must be the humans.
   if (tSettings.playerAliases.length > 0) {
       tSettings.playerAliases = tSettings.playerAliases.slice(0, humanPlayersCount);
   }
-
-  // ******************************************************
-
-  // 3. GENERATE/ASSIGN HTML (Restore fields)
-  // Now generateInputsForAliases will use the correct, cleaned list.
   const aliasesHtml = generateInputsForAliases(tSettings);
   inputsContainer.innerHTML = aliasesHtml;
 }
 
-// --- 1. Helper Function: Create HTML Inputs ---
-function generateInputsForAliases( tSettings: TournamentSettings) {
+function generateInputsForAliases(tSettings: TournamentSettings) {
   let html = '';
-
-  // Calculate the index from which Bots start
   const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
-
-  // Counter for correct Bot numbering (starts at 1)
   let botCounter = 1; 
 
-  for (let i = 0; i < tSettings.numberOfPlayers; ++i) {
+  const loggedInUser = localStorage.getItem('userName') || '';
 
-    // Check if the current index (i) corresponds to a Bot
+  for (let i = 0; i < tSettings.numberOfPlayers; ++i) {
     const isBotInput = i >= humanPlayersCount;
 
     let inputValue = '';
     let disabledAttribute = '';
-    let inputClass = 'player-alias-input js-player-alias-input';
+	let inputClass = 'player-alias-input js-player-alias-input ';
+
+	inputClass += `
+	rounded-[15px] border border-gray-300 w-[300px] 
+	px-[20px] py-[25px] text-[24px] text-center
+	mb-[15px] bg-[#f0eeee] focus:outline-none
+	`;
 
     if (isBotInput) {
-      // Bot Logic: Correct naming (Bot 1, Bot 2, etc.)
       inputValue = `Bot ${botCounter}`;
       botCounter++; 
       disabledAttribute = 'disabled';
-      inputClass += ' bot-alias-input';
+      inputClass += ' bot-alias-input opacity-70 cursor-not-allowed';
     } else {
-        // Human Logic: Empty value so the placeholder is visible
-        // and the user can enter the alias
-        // inputValue = tSettings.playerAliases[i] || ''; // We use an empty string
-        inputValue = '';
+      if (i === 0) {
+        inputValue = tSettings.playerAliases[i] || loggedInUser;
+        disabledAttribute = 'disabled'; 
+        inputClass += ' opacity-80 cursor-not-allowed bg-gray-100'; 
+      } else {
+        inputValue = tSettings.playerAliases[i] || '';
+      }
     }
 
-    // Create the HTML for the input
     html += `
       <div>
         <div class="player-photo"></div>
@@ -79,101 +66,71 @@ function generateInputsForAliases( tSettings: TournamentSettings) {
           class="${inputClass}"
           placeholder="Player ${i + 1}"
           value="${inputValue}" 
-          ${disabledAttribute}> 
+          ${disabledAttribute}>
       </div>
     `;
   }
 
-  // REMOVE DOM ASSIGNMENT FROM HERE
-  // The assignment will be done by the function that calls generateInputsForAliases
-  // (e.g., initTournamentPlayerAliasesPage).
-  return html; // We return only the HTML string
+  return html;
 }
 
-// --- 2. Helper Function: Alias Check ---
-async function checkAliasExists(alias: string): Promise<boolean> {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/api/alias/${encodeURIComponent(alias)}`
-    );
-
-    if (!response.ok) {
-      console.error('checkAlias failed with status:', response.status);
-      return false;
-    }
-
-    const data = await response.json();
-    return Boolean(data.exists);
-  } catch (error) {
-    console.error('checkAlias ERROR:', error);
-    return false;
-  }
-}
-
-// --- 3. Handler for the NEXT Button ---
 export async function handleNextAfterAliases() {
+    const inputsList = document.querySelectorAll('.js-player-alias-input');
+    
+    const section = document.querySelector('#tournament-page-player-aliases');
+    
+    const statusContainer = section?.querySelector('.js-alias-status') as HTMLElement | null;
+    const statusText = section?.querySelector('.js-alias-status-text') as HTMLElement | null;
+    const statusDot = section?.querySelector('.js-alias-text-dot') as HTMLElement | null;
 
-  const inputsList = document.querySelectorAll('.js-player-alias-input');
-
-  // Exclude Bot aliases from validation
-  const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
-
-  // We only get the aliases of the human players (the first humanPlayersCount inputs)
-  const humanAliases = Array.from(inputsList)
-      .slice(0, humanPlayersCount)
-      .map((input) => (input as HTMLInputElement).value.trim());
-
-  // Check for empty fields
-  if (humanAliases.some(alias => !alias)) {
-    alert("Please fill in all player fields.");
-    return;
-  }
-
-  const aliasesExist: string[] = [];
-  const aliasesDoNotExist: string[] = [];
-
-  // Check if Aliases exist
-  for (const alias of humanAliases) {
-    const exists = await checkAliasExists(alias); 
-    if (exists) {
-      aliasesExist.push(alias);
-    } else {
-      aliasesDoNotExist.push(alias);
-    }
-  }
-
-  // Result handling
-  if (aliasesDoNotExist.length > 0) {
-    alert(`Unfortunately, user(s) "${aliasesDoNotExist.join(', ')}" were not found in our database. Please sign up first.`);
-    return; // We stop if there are invalid aliases
-  }
-
-  // If we reach here, all human aliases are valid
-  if (aliasesExist.length > 0 || tSettings.numberOfBots > 0) {
-      
-    // *****************************************************************
-    // ** Dynamically Create Bot Aliases **
-    // *****************************************************************
-    const createdBotAliases: string[] = [];
-    const totalBots = tSettings.numberOfBots;
-
-    for (let i = 0; i < totalBots; i++) {
-        createdBotAliases.push(`Bot ${i + 1}`); 
+    if (statusContainer) {
+        statusContainer.classList.remove('opacity-100');
+        statusContainer.classList.add('opacity-0');
     }
 
-    // 6. COMBINATION of Human Players and Bots
-    const finalTournamentAliases: string[] = [
-        ...aliasesExist,       // Confirmed humans
-        ...createdBotAliases   // Generated Bots
-    ];
+    const humanPlayersCount = tSettings.numberOfPlayers - tSettings.numberOfBots;
+    const humanAliases = Array.from(inputsList)
+        .slice(0, humanPlayersCount)
+        .map((input) => (input as HTMLInputElement).value.trim());
 
-    tSettings.playerAliases = finalTournamentAliases; 
+    if (humanAliases.some(alias => !alias)) {
+        displayError("Please fill in all player fields.", statusContainer, statusText, statusDot);
+        return;
+    }
 
-    console.log("--- FINAL TOURNAMENT ALIASES ---");
-    console.log("All players are registered (Humans + Bots):", tSettings.playerAliases);
-    console.log("Total Players:", tSettings.playerAliases.length);
-    console.log("---------------------------------");
+    const lower = humanAliases.map(a => a.toLowerCase());
+    const hasDup = new Set(lower).size !== lower.length;
+    if (hasDup) {
+        displayError("Player aliases must be unique.", statusContainer, statusText, statusDot);
+        return;
+    }
 
-    location.hash = '#game-ready-page';
-  }
+    if (humanAliases.length > 0 || tSettings.numberOfBots > 0) {
+        const createdBotAliases = [];
+        for (let i = 0; i < tSettings.numberOfBots; i++) {
+            createdBotAliases.push(`Bot ${i + 1}`); 
+        }
+        tSettings.playerAliases = [...humanAliases, ...createdBotAliases]; 
+        location.hash = '#game-ready-page';
+    }
+}
+
+function displayError(msg: string, container: HTMLElement | null, textEl: HTMLElement | null, dotEl: HTMLElement | null) {
+    if (!container || !textEl || !dotEl) {
+        return;
+    }
+
+    updatePassMsgDot('red', dotEl);
+    showMessage(textEl, msg);
+    
+    container.style.transition = 'none'; 
+    container.classList.remove('opacity-100');
+    container.classList.add('opacity-0');
+
+    requestAnimationFrame(() => {
+        container.style.transition = '';
+        requestAnimationFrame(() => {
+            toggleOpacity(container);
+        });
+    });
 }

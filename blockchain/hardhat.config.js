@@ -1,4 +1,5 @@
-require('dotenv').config({ path: require('path').join(__dirname, '.env') });
+// require('dotenv').config({ path: require('path').join(__dirname, '.env') });
+require('dotenv').config({ path: require('path').join(__dirname, '../docker/.env') });
 require('@nomicfoundation/hardhat-toolbox');
 
 /** @type import('hardhat/config').HardhatUserConfig */

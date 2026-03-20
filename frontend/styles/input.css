@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+
+@theme {
+	--main-color: rgb(40, 38, 44);
+	--text-secondary: rgb(110, 110, 130);
+	
+	--border-color: rgb(60, 60, 70);
+	--border-soft-gray: rgb(50, 50, 60);
+	
+	--bg-color: rgb(18, 18, 22);
+	--bg-color-gray: rgb(26, 26, 32);
+	--bg-color-white-seven: rgba(26, 26, 34, 0.7);
+	--bg-color-white-nine: rgba(150, 150, 170, 0.9);
+	
+	--bg-wallet-status: rgb(22, 30, 24);
+	--text-wallet-status: rgb(34, 197, 94);
+	
+	--shadow-10: rgba(0, 0, 0, 0.35);
+	--shadow-20: rgba(0, 0, 0, 0.5);
+	--shadow-35: rgba(0, 0, 0, 0.7);
+	
+	--hover-06: rgba(255, 255, 255, 0.5);
+	
+	--text-on-dark: rgba(150, 150, 170, 0.9);
+	--text-on-light: rgba(150, 150, 170, 0.9);
+	
+	--animate-bob: bob 1.6s ease-in-out infinite;
+	
+	--neon-blue: #6cf;
+
+	@keyframes bob {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(-14px); }
+	}
+}
+
+body {
+	background-color: var(--bg-color);
+	color: var(--text-on-dark);
+
+	background:
+		radial-gradient(circle at 20% 30%, var(--neon-blue) 2px, transparent 3px),
+		radial-gradient(circle at 70% 60%, var(--neon-blue) 1.5px, transparent 3px),
+		radial-gradient(circle at 40% 80%, var(--neon-blue) 1px, transparent 3px),
+		var(--bg-color);
+	
+	background-size: 500px 500px;
+
+	animation: starMove 90s linear infinite;
+
+  	color: var(--text-on-dark);
+}
+
+@keyframes starMove {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 600px 300px;
+	}
+}
+
+.neon-button {
+  border: 1px solid var(--neon-blue);
+  box-shadow:
+    0 0 6px var(--neon-blue),
+    0 0 12px var(--neon-blue);
+
+  transition: 0.25s;
+}
+
+.neon-button:hover {
+  box-shadow:
+    0 0 12px var(--neon-blue),
+    0 0 25px var(--neon-blue);
+
+  transform: scale(1.05);
+}
+
+* {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    background-attachment: fixed;
+}
+
+@media (max-width: 768px) {
+    .neon-button, .auth-button, .play-button {
+        padding-left: 30px !important;
+        padding-right: 30px !important;
+        font-size: 18px !important;
+    }
+
+    #game-name {
+        font-size: 18vw;
+    }
+
+    .paddle {
+        display: none;
+    }
+}
+
+#game-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+
+#gameCanvas {
+    width: 95% !important;   
+    max-width: 800px;       
+    height: auto !important; 
+    aspect-ratio: 800 / 500;
+    touch-action: none;      
+}
+
+@media (max-width: 640px) {
+    .auth-button {
+        width: 100% !important; 
+        margin-right: 0 !important; 
+        margin-bottom: 5px;
+        min-height: 45px;
+        padding: 8px 15px !important;
+        font-size: 14px !important;
+    }
+    
+    .signup-login-btns {
+        width: calc(100% - 20px); 
+    }
+}

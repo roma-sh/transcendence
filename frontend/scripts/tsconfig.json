@@ -7,7 +7,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "outDir": "../../public/scripts/js",
+    "outDir": "./js",
     "rootDir": "./"
   },
   "include": [

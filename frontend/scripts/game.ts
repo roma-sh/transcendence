@@ -13,6 +13,7 @@ import {
 import { updateBotPaddle } from "./bot-ai.js";
 import { tSettings } from "./pong.js";
 import { loadGameSettings } from "./settings-page.js";
+import { apiHeaders } from "./api-config.js";
 
 let animationId: number | null = null;
 
@@ -20,6 +21,7 @@ let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
 let keyupHandler: ((e: KeyboardEvent) => void) | null = null;
 
 function cleanupGame() {
+  window.onpopstate = null; // Απελευθέρωση του Back button
   if (animationId !== null) {
     cancelAnimationFrame(animationId);
     animationId = null;
@@ -64,7 +66,7 @@ export function game(): void {
     paddleHeight: 100,
     ballRadius: 10,
     maxScore: settings.scoreToWin,
-    ballInitSpeed: settings.ballSpeed
+    ballInitSpeed: settings.ballSpeed + 5
   };
 
   const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -102,6 +104,11 @@ export function game(): void {
   resetBall(ball, canvas, gameConfig);
 
   const keys: KeyMap = {}; 
+
+  gameState.isPaused = true;
+  startCountdown(() => {
+    gameState.isPaused = false;
+  });
 
   function gameLoop() {
     if (!ctx) return;
@@ -164,72 +171,116 @@ export function game(): void {
   gameLoop();
 }
 
-function handleWinOnce(
-  gameState: GameState,
-  p1Name: string,
-  p2Name: string,
-  isP1Bot: boolean,
-  isP2Bot: boolean,
-  canvas: HTMLCanvasElement,
-  ctx: CanvasRenderingContext2D
-) {
-  if (gameState.winHandled) return;
-  gameState.winHandled = true;
+async function handleWinOnce(
+	gameState: GameState,
+	p1Name: string,
+	p2Name: string,
+	isP1Bot: boolean,
+	isP2Bot: boolean,
+	canvas: HTMLCanvasElement,
+	ctx: CanvasRenderingContext2D
+) 
+{
+	if (gameState.winHandled) return;
+	gameState.winHandled = true;
 
-  const winner = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
-  const winnerName = winner === 'left' ? p1Name : p2Name;
-  const loserName = winner === 'left' ? p2Name : p1Name;
+	console.log("--- handleWinOnce Triggered ---");
 
-  gameState.winnerSide = winner;
+	const winnerSide = gameState.leftScore > gameState.rightScore ? 'left' : 'right';
+	const winnerName = winnerSide === 'left' ? p1Name : p2Name;
+	const loserName = winnerSide === 'left' ? p2Name : p1Name;
 
-  tSettings.winnersAliases.push(winnerName);
+	gameState.winnerSide = winnerSide;
 
-  console.log("Length of player Aliases list : ", tSettings.playerAliases.length);
-  if (tSettings.playerAliases.length == 2 || tSettings.playerAliases.length == 0)
-  {
-    tSettings.secondPlaceAliases.push(loserName);
-    console.log("Losers for second place of this match:", tSettings.secondPlaceAliases);
-  }
-  console.log(`Winner of this match: ${winnerName}`);
+	// 1. Διαχείριση Τουρνουά
+	const isTournamentMatch = tSettings.currentMatch !== null;
+	if (isTournamentMatch) {
+		tSettings.winnersAliases.push(winnerName);
+		if (tSettings.playerAliases.length === 2 || tSettings.playerAliases.length === 0) {
+		tSettings.secondPlaceAliases.push(loserName);
+		}
+	}
 
-  const isPvP = p1Name !== "Player 1" && p2Name !== "Player 2" && !isP1Bot && !isP2Bot;
+	if (!gameState.statsSent) {
+		try {
+		const response = await fetch('/api/profile', { method: 'GET', credentials: 'include', headers: apiHeaders() });
+		const data = await response.json();
+		if (!data.success || !data.user) return;
+		const loggedInAlias = data.user.username;
 
-  if (!gameState.statsSent && isPvP) {
-      updatePlayerStats(winnerName, loserName);
-      gameState.statsSent = true; 
-  }
+		if (loggedInAlias === p1Name || loggedInAlias === p2Name) {
+			
+			await fetch('/api/game/total-games', { method: 'POST', credentials: 'include', headers: apiHeaders() });
+			console.log("Total games incremented for logged-in user.");
 
-  const hasNamedPlayers = (p1Name !== "Player 1" && p2Name !== "Player 2");
-  const nextGameHash    = hasNamedPlayers ? '#game-ready-page' : '#game-page';
+			if (loggedInAlias === winnerName) {
+			await fetch('/api/game/wins', { method: 'POST', credentials: 'include', headers: apiHeaders() });
+			console.log("Win recorded for logged-in user.");
+			}
+		}
+		} catch (error) {
+		}
+		gameState.statsSent = true; 
+	}
 
-  const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
-  bindButtonEvent(canvas, backBtnRect, () => {
-    location.hash = '#welcome-page';
-  });
+	const isLastMatchOfRound = isTournamentMatch && tSettings.playerAliases.length === 0;
+		
+	const isFinalMatch = isLastMatchOfRound && (tSettings.winnersAliases.length === 1 && tSettings.numberOfPlayers === 2);
 
-  const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
-  bindButtonEvent(canvas, nextBtnRect, () => {
-    /** Reset hash first so hashchange fires
-     * even when navigating to the same page */
-    location.hash = '';
-    location.hash = nextGameHash;
-  });
+	if (isFinalMatch) {
+		console.log("🏁 Final match finished. Redirecting to winner page automatically...");
+		setTimeout(() => {
+			location.hash = '#game-ready-page'; 
+		}, 500);
+		return; 
+	}
+
+	const nextGameHash = isTournamentMatch ? '#game-ready-page' : '#game-page';
+
+	const backBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'BACK TO MAIN', 130);
+	bindButtonEvent(canvas, backBtnRect, () => {
+		tSettings.currentMatch = null; 
+		tSettings.winnersAliases = [];
+		location.hash = '#welcome-page';
+	});
+
+	const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
+	bindButtonEvent(canvas, nextBtnRect, () => {
+		if (!isTournamentMatch) {
+		// location.hash = '#game-page';
+    cleanupGame();
+    
+    // 2. Μερικές φορές το hash δεν αλλάζει αν είμαστε ήδη εκεί, 
+    // οπότε αναγκάζουμε το παιχνίδι να ξεκινήσει ξανά
+    location.hash = '#game-page'; 
+    game();
+		} else {
+		location.hash = nextGameHash;
+		}
+	});
 }
 
-async function updatePlayerStats(winnerAlias: string, loserAlias: string) {
-    try {
-        const response = await fetch('http://localhost:3000/api/updateStats', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ winner: winnerAlias, loser: loserAlias })
-        });
+function startCountdown(startGame: () => void) {
+  const countdownEl = document.querySelector(
+    '.countdown-overlay') as HTMLElement | null;
 
-        if (response.ok) {
-            console.log(`Stats updated successfully for ${winnerAlias} and ${loserAlias}.`);
-        } else {
-            console.error('Failed to update stats:', await response.text());
-        }
-    } catch (error) {
-        console.error('Network error while updating stats:', error);
+  if (!countdownEl) return;
+
+  let count = 3;
+  countdownEl.textContent = String(count);
+  countdownEl.classList.remove('hidden');
+  countdownEl.classList.add('flex');
+
+  const interval = setInterval(() => {
+    count--;
+
+    if (count > 0) {
+      countdownEl.textContent = String(count);
+    } else {
+      clearInterval(interval);
+      countdownEl.classList.add('hidden');
+      countdownEl.classList.remove('flex');
+      startGame();
     }
+  }, 1000);
 }

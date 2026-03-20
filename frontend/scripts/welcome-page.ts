@@ -1,24 +1,19 @@
 import {
   updateUIForAuthState,
   updateUIforUserMenu,
-  setUserMenuName,
 } from "./user-menu.js";
+import { apiHeaders } from "./api-config.js";
 
 export async function setInitHash() {
-  if (!location.hash) {
+  const isLoggedIn = await isUserOnline();
+  if (!location.hash || !isLoggedIn) {
     location.hash = '#welcome-page';
   }
 }
 
-export async function initWelcomePage() {
-
-	const isLoggedIn = await isUserOnline();
-
-  console.log('isUserOnline:', isLoggedIn);
-
-	updateUIForAuthState(isLoggedIn);
-	updateUIforUserMenu(isLoggedIn);
-	setUserMenuName();
+export function initWelcomePage() {
+	updateUIForAuthState();
+	updateUIforUserMenu();
 }
 
 export function handleGoBackChooseMode() {
@@ -37,24 +32,31 @@ export function handleOpenLogIn() {
   location.hash = '#log-in-page';
 }
 
-async function isUserOnline(): Promise<true | false> {
+export async function isUserOnline(): Promise<boolean> {
   try {
-    const res = await fetch('http://localhost:3000/api/useronline', {
+    const res = await fetch('/api/useronline', { 
       method: 'GET',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: apiHeaders({ 'Content-Type': 'application/json' }),
     });
-
-    if (!res.ok)
-      return false;
 
     const data = await res.json();
 
-    return data.online;
+    if (data.online && data.username) {
+        const localName = localStorage.getItem('userName');
+        if (!localName) {
+            console.log("Setting initial userName from server:", data.username);
+            localStorage.setItem('userName', data.username);
+        } else {
+            console.log("Keeping current localStorage name:", localName);
+        }
+    } else {
+      localStorage.removeItem('userName');
+    }
+
+    return data.online; 
   } catch (err) {
-    console.error('Connection error(isUserOnline function):', err);
+    localStorage.removeItem('userName');
     return false;
   }
 }

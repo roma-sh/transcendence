@@ -1,0 +1,40 @@
+FROM node:20-bookworm
+
+WORKDIR /usr/src/app
+
+# root package installation
+COPY package*.json ./
+RUN npm install
+
+# backend package installation
+COPY backend/package*.json ./backend/
+RUN cd backend && npm install
+
+# copying code
+COPY backend ./backend
+COPY frontend ./frontend
+COPY database ./database
+COPY blockchain ./blockchain
+COPY auth ./auth
+
+# install typescript
+RUN npm install --save-dev typescript
+
+# notr sure if already installed via package.json 
+RUN npm install @fastify/cookie @fastify/session undici dotenv
+
+# frontend setup
+RUN npm install -D tailwindcss @tailwindcss/cli
+RUN npx @tailwindcss/cli -i ./frontend/styles/input.css -o ./frontend/styles/output.css
+
+RUN npx tsc --project frontend/scripts/tsconfig.json
+
+RUN mkdir -p ../public/styles
+RUN mkdir -p ../public/scripts
+
+
+COPY frontend/styles/ public/styles/
+COPY frontend/pong.html public/index.html
+
+EXPOSE 3000
+CMD ["node", "backend/server.js"]

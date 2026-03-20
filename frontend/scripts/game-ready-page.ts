@@ -1,76 +1,100 @@
-import { TournamentSettings } from "./types.js";
-import { game } from "./game.js";
 import { tSettings } from "./pong.js";
+import { contractService } from "./contract-service.js";
+import { resetTournamentState } from "./choose-mode.js"
 
-export function handleGoBackGameReadyPage() {
-  location.hash = '#tournament-page-player-aliases';
+export function handleStartTournament() {
+
+  if (!tSettings.currentMatch) {
+    return;
+  }
+
+  window.onpopstate = null;
+
+  location.hash = '#game-page';
 }
 
-export function initGameReadyPage(tSettings: TournamentSettings) {
+export function handleGoBackGameReadyPage() {
+  // Πριν φύγουμε, καθαρίζουμε τα πάντα για να μην "μολυνθεί" το Quick Play
+  window.onpopstate = null;
+  resetTournamentState(); 
+  location.hash = '#welcome-page';
+  window.location.reload();
+}
 
-  if (tSettings.playerAliases.length == 0) {
-    if (tSettings.winnersAliases.length == 1) {
-      tSettings.playerAliases = [];
-      tSettings.secondPlaceAlias = tSettings.secondPlaceAliases.pop()!;
-      console.log("First place winner : ", tSettings.winnersAliases[0]);
-      console.log("Second place winner : ", tSettings.secondPlaceAlias);
+export function initGameReadyPage() {
+  console.log("--- Initializing Game Ready Page ---");
+  console.log("Current Aliases in queue:", [...tSettings.playerAliases]);
+  console.log("Current Winners list:", [...tSettings.winnersAliases]);
+  console.log("Number of players for this round context:", tSettings.numberOfPlayers);
+
+  window.onpopstate = null; 
+    
+  // Μετά βάλε το δικό σου lock
+  window.history.pushState(null, "", window.location.href);
+  window.onpopstate = function() {
+      handleGoBackGameReadyPage();
+  };
+
+  if (tSettings.playerAliases.length === 0) {
+    console.log("⚠️ Player queue is empty. Checking for tournament progression...");
+    
+    if (tSettings.winnersAliases.length === 1 && tSettings.numberOfPlayers === 2) {
+      console.log("🏆 Final match winner detected! Preparing winner-page.");
+      
       tSettings.firstPlaceAlias = tSettings.winnersAliases.pop()!;
+      tSettings.secondPlaceAlias = tSettings.secondPlaceAliases.pop() || "";
+      
+      console.log(`Results: 1st place: ${tSettings.firstPlaceAlias}, 2nd place: ${tSettings.secondPlaceAlias}`);
+      void contractService.recordTournamentWinner("Pong Tournament", tSettings.firstPlaceAlias);
+
+      window.onpopstate = null;
+      
+      tSettings.playerAliases = [];
       tSettings.winnersAliases = [];
       tSettings.secondPlaceAliases = [];
+      
       location.hash = `#winner-page`;
       return;
     }
-    console.log('Winners: ' + tSettings.winnersAliases);
-    tSettings.playerAliases = tSettings.winnersAliases.slice(); // Copy winners to the next round
-    tSettings.winnersAliases = []; // Clear winners for the next round
-    console.log("All matches in this round completed. Preparing for the next round. Players left : ", tSettings.playerAliases.length);
-    // location.hash = '#game-ready-page';
+
+    const expectedWinners = tSettings.numberOfPlayers / 2;
+
+    if (tSettings.winnersAliases.length === expectedWinners) {
+      console.log(`🔄 Round complete. Moving all ${tSettings.winnersAliases.length} winners to the next round.`);
+      
+      tSettings.playerAliases = [...tSettings.winnersAliases]; 
+      tSettings.numberOfPlayers = tSettings.playerAliases.length; 
+      tSettings.winnersAliases = []; 
+      
+      initGameReadyPage();
+      return;
+    } else {
+      console.log(`⏳ Waiting for all matches to finish. (Winners: ${tSettings.winnersAliases.length}/${expectedWinners})`);
+      return; 
+    }
   }
 
-  console.log("Aliases BEFORE extraction:", tSettings.playerAliases);
-  console.log("List Length BEFORE extraction:", tSettings.playerAliases.length);
-  
-  // 1. Extract the First Player (Start of the list)
-  // shift() removes and returns the first element.
   const p1Name = tSettings.playerAliases.shift(); 
-  
-  // 2. Extract the Last Player (End of the list)
-  // pop() removes and returns the last element.
   const p2Name = tSettings.playerAliases.pop();
-  
-  console.log("p1Name (shift):", p1Name);
-  console.log("p2Name (pop):", p2Name);
-  
-  // Navigate to the game page
-  
-  // 3. Inject Names into the DOM
+
+  console.log(`⚔️ Match Setup: ${p1Name} VS ${p2Name}`);
+
+  if (p1Name && p2Name) {
+    tSettings.currentMatch = { p1Name, p2Name };
+    console.log("Match object stored in tSettings:", tSettings.currentMatch);
+  } else {
+    tSettings.currentMatch = null;
+  }
+
   const p1NameEl = document.querySelector('.js-p1-name');
   const p2NameEl = document.querySelector('.js-p2-name');
 
   if (p1NameEl) {
     p1NameEl.textContent = p1Name || '';
+    console.log("P1 DOM updated with:", p1Name);
   }
   if (p2NameEl) {
     p2NameEl.textContent = p2Name || '';
+    console.log("P2 DOM updated with:", p2Name);
   }
-}
-
-export function handleStartTournament() {
-  console.log('handle start tournament called!!!')
-
-  const p1El = document.querySelector('.js-p1-name') as HTMLElement | null;
-  const p2El = document.querySelector('.js-p2-name') as HTMLElement | null;
-
-  const p1Name = p1El?.textContent?.trim() || '';
-  const p2Name = p2El?.textContent?.trim() || '';
-
-  if (!p1Name || !p2Name) {
-    console.error('Missing player names for game start');
-    return;
-  }
-
-  console.log(`Starting match: ${p1Name} vs ${p2Name}`);
-
-  tSettings.currentMatch = { p1Name, p2Name };
-  location.hash = '#game-page';
 }
