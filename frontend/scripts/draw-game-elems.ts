@@ -7,7 +7,7 @@ export function drawPlayerName(
   name: string                 
 ) {
   ctx.fillStyle = '#463D3D';
-  ctx.font = 'bold 18px Arial';
+  ctx.font = "bold 18px 'Orbitron'";
   ctx.textAlign = side === 'left' ? 'left' : 'right';
   
   const x = side === 'left' ? 45 : canvas.width - 45;
@@ -118,10 +118,15 @@ export function drawWinText(
   winner : 'left' | 'right') {
 
     const text = 'WIN';
-    ctx.fillStyle = '#463D3D';
-    ctx.font = "48px Arial";
+    ctx.fillStyle = '#6cf'; 
+    ctx.font = "bold 60px 'Orbitron'";
     ctx.textAlign = 'center';
-    // ctx.textBaseline = 'middle';
+    ctx.textBaseline = 'middle';
+
+    ctx.shadowColor = '#6cf';
+    ctx.shadowBlur = 20; 
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
 
     const leftCoords = {
       x: canvas.width / 4,
@@ -133,7 +138,10 @@ export function drawWinText(
     };
 
     const pos = winner === 'left' ? leftCoords : rightCoords;
-    ctx.fillText('WIN', pos.x, pos.y);
+    ctx.fillText(text, pos.x, pos.y);
+
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
 }
 
 export function drawButton (
@@ -144,7 +152,7 @@ export function drawButton (
   yMargin: number,
 ) : ButtonRect {
 
-  const btnWidth = 150;
+  const btnWidth = 220;
   const btnHeight = 40;
   const radius = btnHeight / 2;
 
@@ -174,7 +182,7 @@ export function drawButton (
   ctx.fill();
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '18px Arial';
+  ctx.font = "bold 18px 'Orbitron'";
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(btnText, centerX, centerY);

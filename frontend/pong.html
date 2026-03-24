@@ -7,8 +7,9 @@
 	<link rel="icon" href="data:,">
     <link rel="stylesheet" href="./styles/output.css">
     <link rel="stylesheet" href="./styles/switch-pages.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   </head>
-  <body class="h-full m-0 p-0 min-h-screen font-[Arial] bg-(--bg-color)">
+  <body class="h-full m-0 p-0 min-h-screen font-['Orbitron',sans-serif] bg-(--bg-color)">
 
     <div class=
         "user-menu-button-container
@@ -255,7 +256,7 @@
       </button>
       <div class="game-options
           flex items-center justify-center mb-[24px] py-[5vh] px-[5vw]">
-        <div
+        <!-- <div
           data-option="quick-play"
           data-action="select-game-option"
           class="game-option-1 js-game-option
@@ -276,7 +277,32 @@
             font-[Arial] text-(--neon-blue) bg-(--bg-color-white-seven)
             transition-[background-color] hover:bg-[rgb(240,238,238)]">
               <p class="m-0">Tournament</p>
-        </div>
+        </div> -->
+        <div
+            data-option="quick-play"
+            data-action="select-game-option"
+            class="game-option-1 js-game-option
+              min-w-[250px] w-auto h-auto min-h-[200px] p-[40px] 
+              border-2 border-solid border-(--border-color) rounded-[20px] 
+              flex items-center justify-center cursor-pointer 
+              text-[clamp(20px,3vw,40px)] text-(--neon-blue) 
+              bg-(--bg-color-white-seven) transition-all mr-[30px] 
+              hover:bg-(--hover-06) hover:scale-105">
+                <p class="m-0 whitespace-nowrap">Quick Play</p>
+          </div>
+
+          <div
+            data-option="tournament"
+            data-action="select-game-option"
+            class="game-option-2 js-game-option
+              min-w-[250px] w-auto h-auto min-h-[200px] p-[40px] 
+              border-2 border-solid border-(--border-color) rounded-[20px] 
+              flex items-center justify-center cursor-pointer 
+              text-[clamp(20px,3vw,40px)] text-(--neon-blue) 
+              bg-(--bg-color-white-seven) transition-all 
+              hover:bg-(--hover-06) hover:scale-105">
+                <p class="m-0 whitespace-nowrap">Tournament</p>
+          </div>
       </div>
       <div class="start-button-container
           flex items-center justify-center">

@@ -29,8 +29,8 @@ build:
 	echo "$(BLUE)Installing blockchain dependencies$(NC) . . ."
 	npm --prefix blockchain install
 	echo "$(BLUE)Compiling and deploying blockchain (Hardhat / Avalanche Fuji)...$(NC)"
-	npm run chain:compile
-	npm run chain:deploy:fuji
+# 	npm run chain:compile
+# 	npm run chain:deploy:fuji
 	echo "$(BLUE)Building$(NC) . . ."
 	docker compose -f $(COMPOSE) build
 
