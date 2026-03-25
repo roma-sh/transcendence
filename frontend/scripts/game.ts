@@ -20,7 +20,6 @@ let animationId: number | null = null;
 let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
 let keyupHandler: ((e: KeyboardEvent) => void) | null = null;
 
-// Διόρθωση 1: Ορισμός τύπου και μετατροπή σε arrow function για να επιτρέπεται το re-assignment
 let cleanupGame: () => void = () => {
   window.onpopstate = null;
   if (animationId !== null) {
@@ -157,8 +156,6 @@ export function game(): void {
     return;
   }
 
-  // --- Τμήμα Event Listeners ---
-
   keydownHandler = (e: KeyboardEvent) => {
     keys[e.code] = true;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
@@ -169,19 +166,15 @@ export function game(): void {
   };
 
   const touchHandler = (e: TouchEvent) => {
-    // Σημαντικό: Επιτρέπουμε το default αν το παιχνίδι έχει τελειώσει 
-    // για να αφήσουμε τον browser να βοηθήσει με τα clicks
     if (!gameState.isWin && e.cancelable) {
         e.preventDefault();
     }
 
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
-    
-    // 2. ΕΛΕΓΧΟΣ ΓΙΑ ΚΟΥΜΠΙΑ (Μόνο αν το παιχνίδι έχει τελειώσει)
+
     if (gameState.isWin) {
         if (e.type === 'touchstart') {
-            // Δημιουργούμε ένα PointerEvent που "πιάνει" καλύτερα στα κινητά
             const pointerEvent = new PointerEvent('pointerdown', {
                 clientX: touch.clientX,
                 clientY: touch.clientY,
@@ -190,7 +183,6 @@ export function game(): void {
             });
             canvas.dispatchEvent(pointerEvent);
 
-            // Στέλνουμε και ένα κλασικό click για σιγουριά
             const clickEvent = new MouseEvent('click', {
                 clientX: touch.clientX,
                 clientY: touch.clientY,
@@ -201,7 +193,6 @@ export function game(): void {
         return; 
     }
 
-    // --- ΚΙΝΗΣΗ ΡΑΚΕΤΑΣ ---
     const scaleY = canvas.height / rect.height;
     const canvasY = (touch.clientY - rect.top) * scaleY;
 
@@ -218,51 +209,12 @@ export function game(): void {
     });
   };
 
-  // const touchHandler = (e: TouchEvent) => {
-  //   if (e.cancelable) e.preventDefault();
-
-  //   const rect = canvas.getBoundingClientRect();
-  //   const touch = e.touches[0];
-  //   const relativeY = touch.clientY - rect.top;
-  //   const scaleY = canvas.height / rect.height;
-  //   const canvasY = relativeY * scaleY;
-
-  //   if (gameState.isWin) {
-  //       // Αυτή η συνάρτηση προσομοιώνει ένα "κλικ" στο Canvas
-  //       // για να ενεργοποιηθούν οι listeners που έβαλε η bindButtonEvent
-  //       const clickEvent = new MouseEvent('click', {
-  //           clientX: touch.clientX,
-  //           clientY: touch.clientY,
-  //           bubbles: true
-  //       });
-  //       canvas.dispatchEvent(clickEvent);
-  //       return; // Σταματάμε εδώ, δεν χρειάζεται να κουνήσουμε ρακέτες
-  //   }
-
-  //   if (touch.clientX - rect.left < rect.width / 2) {
-  //     if (!isP1Bot) {
-  //       leftPaddle.y = canvasY - gameConfig.paddleHeight / 2;
-  //     }
-  //   } else {
-  //     if (!isP2Bot) {
-  //       rightPaddle.y = canvasY - gameConfig.paddleHeight / 2;
-  //     }
-  //   }
-
-  //   [leftPaddle, rightPaddle].forEach(p => {
-  //     if (p.y < 0) p.y = 0;
-  //     if (p.y > canvas.height - gameConfig.paddleHeight) 
-  //       p.y = canvas.height - gameConfig.paddleHeight;
-  //   });
-  // };
-
   window.addEventListener('keydown', keydownHandler);
   window.addEventListener('keyup', keyupHandler);
   
   canvas.addEventListener('touchstart', touchHandler, { passive: false });
   canvas.addEventListener('touchmove', touchHandler, { passive: false });
 
-  // Διόρθωση 2: Η ανάθεση δουλεύει τώρα επειδή η cleanupGame ορίστηκε με let
   const originalCleanup = cleanupGame;
   cleanupGame = () => {
     originalCleanup();
@@ -272,227 +224,6 @@ export function game(): void {
 
   gameLoop();
 }
-
-// let animationId: number | null = null;
-
-// let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
-// let keyupHandler: ((e: KeyboardEvent) => void) | null = null;
-
-// function cleanupGame() {
-//   window.onpopstate = null; // Απελευθέρωση του Back button
-//   if (animationId !== null) {
-//     cancelAnimationFrame(animationId);
-//     animationId = null;
-//   }
-//   if (keydownHandler) {
-//     window.removeEventListener('keydown', keydownHandler);
-//   }
-//   if (keyupHandler) {
-//     window.removeEventListener('keyup', keyupHandler);
-//   }
-// }
-
-// export function game(): void {
-
-//   cleanupGame();
-
-//   let settings = loadGameSettings();
-
-//   let p1Name = "Player 1";
-//   let p2Name = "Player 2";
-
-//   if (tSettings.currentMatch) {
-//     p1Name = tSettings.currentMatch.p1Name;
-//     p2Name = tSettings.currentMatch.p2Name;
-//   }
-
-//   const BOT_SKILL_LEVEL = 0.6;
-//   const isP1Bot = p1Name.startsWith("Bot ");
-//   const isP2Bot = p2Name.startsWith("Bot ");
-    
-//   const gameState: GameState = {
-//     isPaused: false,
-//     isWin: false,
-//     leftScore: 0,
-//     rightScore: 0,
-//     statsSent: false,
-//     winHandled: false,
-//     winnerSide: 'left'
-//   };
-//   const gameConfig: GameConfig = { 
-//     paddleWidth: 30,
-//     paddleHeight: 100,
-//     ballRadius: 10,
-//     maxScore: settings.scoreToWin,
-//     ballInitSpeed: settings.ballSpeed + 5
-//   };
-
-//   const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
-
-//   if (!canvas) {
-//     console.log('there is no such element as gameCanvas');
-//     return;
-//   }
-
-//   const ctx = canvas.getContext('2d');
-
-//   if (!ctx) {
-//     console.log('error in canvas.getContext');
-//     return;
-//   }
-
-//   const leftPaddle: Paddle = { 
-//     x: 10,
-//     y: canvas.height / 2 - gameConfig.paddleHeight / 2,
-//     dy: 0
-//   };
-//   const rightPaddle: Paddle = { 
-//     x: canvas.width - gameConfig.paddleWidth - 10,
-//     y: canvas.height / 2 - gameConfig.paddleHeight / 2,
-//     dy: 0
-//   };
-
-//   let ball: Ball = { 
-//     radius: gameConfig.ballRadius,
-//     x: canvas.width / 2,
-//     y: canvas.height / 2,
-//     dx: 0,
-//     dy: 0
-//   };
-//   resetBall(ball, canvas, gameConfig);
-
-//   const keys: KeyMap = {}; 
-
-//   gameState.isPaused = true;
-//   startCountdown(() => {
-//     gameState.isPaused = false;
-//   });
-
-//   function gameLoop() {
-//     if (!ctx) return;
-
-//     function drawBaseFrame() {
-//       if (!ctx) return;
-
-//       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-//       ctx.fillStyle = settings.bgColor;
-//       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-//       drawPlayerName(ctx, canvas, 'left', p1Name);
-//       drawPlayerName(ctx, canvas, 'right', p2Name);
-
-//       drawScore(ctx, canvas, 'left',  gameState.leftScore);
-//       drawScore(ctx, canvas, 'right', gameState.rightScore);
-
-//       drawPaddle(leftPaddle, ctx, gameConfig, settings);
-//       drawPaddle(rightPaddle, ctx, gameConfig, settings);
-//       drawBall(ctx, gameState.isPaused, ball, settings);
-//       drawDividingLine(ctx, canvas);
-//     }
-
-//     drawBaseFrame();
-
-//     if (gameState.isWin) {
-//       handleWinOnce(gameState, p1Name, p2Name, isP1Bot, isP2Bot, canvas, ctx);
-//       drawWinText(ctx, canvas, gameState.winnerSide);
-//       return;
-//     }
-
-//     if (!gameState.isPaused) {
-//       if (isP1Bot) {
-//         updateBotPaddle(leftPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
-//       }
-//       if (isP2Bot) {
-//         updateBotPaddle(rightPaddle, ball, canvas, gameConfig, BOT_SKILL_LEVEL);
-//       }
-//     }
-
-//     update(gameState, ball, leftPaddle, rightPaddle, canvas, gameConfig);
-
-//     animationId = requestAnimationFrame(gameLoop);
-//     return;
-//   }
-
-//   // --- Τμήμα Event Listeners ---
-
-//   // 1. Keyboard Handlers (Για Laptop)
-//   keydownHandler = (e: KeyboardEvent) => {
-//     keys[e.code] = true;
-//     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
-//   };
-//   keyupHandler = (e: KeyboardEvent) => { 
-//     keys[e.code] = false;
-//     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
-//   };
-
-//   // 2. Touch Handler (Για iPhone/Mobile)
-//   const touchHandler = (e: TouchEvent) => {
-//     // Εμποδίζει το scroll της σελίδας όσο παίζεις
-//     if (e.cancelable) e.preventDefault();
-
-//     const rect = canvas.getBoundingClientRect();
-//     const touch = e.touches[0]; // Παίρνουμε το πρώτο δάχτυλο
-    
-//     // Υπολογισμός θέσης δαχτύλου σχετικά με το Canvas
-//     const relativeY = touch.clientY - rect.top;
-    
-//     // Διόρθωση scale (αν το canvas φαίνεται μικρότερο/μεγαλύτερο λόγω CSS)
-//     const scaleY = canvas.height / rect.height;
-//     const canvasY = relativeY * scaleY;
-
-//     // Έλεγχος πλευράς: Αν αγγίζεις αριστερά κουνάς την P1, αν δεξιά την P2
-//     if (touch.clientX - rect.left < rect.width / 2) {
-//       if (!isP1Bot) {
-//         leftPaddle.y = canvasY - gameConfig.paddleHeight / 2;
-//       }
-//     } else {
-//       if (!isP2Bot) {
-//         rightPaddle.y = canvasY - gameConfig.paddleHeight / 2;
-//       }
-//     }
-
-//     // Περιορισμοί για να μη βγαίνουν οι ρακέτες έξω από το Canvas
-//     [leftPaddle, rightPaddle].forEach(p => {
-//       if (p.y < 0) p.y = 0;
-//       if (p.y > canvas.height - gameConfig.paddleHeight) 
-//         p.y = canvas.height - gameConfig.paddleHeight;
-//     });
-//   };
-
-//   // Προσθήκη όλων των Listeners
-//   window.addEventListener('keydown', keydownHandler);
-//   window.addEventListener('keyup', keyupHandler);
-  
-//   // Σημαντικό: { passive: false } για να επιτρέπεται το preventDefault()
-//   canvas.addEventListener('touchstart', touchHandler, { passive: false });
-//   canvas.addEventListener('touchmove', touchHandler, { passive: false });
-
-//   // Ενημέρωση της cleanupGame για να αφαιρεί και τα Touch Events
-//   const originalCleanup = cleanupGame;
-//   cleanupGame = () => {
-//     originalCleanup();
-//     canvas.removeEventListener('touchstart', touchHandler);
-//     canvas.removeEventListener('touchmove', touchHandler);
-//   };
-
-//   gameLoop();
-// }
-
-//   // keydownHandler = (e: KeyboardEvent) => {
-//   //   keys[e.code] = true;
-//   //   updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
-//   // };
-//   // keyupHandler = (e: KeyboardEvent) => { 
-//   //   keys[e.code] = false;
-//   //   updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
-//   // };
-
-//   // window.addEventListener('keydown', keydownHandler);
-//   // window.addEventListener('keyup', keyupHandler);
-
-//   // gameLoop();
-// // }
 
 async function handleWinOnce(
 	gameState: GameState,
@@ -515,7 +246,6 @@ async function handleWinOnce(
 
 	gameState.winnerSide = winnerSide;
 
-	// 1. Διαχείριση Τουρνουά
 	const isTournamentMatch = tSettings.currentMatch !== null;
 	if (isTournamentMatch) {
 		tSettings.winnersAliases.push(winnerName);
@@ -570,11 +300,8 @@ async function handleWinOnce(
 	const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
 	bindButtonEvent(canvas, nextBtnRect, () => {
 		if (!isTournamentMatch) {
-		// location.hash = '#game-page';
     cleanupGame();
     
-    // 2. Μερικές φορές το hash δεν αλλάζει αν είμαστε ήδη εκεί, 
-    // οπότε αναγκάζουμε το παιχνίδι να ξεκινήσει ξανά
     location.hash = '#game-page'; 
     game();
 		} else {

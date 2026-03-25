@@ -143,28 +143,24 @@ body {
     }
 }
 
-/* Πιάσε όλες τις οθόνες μέχρι 550px πλάτος (mobile & small previews) */
 @media screen and (max-width: 550px) {
 
-    /* Διόρθωση της Φόρμας: Ακύρωσε το σταθερό min-width */
     .settings-form {
         width: 100% !important;
         max-width: 100% !important;
-        min-width: 0 !important; /* Αυτό είναι το κλειδί! */
+        min-width: 0 !important; 
         padding: 10px !important;
         box-sizing: border-box !important;
-        display: block !important; /* Άλλαξε το grid σε block για να μην στριμώχνονται */
+        display: block !important;
     }
 
-    /* Διόρθωση των Σειρών (Labels & Sliders) */
     .settings-value-row {
-        flex-direction: column !important; /* Τα labels πάνω από τα sliders */
+        flex-direction: column !important; 
         align-items: flex-start !important;
         gap: 5px !important;
         margin-bottom: 15px !important;
     }
 
-    /* Αναγκαστικά 100% πλάτος σε όλα τα inputs */
     .settings-form input[type="range"],
     .settings-form input[type="text"],
     .settings-form input[type="number"] {
@@ -174,7 +170,6 @@ body {
         margin-left: 0 !important;
     }
 
-    /* Ευθυγράμμιση των κειμένων των τιμών */
     .settings-value,
     .settings-color-text {
         width: 100% !important;
@@ -183,25 +178,22 @@ body {
         color: #9ca3af !important;
     }
     
-    /* Αν έχεις helper texts κάτω από τα πεδία */
     .settings-helper {
         margin-top: -5px !important;
         margin-bottom: 10px !important;
     }
 }
 
-/* Media query ειδικά για τις κάρτες επιλογής mode */
 @media (max-width: 640px) {
-    /* Αντικατάστησε το .cards-container με το δικό σου class */
     .cards-container, .mode-selection { 
-        flex-direction: column !important; /* Στοίχιση κάθετα */
+        flex-direction: column !important; 
         gap: 20px !important;
         padding: 10px !important;
         align-items: center !important;
     }
 
     .card {
-        width: 90% !important; /* Η κάρτα να πιάνει σχεδόν όλο το πλάτος */
+        width: 90% !important; 
         max-width: 300px;
         margin: 0 auto !important;
     }
