@@ -241,7 +241,7 @@
       </div>
     </section>
 
-    <section id="choose-mode-page"
+    <!-- <section id="choose-mode-page"
       class="min-h-screen box-border flex flex-col
         justify-center items-center relative">
       <button
@@ -256,28 +256,6 @@
       </button>
       <div class="game-options
           flex items-center justify-center mb-[24px] py-[5vh] px-[5vw]">
-        <!-- <div
-          data-option="quick-play"
-          data-action="select-game-option"
-          class="game-option-1 js-game-option
-            w-[min(300px,40vw)] h-[min(300px,40vh)] border-2 border-solid
-            border-(--border-color) rounded-[20px] flex items-center
-            justify-center cursor-pointer text-[clamp(24px,4vw,50px)]
-            font-[Arial] text-(--neon-blue) bg-(--bg-color-white-seven)
-            transition-[background-color] mr-[30px] hover:bg-[rgb(240,238,238)]">
-              <p class="m-0">Quick Play</p>
-        </div>
-        <div
-          data-option="tournament"
-          data-action="select-game-option"
-          class="game-option-2 js-game-option
-            w-[min(300px,40vw)] h-[min(300px,40vh)] border-2 border-solid
-            border-(--border-color) rounded-[20px] flex items-center
-            justify-center cursor-pointer text-[clamp(24px,4vw,50px)]
-            font-[Arial] text-(--neon-blue) bg-(--bg-color-white-seven)
-            transition-[background-color] hover:bg-[rgb(240,238,238)]">
-              <p class="m-0">Tournament</p>
-        </div> -->
         <div
             data-option="quick-play"
             data-action="select-game-option"
@@ -316,6 +294,51 @@
               START
         </button>
       </div>
+    </section> -->
+
+    <section id="choose-mode-page"
+        class="min-h-screen box-border flex flex-col justify-center items-center relative p-[20px]">
+        
+        <button data-action="go-back-choose-mode"
+            class="back_btn js-choose-mode-back-btn absolute top-[29.5px] left-[16px] inline-flex items-center gap-[6px] text-(--main-color) bg-transparent border-0 text-[16px] font-semibold py-[8px] px-[12px] rounded-[10px] cursor-pointer transition-[background] hover:bg-(--hover-06)">
+            ← Back
+        </button>
+
+        <div class="game-options flex flex-col md:flex-row items-center justify-center gap-[20px] mb-[24px] w-full max-w-[800px]">
+            
+            <div data-option="quick-play" data-action="select-game-option"
+                class="game-option-1 js-game-option 
+                w-full max-w-[300px] min-h-[150px] md:min-h-[200px] p-[20px] md:p-[40px] 
+                border-2 border-solid border-(--border-color) rounded-[20px] 
+                flex items-center justify-center cursor-pointer 
+                text-[clamp(18px,4vw,32px)] text-(--neon-blue) 
+                bg-(--bg-color-white-seven) transition-all 
+                hover:bg-(--hover-06) hover:scale-105">
+                <p class="m-0 text-center">Quick Play</p>
+            </div>
+
+            <div data-option="tournament" data-action="select-game-option"
+                class="game-option-2 js-game-option 
+                w-full max-w-[300px] min-h-[150px] md:min-h-[200px] p-[20px] md:p-[40px] 
+                border-2 border-solid border-(--border-color) rounded-[20px] 
+                flex items-center justify-center cursor-pointer 
+                text-[clamp(18px,4vw,32px)] text-(--neon-blue) 
+                bg-(--bg-color-white-seven) transition-all 
+                hover:bg-(--hover-06) hover:scale-105">
+                <p class="m-0 text-center">Tournament</p>
+            </div>
+        </div>
+
+        <div class="start-button-container w-full flex justify-center px-[20px]">
+            <button data-action="start-game-option"
+                class="start-button js-start-button neon-button
+                w-full max-w-[300px] md:w-auto md:px-[100px] py-[15px] md:py-[20px] 
+                bg-(--main-color) border-0 rounded-[45px] text-(--bg-color-white-nine)
+                cursor-pointer text-[24px] md:text-[30px] font-bold font-[Arial]
+                transition-opacity hover:opacity-[0.7]">
+                START
+            </button>
+        </div>
     </section>
 
     <section id="game-ready-page"
@@ -1096,11 +1119,12 @@
         class="card-settings-page
           bg-white border border-solid border-(--border-soft-gray)
           rounded-[16px] px-[16px] py-[16px] mt-[16px]
-          flex justify-center">
+          flex justify-center
+          w-full max-w-[550px] mx-auto box-border overflow-hidden">
         <form
           onsubmit="return false;"
           class="settings-form js-settings-form
-          grid gap-[12px] mt-[12px] min-w-[500px]">
+          grid gap-[12px] mt-[12px] w-full max-w-[500px]">
           <!-- Ball speed -->
           <div class="field">
             <label

@@ -24,11 +24,13 @@
 #wallet-info-page:target,
 #profile-page:target,
 #settings-page:target,
-#winner-page:target {
+#winner-page:target,
+#game-ready-page:target 
+{
   display: flex;
 }
-#game-ready-page:target
-{
+
+/* {
     display: flex; 
-    position: relative;
-}
+    /* position: relative; */
+/* }  
