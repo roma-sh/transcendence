@@ -1,4 +1,5 @@
 import { apiHeaders } from "./api-config.js";
+import { escapeHTML } from "./game.js";
 
 export async function initUserProfilePage(): Promise<void> {
   const profileSection = document.querySelector('#user-profile') as HTMLElement;
@@ -30,10 +31,14 @@ export async function initUserProfilePage(): Promise<void> {
     // Update HTML with username + green online dot
     profileSection.innerHTML = `
       <div class="profile-container flex items-center gap-2">
-        <h2>Welcome here ${userName}</h2>
+        <h2>Welcome here <span class="username"></span></h2>
         <span class="w-3 h-3 rounded-full bg-green-500" title="Online"></span>
       </div>
     `;
+
+    const span = profileSection.querySelector('.username');
+    if (span) span.textContent = escapeHTML(userName);
+
   } catch (err) {
     profileSection.innerHTML = `
       <div class="profile-container">

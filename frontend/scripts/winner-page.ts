@@ -1,5 +1,6 @@
 import { TournamentSettings } from "./types.js";
 import { contractService } from "./contract-service.js";
+import { escapeHTML } from "./game.js";
 
 export function handleGoToWelcomePage() {
     location.hash = '#welcome-page';
@@ -49,7 +50,8 @@ export async function handleLoadBlockchainWinners(): Promise<void> {
         `;
 
         tournaments.forEach((t) => {
-            const winnerName = extractWinnerName(t.name);
+            const winnerName = escapeHTML(extractWinnerName(t.name));
+            const tournamentID = escapeHTML(String(t.id));
             const status = t.finalized ? "Finalized" : "Not Finalized";
             const statusClass = t.finalized 
                 ? "text-green-600 font-semibold" 
@@ -57,7 +59,7 @@ export async function handleLoadBlockchainWinners(): Promise<void> {
             
             tableHTML += `
                 <tr class="bg-white hover:bg-gray-50">
-                    <td class="border border-(--border-soft-gray) px-[16px] py-[12px] text-[14px]">${t.id}</td>
+                    <td class="border border-(--border-soft-gray) px-[16px] py-[12px] text-[14px]">${tournamentID}</td>
                     <td class="border border-(--border-soft-gray) px-[16px] py-[12px] text-[14px] font-medium">${winnerName}</td>
                     <td class="border border-(--border-soft-gray) px-[16px] py-[12px] text-[14px] ${statusClass}">${status}</td>
                 </tr>
@@ -82,11 +84,29 @@ export function initWinnerAnnouncementPage(tSettings: TournamentSettings): void 
 
     const { firstPlaceAlias, secondPlaceAlias } = tSettings;
 
-    if (firstPlaceEl) {
+    // XSS_VULNERABILITY
+/*     if (firstPlaceEl) {
         firstPlaceEl.innerHTML = `🥇 1st Place: <span class="uppercase">${firstPlaceAlias || '---'}</span>`;
-    }
-    
-    if (secondPlaceEl) {
+    } */   
+/*     if (secondPlaceEl) {
         secondPlaceEl.innerHTML = `🥈 2nd Place: <span class="uppercase">${secondPlaceAlias || '---'}</span>`;
+    } */
+
+        if (firstPlaceEl) {
+        firstPlaceEl.innerHTML = `🥇 1st Place: <span class="uppercase"></span>`;
+        
+        const span = firstPlaceEl.querySelector("span");
+        if(span) {
+            span.textContent = firstPlaceAlias || "---";
+        } 
+    }
+
+        if (secondPlaceEl) {
+        secondPlaceEl.innerHTML = `🥈 2nd Place: <span class="uppercase"></span>`;
+        
+        const span = secondPlaceEl.querySelector('span');
+        if (span) {
+            span.textContent = secondPlaceAlias || '---';
+        }
     }
 }

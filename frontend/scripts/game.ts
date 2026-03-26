@@ -35,6 +35,20 @@ let cleanupGame: () => void = () => {
   }
 };
 
+export function escapeHTML(str: string): string {
+  if (!str) return '';
+  return str.replace(/[&<>"']/g, (match) => {
+    const escapes: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
+    return escapes[match];
+  });
+}
+
 export function game(): void {
 
   cleanupGame();

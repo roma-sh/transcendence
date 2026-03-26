@@ -6,6 +6,7 @@ import {
   updatePassMsgDot
 } from "./profile-page.js";
 import { apiHeaders } from "./api-config.js";
+import { escapeHTML } from "./game.js";
 
 export function handleGoBackSignUp() {
   location.hash = '#welcome-page';
@@ -71,7 +72,7 @@ export async function handleSubmitSignUp(event?: MouseEvent): Promise<void> {
       const errText = String(result?.error ?? "Sign up failed");
       let msg = errText.split(".")[0];
       updatePassMsgDot('red', signupTextDotEl);
-      showMessage(signupStatusText, msg);
+      showMessage(signupStatusText, escapeHTML(msg));
       toggleOpacity(signupStatus);
     }
   } catch (err) {
@@ -140,7 +141,7 @@ export async function handleSubmitLogIn(event?: MouseEvent): Promise<void> {
     } else {
       let msg = result.message || 'Error while logging in!';
       updatePassMsgDot('red', loginTextDotEl);
-      showMessage(loginStatusText, msg);
+      showMessage(loginStatusText, escapeHTML(msg));
       toggleOpacity(loginStatus);
     }
   } catch (error) {
