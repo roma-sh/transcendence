@@ -5,7 +5,6 @@ import {
 import {
   updatePaddleDirection, update, resetBall
 } from "./update-game-elems.js";
-import { bindButtonEvent } from "./interact-game-elems.js";
 import {
   drawPaddle, drawBall, drawDividingLine,
   drawWinText, drawButton, drawScore, drawPlayerName
@@ -14,6 +13,8 @@ import { updateBotPaddle } from "./bot-ai.js";
 import { tSettings } from "./pong.js";
 import { loadGameSettings } from "./settings-page.js";
 import { apiHeaders } from "./api-config.js";
+import { ButtonRect } from "./types.js";
+
 
 let animationId: number | null = null;
 
@@ -61,6 +62,7 @@ export function game(): void {
     winHandled: false,
     winnerSide: 'left'
   };
+
   const gameConfig: GameConfig = { 
     paddleWidth: 30,
     paddleHeight: 100,
@@ -86,12 +88,15 @@ export function game(): void {
   const leftPaddle: Paddle = { 
     x: 10,
     y: canvas.height / 2 - gameConfig.paddleHeight / 2,
-    dy: 0
+    dy: 0,
+    freezeTimer: 0
   };
   const rightPaddle: Paddle = { 
     x: canvas.width - gameConfig.paddleWidth - 10,
     y: canvas.height / 2 - gameConfig.paddleHeight / 2,
-    dy: 0
+    dy: 0,
+    freezeTimer: 0
+
   };
 
   let ball: Ball = { 
@@ -333,4 +338,31 @@ function startCountdown(startGame: () => void) {
       startGame();
     }
   }, 1000);
+}
+
+function bindButtonEvent(
+  canvas: HTMLCanvasElement,
+  btnRect : ButtonRect,
+  callback: () => void
+) {
+  const onClick = (e: MouseEvent) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;  
+    const scaleY = canvas.height / rect.height;
+
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+
+    if (
+      mx >= btnRect.x &&
+      mx <= btnRect.x + btnRect.width &&
+      my >= btnRect.y &&
+      my <= btnRect.y + btnRect.height
+    ) {
+      canvas.removeEventListener('click', onClick);
+      callback();
+    }
+  };
+
+  canvas.addEventListener('mousedown', onClick);
 }

@@ -1,10 +1,5 @@
-import {
-	clearUserMenuReturnHash,
-	getUserMenuReturnHash
-} from "./user-menu.js";
-import {
-	toggleOpacity
-} from "./settings-page.js";
+import { clearUserMenuReturnHash, getUserMenuReturnHash } from "./user-menu.js";
+import { toggleOpacity } from "./settings-page.js";
 import { apiHeaders } from "./api-config.js";
 import { handleLogOut } from "./user-menu.js";
 
@@ -420,7 +415,6 @@ export async function handleRemoveAvatar() {
 	}
 }
 
-// Ανοίγει και κλείνει το Modal
 export function handleToggleDeleteModal() {
     const deleteModal = document.querySelector('.js-delete-modal') as HTMLElement | null;
     if (deleteModal) {
@@ -438,13 +432,11 @@ export async function handleConfirmDeleteAccount(): Promise<boolean> {
 
     try {
         const res = await fetch('/api/account/delete', {
-            // ΠΡΟΣΟΧΗ: Πρέπει να είναι DELETE (όπως στο routes σου)
             method: 'DELETE', 
             headers: apiHeaders({ 
                 'Content-Type': 'application/json' 
             }),
             credentials: 'include',
-            // ΠΡΟΣΟΧΗ: Πρέπει να έχει body (έστω άδειο {}) για να μην βγάλει 400 ο Fastify
             body: JSON.stringify({}) 
         });
 
@@ -459,10 +451,8 @@ export async function handleConfirmDeleteAccount(): Promise<boolean> {
             return false;
         }
 
-        // 1. Κλείνουμε το modal
         handleToggleDeleteModal();
         
-        // 2. Καλούμε το logout για να καθαρίσει τα πάντα και να μας πάει στο Welcome
         await handleLogOut();
         
         return true;

@@ -19,7 +19,8 @@ export interface GameConfig {
 export interface Paddle {
   x: number,
   y: number,
-  dy: number
+  dy: number,
+  freezeTimer : number
 }
 
 export interface KeyMap {

@@ -1,7 +1,4 @@
-import {
-  updateUIForAuthState,
-  updateUIforUserMenu,
-} from "./user-menu.js";
+import { updateUIForAuthState, updateUIforUserMenu } from "./user-menu.js";
 import { apiHeaders } from "./api-config.js";
 
 export async function setInitHash() {
