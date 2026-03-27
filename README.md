@@ -37,6 +37,7 @@ Make sure you have:
 - Docker
 - Docker Compose
 - Make
+- MetaMask, !HELP
 - stable internet :D
 
 ## HOW TO USE
@@ -271,4 +272,5 @@ README structuring
 _Challenges & Solutions_:
 
 Complex Docker setup → One time setup solution;
+choosing not to deploy the volume at goinfre, so the project can run on any device (also not neccesary in new subject).
 SQL && XSS → Had to go down the rabbit hole to understand it, but after it clicks you just fix. . . 
