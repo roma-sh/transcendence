@@ -176,10 +176,13 @@ export function game(): void {
   }
 
   keydownHandler = (e: KeyboardEvent) => {
+    if (isP1Bot && (e.code === 'KeyW' || e.code === 'KeyS')) return;
+    if (isP2Bot && (e.code === 'ArrowUp' || e.code === 'ArrowDown')) return;
+
     keys[e.code] = true;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
   };
-  keyupHandler = (e: KeyboardEvent) => { 
+  keyupHandler = (e: KeyboardEvent) => {
     keys[e.code] = false;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
   };
@@ -290,6 +293,7 @@ async function handleWinOnce(
 			console.log("Win recorded for logged-in user.");
 			}
 		}
+
 		} catch (error) {
 		}
 		gameState.statsSent = true; 
