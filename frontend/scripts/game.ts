@@ -5,7 +5,6 @@ import {
 import {
   updatePaddleDirection, update, resetBall
 } from "./update-game-elems.js";
-import { bindButtonEvent } from "./interact-game-elems.js";
 import {
   drawPaddle, drawBall, drawDividingLine,
   drawWinText, drawButton, drawScore, drawPlayerName
@@ -14,14 +13,16 @@ import { updateBotPaddle } from "./bot-ai.js";
 import { tSettings } from "./pong.js";
 import { loadGameSettings } from "./settings-page.js";
 import { apiHeaders } from "./api-config.js";
+import { ButtonRect } from "./types.js";
+
 
 let animationId: number | null = null;
 
 let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
 let keyupHandler: ((e: KeyboardEvent) => void) | null = null;
 
-function cleanupGame() {
-  window.onpopstate = null; // Απελευθέρωση του Back button
+let cleanupGame: () => void = () => {
+  window.onpopstate = null;
   if (animationId !== null) {
     cancelAnimationFrame(animationId);
     animationId = null;
@@ -32,6 +33,20 @@ function cleanupGame() {
   if (keyupHandler) {
     window.removeEventListener('keyup', keyupHandler);
   }
+};
+
+export function escapeHTML(str: string): string {
+  if (!str) return '';
+  return str.replace(/[&<>"']/g, (match) => {
+    const escapes: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
+    return escapes[match];
+  });
 }
 
 export function game(): void {
@@ -61,6 +76,7 @@ export function game(): void {
     winHandled: false,
     winnerSide: 'left'
   };
+
   const gameConfig: GameConfig = { 
     paddleWidth: 30,
     paddleHeight: 100,
@@ -86,12 +102,15 @@ export function game(): void {
   const leftPaddle: Paddle = { 
     x: 10,
     y: canvas.height / 2 - gameConfig.paddleHeight / 2,
-    dy: 0
+    dy: 0,
+    freezeTimer: 0
   };
   const rightPaddle: Paddle = { 
     x: canvas.width - gameConfig.paddleWidth - 10,
     y: canvas.height / 2 - gameConfig.paddleHeight / 2,
-    dy: 0
+    dy: 0,
+    freezeTimer: 0
+
   };
 
   let ball: Ball = { 
@@ -157,16 +176,73 @@ export function game(): void {
   }
 
   keydownHandler = (e: KeyboardEvent) => {
+    if (isP1Bot && (e.code === 'KeyW' || e.code === 'KeyS')) return;
+    if (isP2Bot && (e.code === 'ArrowUp' || e.code === 'ArrowDown')) return;
+
     keys[e.code] = true;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
   };
-  keyupHandler = (e: KeyboardEvent) => { 
+  keyupHandler = (e: KeyboardEvent) => {
     keys[e.code] = false;
     updatePaddleDirection(keys, leftPaddle, rightPaddle, settings);
   };
 
+  const touchHandler = (e: TouchEvent) => {
+    if (!gameState.isWin && e.cancelable) {
+        e.preventDefault();
+    }
+
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+
+    if (gameState.isWin) {
+        if (e.type === 'touchstart') {
+            const pointerEvent = new PointerEvent('pointerdown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+                bubbles: true,
+                pointerType: 'touch'
+            });
+            canvas.dispatchEvent(pointerEvent);
+
+            const clickEvent = new MouseEvent('click', {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+                bubbles: true
+            });
+            canvas.dispatchEvent(clickEvent);
+        }
+        return; 
+    }
+
+    const scaleY = canvas.height / rect.height;
+    const canvasY = (touch.clientY - rect.top) * scaleY;
+
+    if (touch.clientX - rect.left < rect.width / 2) {
+      if (!isP1Bot) leftPaddle.y = canvasY - gameConfig.paddleHeight / 2;
+    } else {
+      if (!isP2Bot) rightPaddle.y = canvasY - gameConfig.paddleHeight / 2;
+    }
+
+    [leftPaddle, rightPaddle].forEach(p => {
+      if (p.y < 0) p.y = 0;
+      if (p.y > canvas.height - gameConfig.paddleHeight) 
+        p.y = canvas.height - gameConfig.paddleHeight;
+    });
+  };
+
   window.addEventListener('keydown', keydownHandler);
   window.addEventListener('keyup', keyupHandler);
+  
+  canvas.addEventListener('touchstart', touchHandler, { passive: false });
+  canvas.addEventListener('touchmove', touchHandler, { passive: false });
+
+  const originalCleanup = cleanupGame;
+  cleanupGame = () => {
+    originalCleanup();
+    canvas.removeEventListener('touchstart', touchHandler);
+    canvas.removeEventListener('touchmove', touchHandler);
+  };
 
   gameLoop();
 }
@@ -192,7 +268,6 @@ async function handleWinOnce(
 
 	gameState.winnerSide = winnerSide;
 
-	// 1. Διαχείριση Τουρνουά
 	const isTournamentMatch = tSettings.currentMatch !== null;
 	if (isTournamentMatch) {
 		tSettings.winnersAliases.push(winnerName);
@@ -218,6 +293,7 @@ async function handleWinOnce(
 			console.log("Win recorded for logged-in user.");
 			}
 		}
+
 		} catch (error) {
 		}
 		gameState.statsSent = true; 
@@ -247,11 +323,8 @@ async function handleWinOnce(
 	const nextBtnRect = drawButton(ctx, canvas, gameState.winnerSide, 'NEXT GAME', 180);
 	bindButtonEvent(canvas, nextBtnRect, () => {
 		if (!isTournamentMatch) {
-		// location.hash = '#game-page';
     cleanupGame();
     
-    // 2. Μερικές φορές το hash δεν αλλάζει αν είμαστε ήδη εκεί, 
-    // οπότε αναγκάζουμε το παιχνίδι να ξεκινήσει ξανά
     location.hash = '#game-page'; 
     game();
 		} else {
@@ -283,4 +356,31 @@ function startCountdown(startGame: () => void) {
       startGame();
     }
   }, 1000);
+}
+
+function bindButtonEvent(
+  canvas: HTMLCanvasElement,
+  btnRect : ButtonRect,
+  callback: () => void
+) {
+  const onClick = (e: MouseEvent) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;  
+    const scaleY = canvas.height / rect.height;
+
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+
+    if (
+      mx >= btnRect.x &&
+      mx <= btnRect.x + btnRect.width &&
+      my >= btnRect.y &&
+      my <= btnRect.y + btnRect.height
+    ) {
+      canvas.removeEventListener('click', onClick);
+      callback();
+    }
+  };
+
+  canvas.addEventListener('mousedown', onClick);
 }

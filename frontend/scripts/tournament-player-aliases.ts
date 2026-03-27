@@ -2,10 +2,13 @@ import { TournamentSettings } from "./types.js";
 import { tSettings } from "./pong.js";
 import { toggleOpacity, showMessage } from "./settings-page.js";
 import { updatePassMsgDot } from "./profile-page.js";
+import { escapeHTML } from "./game.js";
 
 export function handleGoBackPlayerAliases() {
   location.hash = '#tournament-page';
 }
+
+
 
 export function addAliasesSection() {
 
@@ -58,6 +61,8 @@ function generateInputsForAliases(tSettings: TournamentSettings) {
       }
     }
 
+    const safeValue = escapeHTML(inputValue);
+
     html += `
       <div>
         <div class="player-photo"></div>
@@ -65,7 +70,7 @@ function generateInputsForAliases(tSettings: TournamentSettings) {
           name="playerAlias" 
           class="${inputClass}"
           placeholder="Player ${i + 1}"
-          value="${inputValue}" 
+          value="${safeValue}" 
           ${disabledAttribute}>
       </div>
     `;

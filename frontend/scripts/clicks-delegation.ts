@@ -117,8 +117,6 @@ export function setupGlobalClicksDelegation() {
 	document.addEventListener('click', (e) => {
 		const target = e.target as HTMLElement | null;
 		if (!target) return;
-
-		// Find nearest element that has data-action attribute
 		const actionEl = target.closest("[data-action]") as HTMLElement | null;
 		const menu = document.querySelector('.js-user-dropdown') as HTMLElement | null;
 
@@ -131,14 +129,13 @@ export function setupGlobalClicksDelegation() {
 
 			handler(e);
 
-      if (menu && actionEl.closest('.js-user-dropdown')) {
-        menu.style.display = 'none';
-      }
+		if (menu && actionEl.closest('.js-user-dropdown')) {
+			menu.style.display = 'none';
+		}
 
 			return;
 		}
 
-		// Close dropdown if clicked outside
 		const btn = document.querySelector('.js-user-menu-button') as HTMLElement | null;
 		if (menu && btn && !btn.contains(target) && !menu.contains(target)) {
 				menu.style.display = 'none';

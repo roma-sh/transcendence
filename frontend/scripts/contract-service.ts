@@ -15,6 +15,7 @@ interface OnChainTournament {
   name: string;
   winner: string;
   finalized: boolean;
+  winnerScore: number | null;
 }
 
 class ContractService {
@@ -109,7 +110,11 @@ class ContractService {
       const txAdd = await contract.addParticipants(newId, info.address);
       await txAdd.wait();
 
-      // 4) Declare the connected wallet as winner
+      // 4) Record a minimal tournament score for the winner
+      const txScore = await contract.recordScore(newId, info.address, 1);
+      await txScore.wait();
+
+      // 5) Declare the connected wallet as winner
       const txWin = await contract.declareWinner(newId, info.address);
       await txWin.wait();
 
@@ -146,8 +151,15 @@ class ContractService {
         const name: string = t.name;
         const winner: string = t.winner;
         const finalized: boolean = t.finalized;
+        let winnerScore: number | null = null;
 
-        result.push({ id, name, winner, finalized });
+        if (finalized && winner && winner !== ethers.ZeroAddress) {
+          const scoreRaw = await contract.getScore(id, winner);
+          const scoreNum = Number(scoreRaw);
+          winnerScore = Number.isFinite(scoreNum) ? scoreNum : null;
+        }
+
+        result.push({ id, name, winner, finalized, winnerScore });
       }
 
       return result;

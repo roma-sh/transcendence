@@ -25,7 +25,12 @@ user_db.run(`
     is_oauth INTEGER DEFAULT 0,
     profile_picture TEXT DEFAULT NULL,
     two_factor_secret TEXT DEFAULT NULL,
-    two_factor_enabled INTEGER DEFAULT 0
+    two_factor_enabled INTEGER DEFAULT 0,
+
+    CHECK (
+      (is_oauth = 0 AND password IS NOT NULL) OR
+      (is_oauth = 1)
+    )
   )
 `);
 

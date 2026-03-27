@@ -1,8 +1,5 @@
 import { GameSettings } from "./types.js";
-import {
-	clearUserMenuReturnHash,
-	getUserMenuReturnHash
-} from "./user-menu.js";
+import { clearUserMenuReturnHash, getUserMenuReturnHash } from "./user-menu.js";
 
 const DEFAULT_SETTINGS: GameSettings = {
 	ballSpeed: 4,
@@ -101,7 +98,6 @@ export function initSettingsPage() {
 
 	const d = settingsDOM;
 
-	// listeners
 	d.ballSpeedInput!.addEventListener("input", () => {
 		currentSettings.ballSpeed = Number(d.ballSpeedInput!.value);
 		render(currentSettings);
@@ -148,7 +144,6 @@ function render(settings: GameSettings) {
 
 	const d = settingsDOM;
 
-	// main form values
 	d.ballSpeedInput!.value = settings.ballSpeed.toString();
 	d.paddleSpeedInput!.value = settings.paddleSpeed.toString();
 	d.ballColorInput!.value = settings.ballColor;

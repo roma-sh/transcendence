@@ -38,11 +38,18 @@ async function setup2FAController(request, reply) {
     await saveSecret(userId, secret);
 
     const qrCode = await generateQRCode(secret);
+    const otpauthUrl = secret.otpauth_url;
 
     return reply.send({
       secret: secret.base32,
       qrCode: qrCode,
-      manualEntryKey: secret.base32
+      // fix for broken API
+      qrcode: qrCode,
+      qr_code: qrCode,
+      otpauthUrl: otpauthUrl,
+      otpauth_url: otpauthUrl,
+      manualEntryKey: secret.base32,
+      manual_entry_key: secret.base32
     });
   } catch (err) {
     request.log.error(err);

@@ -6,21 +6,22 @@ export function updatePaddleDirection (
   rightPaddle : Paddle,
   settings : GameSettings) {
 
-  if (keys['KeyW']) {
-    leftPaddle.dy = -settings.paddleSpeed;
-  } else if (keys['KeyS']) {
-    leftPaddle.dy = settings.paddleSpeed;
-  } else {
-    leftPaddle.dy = 0;
-  }
+    if (keys['KeyW']) {
+      leftPaddle.dy = -settings.paddleSpeed;
+    } else if (keys['KeyS']) {
+      leftPaddle.dy = settings.paddleSpeed;
+    } else {
+      leftPaddle.dy = 0;
+    }
 
-  if (keys['ArrowUp']) {
-    rightPaddle.dy = -settings.paddleSpeed;
-  } else if (keys['ArrowDown']) {
-    rightPaddle.dy = settings.paddleSpeed;
-  } else {
-    rightPaddle.dy = 0;
-  }
+
+    if (keys['ArrowUp']) {
+      rightPaddle.dy = -settings.paddleSpeed;
+    } else if (keys['ArrowDown']) {
+      rightPaddle.dy = settings.paddleSpeed;
+    } else {
+      rightPaddle.dy = 0;
+    }
 }
 
 export function update(

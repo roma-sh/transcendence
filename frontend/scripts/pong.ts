@@ -1,7 +1,4 @@
-import {
-  setInitHash,
-  initWelcomePage
-} from './welcome-page.js';
+import { setInitHash, initWelcomePage } from './welcome-page.js';
 import { addAliasesSection } from './tournament-player-aliases.js';
 import { TournamentSettings } from './types.js';
 import { initUserProfilePage } from './user-profile.js';

@@ -35,7 +35,12 @@
 	}
 }
 
+* {
+    font-family: 'Orbitron', sans-serif !important;
+}
+
 body {
+    font-family: 'Orbitron', sans-serif;
 	background-color: var(--bg-color);
 	color: var(--text-on-dark);
 
@@ -118,6 +123,9 @@ body {
     height: auto !important; 
     aspect-ratio: 800 / 500;
     touch-action: none;      
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 @media (max-width: 640px) {
@@ -132,5 +140,61 @@ body {
     
     .signup-login-btns {
         width: calc(100% - 20px); 
+    }
+}
+
+@media screen and (max-width: 550px) {
+
+    .settings-form {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important; 
+        padding: 10px !important;
+        box-sizing: border-box !important;
+        display: block !important;
+    }
+
+    .settings-value-row {
+        flex-direction: column !important; 
+        align-items: flex-start !important;
+        gap: 5px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .settings-form input[type="range"],
+    .settings-form input[type="text"],
+    .settings-form input[type="number"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        margin-left: 0 !important;
+    }
+
+    .settings-value,
+    .settings-color-text {
+        width: 100% !important;
+        text-align: left !important;
+        font-size: 11px !important;
+        color: #9ca3af !important;
+    }
+    
+    .settings-helper {
+        margin-top: -5px !important;
+        margin-bottom: 10px !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .cards-container, .mode-selection { 
+        flex-direction: column !important; 
+        gap: 20px !important;
+        padding: 10px !important;
+        align-items: center !important;
+    }
+
+    .card {
+        width: 90% !important; 
+        max-width: 300px;
+        margin: 0 auto !important;
     }
 }

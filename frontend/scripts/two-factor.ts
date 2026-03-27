@@ -1,5 +1,6 @@
 import { toggleOpacity, showMessage } from "./settings-page.js";
 import { updatePassMsgDot } from "./profile-page.js";
+import { apiHeaders } from "./api-config.js";
 
 let pending2FAUserId: number | null = null;
 
@@ -32,7 +33,7 @@ async function load2FAStatus(): Promise<void> {
     const response = await fetch('/api/2fa/status', {
       method: 'GET',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' }
+      headers: apiHeaders({ 'Content-Type': 'application/json' })
     });
 
     if (!response.ok) {
@@ -81,17 +82,33 @@ export async function handleSetup2FA(): Promise<void> {
     const response = await fetch('/api/2fa/setup', {
       method: 'GET',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' }
+      headers: apiHeaders({ 'Content-Type': 'application/json' })
     });
 
     if (!response.ok) {
       show2FAMessage('Failed to setup 2FA', 'red');
       return;
     }
-
+    // fix for broken API
     const data = await response.json();
-    qrCodeImg.src = data.qrCode;
-    secretEl.textContent = data.manualEntryKey;
+    const qrCodeValue = data?.qrCode || data?.qrcode || data?.qr_code || '';
+    const manualKeyValue = data?.manualEntryKey || data?.manual_entry_key || data?.secret || '';
+
+    if (typeof qrCodeValue !== 'string' || qrCodeValue.trim() === '') {
+      show2FAMessage('2FA setup failed: QR code was not returned', 'red');
+      return;
+    }
+
+    if (typeof manualKeyValue !== 'string' || manualKeyValue.trim() === '') {
+      show2FAMessage('2FA setup failed: secret key was not returned', 'red');
+      return;
+    }
+
+    qrCodeImg.onerror = () => {
+      show2FAMessage('Failed to render QR code. Use the manual key instead.', 'red');
+    };
+    qrCodeImg.src = qrCodeValue;
+    secretEl.textContent = manualKeyValue;
 
     if (setupSection) setupSection.classList.remove('hidden');
     if (enabledSection) enabledSection.classList.add('hidden');
@@ -120,7 +137,7 @@ export async function handleVerifyEnable2FA(): Promise<void> {
     const response = await fetch('/api/2fa/verify-enable', {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      headers: apiHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ token })
     });
 
@@ -153,7 +170,7 @@ export async function handleDisable2FA(): Promise<void> {
     const response = await fetch('/api/2fa/disable', {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      headers: apiHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({})
     });
 
@@ -242,7 +259,7 @@ export async function handleVerify2FALogin(): Promise<Promise<void>> {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      headers: apiHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         twoFactorToken: token,
         userId: pending2FAUserId
