@@ -71,13 +71,18 @@ logs-f:
 	docker compose -f $(COMPOSE) logs -f --tail=150
 
 setup:
-	echo "Creating project goinfre directories..."; \
+	@echo "Creating project goinfre directories..."; \
 	mkdir -p $(GOINFRE_PATH)/db; \
 	mkdir -p $(GOINFRE_PATH)/grafana; \
 	mkdir -p $(GOINFRE_PATH)/prometheus; \
-	echo "Setting permissions..."; \
+
+	@echo "Fixing permissions..."; \
 	chmod -R 777 $(GOINFRE_PATH)/grafana; \
-	chmod -R 777 $(GOINFRE_PATH)/prometheus;
+	chmod -R 777 $(GOINFRE_PATH)/prometheus; \
+
+	echo "Fixing Prometheus permissions via container..."; \
+	docker run --rm -v $(GOINFRE_PATH)/prometheus:/data alpine \
+		sh -c "chmod -R 777 /data"; \
 
 	if [ ! -f $(ENV_FILE) ]; then \
 		echo "#APPLICATION" >> $(ENV_FILE); \
