@@ -54,6 +54,10 @@ clean: down
 fclean: clean
 	echo "$(RED)Cleaning everything now$(NC) . . ."
 	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) down -v
+
+	docker run --rm -v $(GOINFRE_PATH)/grafana:/data alpine sh -c "chmod -R 777 /data"
+	docker run --rm -v $(GOINFRE_PATH)/prometheus:/data alpine sh -c "chmod -R 777 /data"
+	
 	rm -rf $(SSL_DIR)
 	rm -rf $(CHECKFILE)
 	rm -rf $(GOINFRE_PATH)/db/*
@@ -71,6 +75,9 @@ setup:
 	mkdir -p $(GOINFRE_PATH)/db; \
 	mkdir -p $(GOINFRE_PATH)/grafana; \
 	mkdir -p $(GOINFRE_PATH)/prometheus; \
+	echo "Setting permissions..."; \
+	chmod -R 777 $(GOINFRE_PATH)/grafana; \
+	chmod -R 777 $(GOINFRE_PATH)/prometheus;
 
 	if [ ! -f $(ENV_FILE) ]; then \
 		echo "#APPLICATION" >> $(ENV_FILE); \
