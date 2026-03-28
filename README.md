@@ -117,7 +117,7 @@ The system uses a relational structure. Users are the central entity, linked to 
 1.  **Clone the repository:** `git clone <repo_url>`
 2.  **Setup Environment:** Run `make setup` and fill in your credentials in the generated `.env` file.
 3.  **Launch Project:** Run `make` (This will build and start all containers).
-4.  **Access App:** Open `http://localhost:8080` (or your configured port).
+4.  **Access App:** Open `http://localhost:8443` (or your configured port).
 
 ### **Useful Commands**
 - `make build`: Rebuild containers.

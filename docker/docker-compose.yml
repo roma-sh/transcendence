@@ -80,9 +80,3 @@ networks:
   trance-net: 
     driver: bridge
     name: inception
-
-#-VOLUMES-
-volumes:
-  db_data:
-  grafana_data:
-  prometheus_data:
