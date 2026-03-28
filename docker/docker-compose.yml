@@ -8,7 +8,7 @@ services:
     volumes:
       - ${GOINFRE_PATH}/db:/usr/src/database
     env_file:
-      - ../.env
+      - .env
     restart:  always
     networks:
       - trance-net
@@ -38,7 +38,7 @@ services:
     ports:
       - "9090:9090"
     env_file:
-      - ../.env
+      - .env
     restart: always
     networks:
       - trance-net
@@ -55,7 +55,7 @@ services:
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=false
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - prometheus
     restart: always

@@ -6,11 +6,13 @@ NC=\033[0m
 
 COMPOSE		= docker/docker-compose.yml
 CHECKFILE	= .checkfile  
-ENV_FILE	= .env
+ENV_FILE	= docker/.env
 SSL_DIR		= ./docker/proxy/certs
 SSL_CERT	= $(SSL_DIR)/selfsigned.crt
 SSL_KEY		= $(SSL_DIR)/selfsigned.key
 GOINFRE_PATH = $(HOME)/goinfre/transcendence
+
+
 
 # re only recreates the instance and keeps the DB
 # to delete the database fclean and all is needed seperately to reset completely
@@ -33,15 +35,15 @@ build:
 	npm run chain:compile
 	npm run chain:deploy:fuji
 	echo "$(BLUE)Building$(NC) . . ."
-	docker compose -f $(COMPOSE) build
+	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) build
 
 up:
 	echo "$(GREEN)Starting$(NC) . . ."
-	docker compose -f $(COMPOSE) up -d
+	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) up -d
 
 down:
 	echo "$(BLUE)Stopping$(NC) . . ."
-	docker compose -f $(COMPOSE) down
+	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) down
 
 re: down clean build up
 
@@ -51,9 +53,8 @@ clean: down
 
 fclean: clean
 	echo "$(RED)Cleaning everything now$(NC) . . ."
-	docker compose -f $(COMPOSE) down -v
+	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) down -v
 	rm -rf $(SSL_DIR)
-	rm -rf $(ENV_FILE)
 	rm -rf $(CHECKFILE)
 	rm -rf $(GOINFRE_PATH)/db/*
 	rm -rf $(GOINFRE_PATH)/grafana/*
