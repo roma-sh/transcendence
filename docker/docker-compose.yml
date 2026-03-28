@@ -6,9 +6,9 @@ services:
       dockerfile: docker/Dockerfile.backend
     container_name: back-end
     volumes:
-      - db_data:/usr/src/database
+      - ${GOINFRE_PATH}/db:/usr/src/database
     env_file:
-      - .env
+      - ../.env
     restart:  always
     networks:
       - trance-net
@@ -34,9 +34,11 @@ services:
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml
-      - prometheus_data:/prometheus
+      - ${GOINFRE_PATH}/prometheus:/prometheus
     ports:
       - "9090:9090"
+    env_file:
+      - ../.env
     restart: always
     networks:
       - trance-net
@@ -47,13 +49,13 @@ services:
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
-      - grafana_data:/var/lib/grafana
+      - ${GOINFRE_PATH}/grafana:/var/lib/grafana
     ports:
       - "3000:3000"
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=false
     env_file:
-      - .env
+      - ../.env
     depends_on:
       - prometheus
     restart: always
