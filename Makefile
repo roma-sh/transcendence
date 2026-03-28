@@ -10,6 +10,9 @@ ENV_FILE	= docker/.env
 SSL_DIR		= ./docker/proxy/certs
 SSL_CERT	= $(SSL_DIR)/selfsigned.crt
 SSL_KEY		= $(SSL_DIR)/selfsigned.key
+GOINFRE_PATH = $(HOME)/goinfre/transcendence
+
+
 
 # re only recreates the instance and keeps the DB
 # to delete the database fclean and all is needed seperately to reset completely
@@ -32,15 +35,15 @@ build:
 	npm run chain:compile
 	npm run chain:deploy:fuji
 	echo "$(BLUE)Building$(NC) . . ."
-	docker compose -f $(COMPOSE) build
+	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) build
 
 up:
 	echo "$(GREEN)Starting$(NC) . . ."
-	docker compose -f $(COMPOSE) up -d
+	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) up -d
 
 down:
 	echo "$(BLUE)Stopping$(NC) . . ."
-	docker compose -f $(COMPOSE) down
+	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) down
 
 re: down clean build up
 
@@ -50,10 +53,16 @@ clean: down
 
 fclean: clean
 	echo "$(RED)Cleaning everything now$(NC) . . ."
-	docker compose -f $(COMPOSE) down -v
+	docker compose --env-file $(ENV_FILE) -f $(COMPOSE) down -v
+
+	docker run --rm -v $(GOINFRE_PATH)/grafana:/data alpine sh -c "chmod -R 777 /data"
+	docker run --rm -v $(GOINFRE_PATH)/prometheus:/data alpine sh -c "chmod -R 777 /data"
+	
 	rm -rf $(SSL_DIR)
-	rm -rf $(ENV_FILE)
 	rm -rf $(CHECKFILE)
+	rm -rf $(GOINFRE_PATH)/db/*
+	rm -rf $(GOINFRE_PATH)/grafana/*
+	rm -rf $(GOINFRE_PATH)/prometheus/*
 
 logs:
 	docker compose -f $(COMPOSE) logs --tail=150
@@ -62,8 +71,22 @@ logs-f:
 	docker compose -f $(COMPOSE) logs -f --tail=150
 
 setup:
+	@echo "Creating project goinfre directories..."; \
+	mkdir -p $(GOINFRE_PATH)/db; \
+	mkdir -p $(GOINFRE_PATH)/grafana; \
+	mkdir -p $(GOINFRE_PATH)/prometheus; \
+
+	@echo "Fixing permissions..."; \
+	chmod -R 777 $(GOINFRE_PATH)/grafana; \
+	chmod -R 777 $(GOINFRE_PATH)/prometheus; \
+
+	echo "Fixing Prometheus permissions via container..."; \
+	docker run --rm -v $(GOINFRE_PATH)/prometheus:/data alpine \
+		sh -c "chmod -R 777 /data"; \
+
 	if [ ! -f $(ENV_FILE) ]; then \
 		echo "#APPLICATION" >> $(ENV_FILE); \
+		echo "GOINFRE_PATH=$(GOINFRE_PATH)" >> $(ENV_FILE); \
 		echo "NODE_ENV=" >> $(ENV_FILE); \
 		echo "PORT=" >> $(ENV_FILE); \
 		echo "HOST=" >> $(ENV_FILE); \
